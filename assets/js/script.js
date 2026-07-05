@@ -33,23 +33,6 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 revealItems.forEach(el => revealObserver.observe(el));
 
-// ============ WRAD MODEL: tree stage sync ============
-const treeVisualWrap = document.getElementById('treeVisualWrap');
-const modelBlocks = document.querySelectorAll('.model-block');
-
-const stageObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    const stage = entry.target.dataset.stage;
-    if (entry.isIntersecting && entry.intersectionRatio > 0.45) {
-      modelBlocks.forEach(b => b.classList.remove('active'));
-      entry.target.classList.add('active');
-      treeVisualWrap.classList.remove('stage-roots', 'stage-trunk', 'stage-canopy');
-      treeVisualWrap.classList.add('stage-' + stage);
-    }
-  });
-}, { threshold: [0.45, 0.6] });
-modelBlocks.forEach(b => stageObserver.observe(b));
-
 // ============ HERO CANVAS: drifting circuit particles ============
 const canvas = document.getElementById('heroCanvas');
 const ctx = canvas.getContext('2d');
@@ -123,14 +106,52 @@ window.addEventListener('resize', () => {
   window._resizeT = setTimeout(setupCanvas, 200);
 });
 
-// ============ CONTACT FORM (static site — no backend) ============
+// ============ CONTACT FORM (Formspree — static, no backend) ============
+// Progressive enhancement: with JS off, the form does a native POST to Formspree
+// (which shows its own thank-you page). With JS on, we submit via fetch and show
+// inline success/error without leaving the page.
 const form = document.getElementById('contactForm');
 const formNote = document.getElementById('formNote');
-form.addEventListener('submit', (e) => {
+const submitBtn = document.getElementById('contactSubmit');
+
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
-  // NOTE: This is a static site. To actually receive submissions,
-  // connect this form to a service like Formspree, Getform, or Basin,
-  // then swap this handler for a real fetch()/POST to that endpoint.
-  formNote.textContent = 'Thanks — this form is a placeholder. Connect it to Formspree or similar to receive messages.';
-  form.reset();
+
+  // Guard: don't pretend to send while the endpoint is still a placeholder.
+  if (form.action.includes('YOUR_FORM_ID')) {
+    formNote.textContent = 'Form not connected yet — add the Formspree endpoint to enable sending.';
+    formNote.className = 'form-note error';
+    return;
+  }
+
+  const originalLabel = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending…';
+  formNote.textContent = '';
+  formNote.className = 'form-note';
+
+  try {
+    const res = await fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      form.reset();
+      formNote.textContent = "Thanks — your message is on its way. We'll be in touch.";
+      formNote.className = 'form-note success';
+    } else {
+      const data = await res.json().catch(() => ({}));
+      formNote.textContent = data.errors
+        ? data.errors.map(x => x.message).join(', ')
+        : 'Something went wrong. Please email support@wradlabs.com.';
+      formNote.className = 'form-note error';
+    }
+  } catch (err) {
+    formNote.textContent = 'Network error — please try again, or email support@wradlabs.com.';
+    formNote.className = 'form-note error';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalLabel;
+  }
 });
