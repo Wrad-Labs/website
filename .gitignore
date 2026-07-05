@@ -1,3 +1,10 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Local-only operational runbook — never commit (see CLAUDE.md)
+OPERATIONS.local.md
+*.local.md
+
+# Personal Claude Code settings (keep out of the public repo)
+.claude/settings.local.json
