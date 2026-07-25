@@ -10,14 +10,20 @@ Static corporate site for [www.wradlabs.com](https://www.wradlabs.com), hosted o
 
 ```
 website/
-├── index.html              # Single-page site (hero, vision, model, build, principles, contact)
+├── index.html              # Single-page site (hero, ventures, contact)
+├── privacy.html            # Privacy policy
+├── 404.html · robots.txt · sitemap.xml
 ├── CNAME                   # Custom domain for GitHub Pages (www.wradlabs.com)
 ├── .nojekyll               # Serve files as-is (skip Jekyll processing)
+├── docs/INDEX.md           # Doc map / memory-model entry point (start here)
 └── assets/
     ├── css/style.css       # All styles (design tokens at the top)
-    ├── js/script.js        # Nav, scroll reveal, tree-stage sync, hero canvas
+    ├── js/script.js        # Nav, scroll reveal, hero canvas, contact form
     └── images/             # Logo + tree backdrop
 ```
+
+Working in this repo? Read [`docs/INDEX.md`](docs/INDEX.md) first — it maps every
+doc and explains the docs-as-memory model this project runs on.
 
 ## Hosting
 
@@ -36,7 +42,8 @@ python -m http.server 8000
 
 ## Notes
 
-- The contact form is a placeholder — connect it to Formspree/Getform/Basin to
-  receive submissions (see the handler at the bottom of `assets/js/script.js`).
+- The contact form is live, posting to Formspree (client-side, no backend) →
+  support@wradlabs.com. See the handler at the bottom of `assets/js/script.js`
+  and the privacy disclosure in `privacy.html`.
 - Email (Google Workspace MX records) is managed at the DNS provider and is
   independent of this repo.
