@@ -2,8 +2,10 @@
 
 Operating manual for AI assistants (and humans) working on the **Wrad Labs**
 marketing site — **www.wradlabs.com**. This project is **completely separate**
-from PopOp: different repo, folder, and rules. Do not import PopOp docs,
-guardrails, or context.
+from the Optants product (repo `Wrad-Labs/optants`) and from the private company
+repo (`Wrad-Labs/company`): different repos, folders, and rules. Do not import
+their docs, guardrails, or context. The one thing shared across all Wrad Labs
+repos is the Owner Operating Model — see below.
 
 > This file is **committed to a public repo and served at the live domain**
 > (`/CLAUDE.md` returns 200). Treat everything here as public. Sensitive
@@ -19,10 +21,27 @@ plain HTML/CSS/JS hosted on **GitHub Pages**, deployed from `main`.
 > provides the foundation from which commercial ventures grow.
 
 Deeper references:
+- **Doc map / where everything lives:** [`docs/INDEX.md`](docs/INDEX.md)
 - **Tech / structure:** [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-- **Improvement backlog:** [`docs/WORKPLAN.md`](docs/WORKPLAN.md)
+- **Current state + backlog:** [`status.md`](status.md)
+- **Why things are the way they are:** [`decisions.md`](decisions.md)
+- **Active constraints (compiled):** [`rules/active.md`](rules/active.md)
 - **Security posture:** [`SECURITY.md`](SECURITY.md)
 - **Ops runbook (local only):** `OPERATIONS.local.md`
+
+## Owner Operating Model (cross-project)
+
+The owner's collaboration preferences are **canonical in one place** — the private
+repo **[`Wrad-Labs/owner-operating-model`](https://github.com/Wrad-Labs/owner-operating-model)**
+(`owner.md`) — and referenced, never copied, by every Wrad Labs repo. Before making
+implementation or collaboration-style decisions, read it there.
+
+- It is **owner-authored and read-only to agents.** Never create a local `owner.md`
+  copy in this repo, and never edit the canonical one directly — propose changes in
+  conversation. (D10 / R-015.)
+- This **public** repo references the model **by URL only** — it deliberately does
+  *not* embed it as a git submodule (that would expose the private repo and risk
+  Pages serving it). The private Optants and company repos may submodule it instead.
 
 ## 2. Golden rules (never violate)
 
@@ -37,8 +56,10 @@ Deeper references:
    Details are in `OPERATIONS.local.md`.
 4. **No unlicensed imagery of real people or brand logos.** Concepts, objects,
    and illustrations are fine; real people/brands need owned or licensed assets.
-5. **Don't imply the contact form works** until it is wired to a real backend
-   (Formspree/Getform/Basin). See [`docs/WORKPLAN.md`](docs/WORKPLAN.md).
+5. **Never collect user data the privacy policy doesn't describe.** The contact
+   form is live (Formspree, client-side) and `privacy.html` is published — so any
+   new field or processor must be reflected there before it ships. See
+   [`status.md`](status.md) (OB-1) and R-007 in [`rules/active.md`](rules/active.md).
 
 ## 3. Scope of decisions & authority
 
@@ -112,3 +133,39 @@ Open `index.html` directly, or serve the folder:
 ```
 python -m http.server 8000
 ```
+
+## 7. Memory model
+
+This repo runs on **docs-as-memory**: the documents are the memory, the chat is
+scratch. An undocumented change didn't happen. The **canonical definition** of this
+model lives in one place — `Wrad-Labs/company/docs-as-memory.md` (private repo) — and
+is referenced, never restated. What follows is the short operational summary for
+working here; the full method is there.
+
+Four memory kinds, kept physically separate — full map in
+[`docs/INDEX.md`](docs/INDEX.md):
+
+- **reference** (`README.md`, `SECURITY.md`, `docs/*`) — what is true *now*;
+  rewrite freely to keep it true.
+- **decisions** ([`decisions.md`](decisions.md)) — *why*; append-only.
+- **rules** ([`rules/active.md`](rules/active.md)) — current hard constraints;
+  *compiled* from locked decisions, never hand-authored. Behavioral/design only —
+  process rules stay in this file (§3–§4).
+- **status** ([`status.md`](status.md)) — where we are now, and the **single**
+  backlog; overwrite constantly.
+
+Plus [`patterns.md`](patterns.md) (capped, expiring observations).
+
+**The loop, every time you work:**
+
+1. **Read** the doc that owns the area before building (start cold →
+   `status.md` → `rules/active.md` → the one reference doc that owns it).
+2. **Flag** before writing anything that contradicts a locked decision — don't
+   just do it.
+3. **Update** the affected doc(s) *and* `status.md` in the **same commit** as the
+   work. If that commit locks or supersedes a decision, **recompile
+   `rules/active.md`** in the same commit.
+4. **Close** with a readout that is a *view* of the backlog in `status.md`, never
+   a second list.
+
+**Governing rule:** an undocumented change didn't happen.

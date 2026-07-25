@@ -1,0 +1,107 @@
+# Status — Wrad Labs website
+
+**Memory kind: status — overwrite constantly.** Where things stand *right now*.
+No rules (see [`rules/active.md`](rules/active.md)), no rationale (see
+[`decisions.md`](decisions.md)). If a line here is out of date, it is a bug.
+
+**The Backlog below is the single pending-work index in this repo (R-014).** It is
+an *index*: one line per item, tier tag, and a pointer to detail that lives
+elsewhere — never a second copy of the detail.
+
+Last updated: **2026-07-24**
+
+---
+
+## Now
+
+**Live.** www.wradlabs.com — static single page on GitHub Pages, deployed from
+`main`, custom domain via `CNAME`, served behind Fastly (`max-age=600`).
+
+- **Page:** `#home` (hero + particle canvas) → `#ventures` (2 cards) → `#contact`.
+  Plus `privacy.html`, `404.html`, `robots.txt`, `sitemap.xml`.
+- **Contact form:** live, posting to Formspree (`mvzjloro` → support@wradlabs.com)
+  with honeypot and a native-POST fallback. **Unconfirmed:** whether Formspree's
+  one-time activation email (sent on the first real submission) has been clicked.
+- **Ventures section** is a placeholder — "Coming soon" / "Future Ventures". The
+  product it will eventually describe is tracked in the private company repo.
+- **Brand / look-and-feel is a working DRAFT (D11), not locked.** The current
+  blue→green palette, the roots→canopy accent meaning, and the logo/brand mark are
+  provisional and open to revision until owner sign-off. The token *system* (declare
+  once, never hardcode — R-004) stays; the specific *values* do not. A rebrand is a
+  normal Tier-2 change, not a decision violation.
+- **Third-party surface:** Google Fonts, Formspree, GitHub Pages, Google Workspace
+  (email, off-repo).
+
+**In flight.** This change: adopting docs-as-memory (branch `docs/memory-model`).
+Docs-only — no HTML/CSS/JS behavior changes.
+
+**Not here.** Accounting, company funding, corporate filings, and product
+development live in the private `company` repo (D8/R-012).
+
+---
+
+## Backlog
+
+### Owner-blocked — needs a decision or action only the owner can take
+
+| # | Item | Tier |
+|---|---|---|
+| OB-1 | **`privacy.html` does not disclose its processors.** The form posts to Formspree, but the published page names none of Formspree, Google Fonts, GitHub Pages, or Google Workspace, and states no retention period. The old WORKPLAN claimed the draft covered processors — the published file does not. Violates R-007. Needs owner review before any edit ships. | 🔴 3 |
+| OB-2 | **Legal review of `privacy.html` wording**, and confirm the published "Last updated: July 4, 2026" is correct. | 🔴 3 |
+| OB-3 | **Enable "Enforce HTTPS"** in GitHub Pages settings — live headers show no HSTS. Repo-side change is impossible; this is a Pages setting. | 🔴 3 |
+| OB-4 | **Confirm the Formspree activation email was clicked** (sent on the first real submission). Until then, submissions may not be delivered. | 🔴 3 |
+| OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, and now `decisions.md` / `status.md` all return 200 at the live domain. Full suppression needs a Jekyll build, which D1 rules out. Carried from WORKPLAN P0. | 🟢 1 |
+| OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
+| OB-7 | **Decide whether to add privacy-respecting analytics** (e.g. Plausible). Requires a privacy-policy disclosure. Carried from WORKPLAN P4. | 🟡 2 |
+
+### Agent queue — ready to pick up
+
+| # | Item | Tier |
+|---|---|---|
+| AQ-1 | Remove the dead placeholder guard in `assets/js/script.js` that checks `form.action` for `'YOUR_FORM_ID'` — unreachable since D4. Separate PR. | 🟢 1 |
+| AQ-2 | Add `<meta name="referrer" content="strict-origin-when-cross-origin">`. Carried from WORKPLAN P2. | 🟢 1 |
+| AQ-3 | Add a `<meta http-equiv="Content-Security-Policy">` scoped to Google Fonts + Formspree. Can break rendering — test both breakpoints. Carried from WORKPLAN P2. | 🟡 2 |
+| AQ-4 | Obfuscate or protect the `mailto:` addresses in `index.html` (nav/footer/contact) to cut harvesting. Carried from WORKPLAN P2. | 🟢 1 |
+| AQ-5 | Add a "skip to content" link. Carried from WORKPLAN P3. | 🟢 1 |
+| AQ-6 | Check `--medium-gray` (`#94A3B8`) body text on `--bg` against WCAG AA at small sizes; bump the token if it fails. Carried from WORKPLAN P3. | 🟢 1 |
+| AQ-7 | Reduce layout shift — preload the hero/tree image. Carried from WORKPLAN P3. | 🟢 1 |
+| AQ-8 | Generate a proper `favicon.ico` + sized PNG icon set instead of reusing `logo.png`. Carried from WORKPLAN P1. | 🟢 1 |
+| AQ-9 | Self-host the fonts to drop the Google Fonts request (privacy + performance). Interacts with OB-1 and AQ-3. Carried from WORKPLAN P3. | 🟡 2 |
+
+Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
+[`CLAUDE.md`](CLAUDE.md) §3.
+
+---
+
+## Session history
+
+Dated one-liners, newest first.
+
+- **2026-07-24** — Marked brand look-and-feel as an explicit draft: added D11
+  (supersedes D5), kept the token discipline (R-004, retied to D11), retired R-005
+  (blue→green palette semantic no longer a locked rule). Logo/palette now revisable
+  via Tier-2 without sign-off; final identity to be locked by a future decision.
+- **2026-07-24** — Wired the Owner Operating Model as a cross-project pointer:
+  added D10/R-015, a "by URL, no submodule" reference to `CLAUDE.md` pointing at
+  the canonical `Wrad-Labs/owner-operating-model` repo. Confirmed `owner.md` is not
+  meant to live here (resolved the former OB-5). Fixed the stale "PopOp" reference
+  in `CLAUDE.md` to Optants/company. Standardized the private repo name to
+  `company`. Confirmed website ⊥ Optants separation (distinct repos, stacks, docs).
+- **2026-07-24** — Adopted docs-as-memory: added `decisions.md` (D1–D9, all
+  locked), `rules/active.md` (R-001–R-014), `status.md`, `patterns.md`,
+  `docs/INDEX.md`. Folded `docs/WORKPLAN.md` into this backlog and deleted it.
+  Corrected stale reference docs against source: `docs/ARCHITECTURE.md` (page
+  sections, JS module count, form status), `README.md` (structure block, form
+  status), `SECURITY.md` (form "transmits nothing", privacy-policy prerequisite).
+  Added `CLAUDE.md` §7. No site behavior changed.
+- **2026-07-04** — Completed and closed out of WORKPLAN: contact form wired to
+  Formspree (P0); `robots.txt`, `sitemap.xml`, custom `404.html`, JSON-LD
+  `Organization` schema, Twitter/OG meta, `apple-touch-icon` (P1); `privacy.html`
+  drafted and published with a footer link and form consent line (P1, partial —
+  see OB-1/OB-2).
+- **2026-07-04** — Streamlined the site to a lean single-pager (`#home` →
+  `#ventures` → `#contact`, dropping `#vision` / `#model` / `#build` /
+  `#principles`) and refreshed the brand mark to the monochrome circuit-tree SVG.
+- **2026-07-04** — Added `CLAUDE.md`; moved DNS/registrar/email detail out of
+  tracked files into untracked `OPERATIONS.local.md`.
+- **2026-07-04** — Initial site published to GitHub Pages at www.wradlabs.com.
