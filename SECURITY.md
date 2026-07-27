@@ -20,24 +20,29 @@ days for a response. Do not open public issues for security reports.
 - **No backend, no secrets, no server code.** The site is fully static, so there
   is no server-side execution to exploit and no credentials to leak.
 - **Transport:** served over HTTPS via GitHub Pages / Fastly. "Enforce HTTPS"
-  should be enabled in Pages settings so HSTS is sent (see
-  [`docs/WORKPLAN.md`](docs/WORKPLAN.md) P0).
-- **Third-party surface:** currently Google Fonts only. Any added service (form
-  handler, analytics) is a new exposure and must be reviewed as a Tier-2 change
-  (see [`CLAUDE.md`](CLAUDE.md) §3) and reflected in the privacy policy.
+  should be enabled in Pages settings so HSTS is sent (see the backlog in
+  [`status.md`](status.md), OB-3).
+- **Third-party surface:** Google Fonts (CSS/font requests) and **Formspree**
+  (the contact form posts submissions to it client-side). Email runs on Google
+  Workspace, off-repo. Any further service (analytics, embeds) is a new exposure,
+  reviewed as a Tier-2 change (see [`CLAUDE.md`](CLAUDE.md) §3) and reflected in
+  `privacy.html`.
 
 ## Known limitations (GitHub Pages)
 
 - Custom **HTTP response headers cannot be set** (no CSP/Referrer/Permissions
   headers server-side). Header-style controls are applied via `<meta http-equiv>`
-  where supported — see WORKPLAN P2.
+  where supported — see the backlog in [`status.md`](status.md) (AQ-2, AQ-3).
 - Tracked files cannot be hidden from the served site without switching to a
   Jekyll build (which conflicts with `.nojekyll`). Mitigation: keep tracked docs
   free of anything sensitive.
 
 ## User data
 
-The contact form is currently a **placeholder that transmits nothing**. Before
-it is wired to a real backend, a privacy policy and a consent notice must be
-added (WORKPLAN P0/P1). Email (`@wradlabs.com`, Google Workspace) is managed at
-the DNS provider and is independent of this repo.
+The contact form **collects and transmits** the visitor's name, email, message,
+and optional organization, posting them client-side to Formspree
+(`mvzjloro` → support@wradlabs.com) with a honeypot field for spam. A privacy
+policy (`privacy.html`, indexable) and a consent line on the form are published.
+Known gap: `privacy.html` does not yet name its processors or state a retention
+period — tracked as OB-1 in [`status.md`](status.md). Email (`@wradlabs.com`,
+Google Workspace) is managed at the DNS provider and is independent of this repo.

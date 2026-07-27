@@ -1,8 +1,9 @@
 # Architecture & tech reference
 
-Technical structure of the Wrad Labs website. Companion to
-[`../CLAUDE.md`](../CLAUDE.md) (governance) and
-[`WORKPLAN.md`](WORKPLAN.md) (backlog).
+Technical structure of the Wrad Labs website. **Memory kind: reference — rewrite
+to stay true against the source.** Companion to [`../CLAUDE.md`](../CLAUDE.md)
+(governance), [`INDEX.md`](INDEX.md) (the doc map), and
+[`../status.md`](../status.md) (current state + backlog).
 
 ## Stack
 
@@ -22,28 +23,39 @@ ships. Edit files directly; refresh the browser.
 
 ```
 website/
-├── index.html            # Entire page: nav, hero, vision, model, build,
-│                         #   principles, closing, contact, footer
+├── index.html            # Entire page: nav, hero, ventures, contact, footer
+├── privacy.html          # Privacy policy (indexable)
+├── 404.html              # Custom GitHub Pages 404
+├── robots.txt            # Crawl directives → sitemap
+├── sitemap.xml           # Single-URL sitemap
 ├── CNAME                 # GitHub Pages custom domain (www.wradlabs.com)
 ├── .nojekyll             # Serve files as-is (no Jekyll processing)
 ├── .gitignore
 ├── CLAUDE.md             # Operating manual / governance (PUBLIC)
 ├── README.md             # Public overview (PUBLIC)
 ├── SECURITY.md           # Security posture & disclosure (PUBLIC)
+├── decisions.md          # Append-only decision log (PUBLIC)
+├── status.md             # Current state + the single backlog (PUBLIC)
+├── patterns.md           # Capped, expiring work observations (PUBLIC)
+├── rules/
+│   └── active.md         # Compiled constraints, backlinked to decisions
 ├── OPERATIONS.local.md   # DNS/email runbook — UNTRACKED, never committed
 ├── docs/
-│   ├── ARCHITECTURE.md   # This file
-│   └── WORKPLAN.md       # Prioritized improvement backlog
+│   ├── INDEX.md          # The doc map / memory-model entry point
+│   └── ARCHITECTURE.md   # This file
 └── assets/
     ├── css/style.css     # All styles; design tokens at top of file
-    ├── js/script.js      # Nav, scroll reveal, tree-stage sync, hero canvas
-    └── images/           # logo.png, tree-backdrop.png
+    ├── js/script.js      # Nav, scroll reveal, hero canvas, contact form
+    └── images/           # logo.png, tree-backdrop.png, favicon.svg
 ```
 
 ## Design tokens
 
 Defined once in `:root` at the top of `assets/css/style.css`. **Always reference
-these; never hardcode.**
+these; never hardcode** (R-004) — this discipline is locked and independent of
+*which* values are chosen. The **values themselves are a working draft** (D11): the
+palette and brand metaphor below are provisional pending owner sign-off, so treat
+this table as "what ships today," not a fixed identity.
 
 | Token | Value | Use |
 |---|---|---|
@@ -60,26 +72,31 @@ these; never hardcode.**
 | `--container` | `1160px` | Max content width |
 | `--ease` | `cubic-bezier(0.16,1,0.3,1)` | Standard easing |
 
-The blue→green gradient encodes the brand metaphor: **roots (blue) → canopy
-(green)**. Keep that semantic when adding accent color.
+The blue→green gradient currently encodes the brand metaphor: **roots (blue) →
+canopy (green)**. This semantic is a **draft** (D11), not a locked rule — it's the
+present direction, but the palette and logo are open to revision until the owner
+locks a final identity. Changing them is a normal Tier-2 proposal.
 
 ## Page sections (in order)
 
-`#home` (hero + canvas) → `#vision` → `#model` (the Wrad tree, 3 stages) →
-`#build` (card grid) → `#principles` → closing statement → `#contact` (form).
+`#home` (hero + particle canvas) → `#ventures` (two-card grid) → `#contact`
+(Formspree form). Footer follows. `privacy.html` is a separate page.
 
-## JavaScript modules (`assets/js/script.js`)
+## JavaScript blocks (`assets/js/script.js`)
 
 All plain DOM, no framework. Four independent blocks:
 
 1. **Nav** — adds `.solid` to the header past 40px scroll; mobile hamburger toggle.
 2. **Scroll reveal** — `IntersectionObserver` adds `.in-view` to `.reveal` elements once.
-3. **Wrad model sync** — `IntersectionObserver` on `.model-block` swaps
-   `.stage-roots/trunk/canopy` on the tree visual as each block scrolls into view.
-4. **Hero canvas** — drifting "circuit" particle field with connecting lines;
+3. **Hero canvas** — drifting "circuit" particle field with connecting lines;
    honors `prefers-reduced-motion` (renders one static frame instead of animating).
-5. **Contact form** — `submit` handler is a **placeholder**; it `preventDefault`s
-   and shows a note. No network call. See [`WORKPLAN.md`](WORKPLAN.md) P0.
+4. **Contact form** — submits to Formspree via `fetch` with inline success/error
+   messaging; native POST fallback with JS off. Not a placeholder (see D4 in
+   [`../decisions.md`](../decisions.md)).
+
+> A dead guard in block 4 still checks `form.action` for `'YOUR_FORM_ID'` — a
+> leftover from the placeholder era, unreachable now. Slated for removal (AQ-1 in
+> [`../status.md`](../status.md)).
 
 ## Conventions
 
