@@ -8,7 +8,7 @@ No rules (see [`rules/active.md`](rules/active.md)), no rationale (see
 an *index*: one line per item, tier tag, and a pointer to detail that lives
 elsewhere — never a second copy of the detail.
 
-Last updated: **2026-07-24**
+Last updated: **2026-07-27**
 
 ---
 
@@ -32,8 +32,9 @@ Last updated: **2026-07-24**
 - **Third-party surface:** Google Fonts, Formspree, GitHub Pages, Google Workspace
   (email, off-repo).
 
-**In flight.** This change: adopting docs-as-memory (branch `docs/memory-model`).
-Docs-only — no HTML/CSS/JS behavior changes.
+**In flight.** Nothing. The docs-as-memory adoption merged to `main` (PR #1,
+`7b5138b`) and the site is deployed. No site behavior has changed since 2026-07-04 —
+every commit since has been docs-only.
 
 **Not here.** Accounting, company funding, corporate filings, and product
 development live in the private `company` repo (D8/R-012).
@@ -50,7 +51,7 @@ development live in the private `company` repo (D8/R-012).
 | OB-2 | **Legal review of `privacy.html` wording**, and confirm the published "Last updated: July 4, 2026" is correct. | 🔴 3 |
 | OB-3 | **Enable "Enforce HTTPS"** in GitHub Pages settings — live headers show no HSTS. Repo-side change is impossible; this is a Pages setting. | 🔴 3 |
 | OB-4 | **Confirm the Formspree activation email was clicked** (sent on the first real submission). Until then, submissions may not be delivered. | 🔴 3 |
-| OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, and now `decisions.md` / `status.md` all return 200 at the live domain. Full suppression needs a Jekyll build, which D1 rules out. Carried from WORKPLAN P0. | 🟢 1 |
+| OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, and now `decisions.md` / `status.md` all return 200 at the live domain. Full suppression needs a Jekyll build, which D1 rules out — but AQ-10 can stop them being *indexed*, which shrinks this to "accept that they are reachable." Carried from WORKPLAN P0. | 🔴 3 |
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-7 | **Decide whether to add privacy-respecting analytics** (e.g. Plausible). Requires a privacy-policy disclosure. Carried from WORKPLAN P4. | 🟡 2 |
 
@@ -61,12 +62,14 @@ development live in the private `company` repo (D8/R-012).
 | AQ-1 | Remove the dead placeholder guard in `assets/js/script.js` that checks `form.action` for `'YOUR_FORM_ID'` — unreachable since D4. Separate PR. | 🟢 1 |
 | AQ-2 | Add `<meta name="referrer" content="strict-origin-when-cross-origin">`. Carried from WORKPLAN P2. | 🟢 1 |
 | AQ-3 | Add a `<meta http-equiv="Content-Security-Policy">` scoped to Google Fonts + Formspree. Can break rendering — test both breakpoints. Carried from WORKPLAN P2. | 🟡 2 |
-| AQ-4 | Obfuscate or protect the `mailto:` addresses in `index.html` (nav/footer/contact) to cut harvesting. Carried from WORKPLAN P2. | 🟢 1 |
+| AQ-4 | Obfuscate or protect the two `mailto:support@wradlabs.com` links in `index.html` (contact section, footer — the nav has none) to cut harvesting. Carried from WORKPLAN P2. | 🟢 1 |
 | AQ-5 | Add a "skip to content" link. Carried from WORKPLAN P3. | 🟢 1 |
 | AQ-6 | Check `--medium-gray` (`#94A3B8`) body text on `--bg` against WCAG AA at small sizes; bump the token if it fails. Carried from WORKPLAN P3. | 🟢 1 |
 | AQ-7 | Reduce layout shift — preload the hero/tree image. Carried from WORKPLAN P3. | 🟢 1 |
 | AQ-8 | Generate a proper `favicon.ico` + sized PNG icon set instead of reusing `logo.png`. Carried from WORKPLAN P1. | 🟢 1 |
 | AQ-9 | Self-host the fonts to drop the Google Fonts request (privacy + performance). Interacts with OB-1 and AQ-3. Carried from WORKPLAN P3. | 🟡 2 |
+| AQ-10 | Add `Disallow: /*.md$` to `robots.txt` so the tracked docs stop being *indexed*. They stay reachable — no build step, so D1 is untouched — but this is the only mitigation available for OB-5 and it costs nothing. | 🟢 1 |
+| AQ-11 | Add `privacy.html` to `sitemap.xml`. It carries a canonical URL and `index, follow` but is absent from the single-URL sitemap. | 🟢 1 |
 
 Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
 [`CLAUDE.md`](CLAUDE.md) §3.
@@ -75,8 +78,20 @@ Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
 
 ## Session history
 
-Dated one-liners, newest first.
+Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
+oldest in the same edit. This is an orientation trail for a cold session, not a
+record: `git log` is the record, and evicted entries are deleted, not archived.
 
+- **2026-07-27** — Audited the docs-as-memory wiring end to end and fixed what it
+  found: removed the registrar/DNS detail `README.md` was publishing in breach of
+  R-003; recorded **D12** so R-003's contact-address clause compiles from a decision
+  instead of from inference; recorded **D13** (canonical docs-as-memory definition
+  lives in the private `company` repo) → **R-016**, backing a `CLAUDE.md` §7 claim
+  that had no decision behind it; recorded **D14** (session-history cap) → **R-017**
+  and applied the cap here. Corrected a stale "in flight" line, OB-5's tier, and
+  AQ-4's description of where the `mailto:` links are. Added AQ-10/AQ-11.
+  Documented the previously unmapped tracked file `.claude/launch.json` and
+  reconciled it with `CLAUDE.md` §6. Reference docs now carry a verification date.
 - **2026-07-24** — Marked brand look-and-feel as an explicit draft: added D11
   (supersedes D5), kept the token discipline (R-004, retied to D11), retired R-005
   (blue→green palette semantic no longer a locked rule). Logo/palette now revisable
@@ -99,9 +114,4 @@ Dated one-liners, newest first.
   `Organization` schema, Twitter/OG meta, `apple-touch-icon` (P1); `privacy.html`
   drafted and published with a footer link and form consent line (P1, partial —
   see OB-1/OB-2).
-- **2026-07-04** — Streamlined the site to a lean single-pager (`#home` →
-  `#ventures` → `#contact`, dropping `#vision` / `#model` / `#build` /
-  `#principles`) and refreshed the brand mark to the monochrome circuit-tree SVG.
-- **2026-07-04** — Added `CLAUDE.md`; moved DNS/registrar/email detail out of
-  tracked files into untracked `OPERATIONS.local.md`.
-- **2026-07-04** — Initial site published to GitHub Pages at www.wradlabs.com.
+*(Older entries evicted by the cap — see `git log`.)*

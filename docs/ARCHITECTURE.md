@@ -5,6 +5,11 @@ to stay true against the source.** Companion to [`../CLAUDE.md`](../CLAUDE.md)
 (governance), [`INDEX.md`](INDEX.md) (the doc map), and
 [`../status.md`](../status.md) (current state + backlog).
 
+**Verified against source: 2026-07-27** — tokens, page sections, JS blocks, and the
+file tree were checked line-by-line against `style.css`, `index.html`, and
+`script.js` on this date. Re-verify and bump this line whenever you edit the doc;
+if it disagrees with the source, the doc is wrong.
+
 ## Stack
 
 | Layer | Choice | Notes |
@@ -40,6 +45,9 @@ website/
 ├── rules/
 │   └── active.md         # Compiled constraints, backlinked to decisions
 ├── OPERATIONS.local.md   # DNS/email runbook — UNTRACKED, never committed
+├── .claude/
+│   ├── launch.json       # Local preview config for AI tooling (TRACKED, public)
+│   └── settings.local.json  # Personal settings — UNTRACKED (gitignored)
 ├── docs/
 │   ├── INDEX.md          # The doc map / memory-model entry point
 │   └── ARCHITECTURE.md   # This file
@@ -107,6 +115,21 @@ All plain DOM, no framework. Four independent blocks:
 - **Responsiveness:** mobile-first; verify at ~375px and ~1280px.
 - **Browser support:** modern evergreen browsers (uses `IntersectionObserver`,
   `matchMedia`, canvas, CSS custom properties).
+
+## Local preview
+
+Two equivalent ways to serve the folder — both are static file servers, and neither
+is a build step (R-001 is about what *ships*, and nothing here produces a deploy
+artifact):
+
+- `python -m http.server 8000` — the documented default ([`../CLAUDE.md`](../CLAUDE.md) §6).
+- `.claude/launch.json` — used by AI tooling that starts the preview itself; it runs
+  `npx --yes http-server -p 8000 -c-1` (`-c-1` disables caching, which `python
+  -m http.server` also effectively does). This file is **tracked and therefore
+  public** (R-003); it holds nothing sensitive, and should stay that way.
+
+Opening `index.html` directly also works, but relative-root paths (`/assets/...`)
+resolve only when served.
 
 ## Deploy
 

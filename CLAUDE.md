@@ -134,13 +134,19 @@ Open `index.html` directly, or serve the folder:
 python -m http.server 8000
 ```
 
+AI tooling may instead start the preview from the tracked `.claude/launch.json`,
+which serves the same folder via `npx http-server` on the same port. Both are plain
+static file servers — see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) § Local
+preview.
+
 ## 7. Memory model
 
 This repo runs on **docs-as-memory**: the documents are the memory, the chat is
 scratch. An undocumented change didn't happen. The **canonical definition** of this
 model lives in one place — `Wrad-Labs/company/docs-as-memory.md` (private repo) — and
-is referenced, never restated. What follows is the short operational summary for
-working here; the full method is there.
+is referenced, never restated (**D13 / R-016**). What follows is the short
+operational summary for working here; the full method is there. If this summary ever
+disagrees with the canonical file, the canonical file wins.
 
 Four memory kinds, kept physically separate — full map in
 [`docs/INDEX.md`](docs/INDEX.md):
@@ -152,7 +158,8 @@ Four memory kinds, kept physically separate — full map in
   *compiled* from locked decisions, never hand-authored. Behavioral/design only —
   process rules stay in this file (§3–§4).
 - **status** ([`status.md`](status.md)) — where we are now, and the **single**
-  backlog; overwrite constantly.
+  backlog; overwrite constantly. Its session history is capped at 5 entries
+  (R-017) — `git log` is the real history.
 
 Plus [`patterns.md`](patterns.md) (capped, expiring observations).
 
