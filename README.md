@@ -28,8 +28,9 @@ doc and explains the docs-as-memory model this project runs on.
 ## Hosting
 
 - **GitHub Pages**, deploying from the `main` branch, root folder.
-- Custom domain `www.wradlabs.com` (see `CNAME`); apex `wradlabs.com` redirects to `www`
-  via A records at the DNS provider (Squarespace Domains).
+- Custom domain `www.wradlabs.com` (see `CNAME`); apex `wradlabs.com` redirects to `www`.
+  DNS and registrar detail is deliberately not in tracked files (R-003) — it lives in
+  the untracked `OPERATIONS.local.md`.
 - Pushing to `main` redeploys the site automatically (allow a minute or two).
 
 ## Local preview
@@ -45,5 +46,5 @@ python -m http.server 8000
 - The contact form is live, posting to Formspree (client-side, no backend) →
   support@wradlabs.com. See the handler at the bottom of `assets/js/script.js`
   and the privacy disclosure in `privacy.html`.
-- Email (Google Workspace MX records) is managed at the DNS provider and is
-  independent of this repo.
+- Email on `@wradlabs.com` runs on Google Workspace and is configured off-repo;
+  nothing in this repository affects it.

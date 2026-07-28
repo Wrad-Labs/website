@@ -35,7 +35,8 @@ days for a response. Do not open public issues for security reports.
   where supported — see the backlog in [`status.md`](status.md) (AQ-2, AQ-3).
 - Tracked files cannot be hidden from the served site without switching to a
   Jekyll build (which conflicts with `.nojekyll`). Mitigation: keep tracked docs
-  free of anything sensitive.
+  free of anything sensitive. Indexing — as distinct from reachability — can be
+  suppressed via `robots.txt` (AQ-10 in [`status.md`](status.md)).
 
 ## User data
 

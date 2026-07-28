@@ -313,3 +313,83 @@ part D5 got right, retained) hardcoding color/font values instead of using token
 
 > When the owner signs off on a final visual identity, lock it with a new decision
 > (D-nn) and recompile the palette/logo rule(s) then — not before.
+
+---
+
+## D12 — support@wradlabs.com is the only contact address in tracked files
+
+- **Date:** 2026-07-27
+- **Status:** locked
+- **Source:** recorded 2026-07-27 to give R-003's contact-address clause an origin;
+  the constraint was already being enforced in practice.
+
+**Context.** R-003 already carried "no contact address beyond support@wradlabs.com,"
+but D2 — the decision it compiles from — says nothing about contact addresses. The
+clause was authored, not compiled, which is the exact failure the generated-rules
+discipline exists to prevent. The constraint itself is sound: every tracked file is
+served at the live domain (D2), so any address committed here is published to
+scrapers, and a one-person company has no second address to publish anyway.
+
+**Decision.** `support@wradlabs.com` is the single contact address that may appear
+in any tracked file — markup, docs, or metadata. Personal or role addresses, phone
+numbers, and the physical business address stay out of the repo; if one is ever
+needed operationally it lives in `OPERATIONS.local.md`.
+
+**Rules out.** Personal `@wradlabs.com` addresses in markup or docs; a named
+individual's email as the disclosure route in `SECURITY.md`; publishing a phone
+number or street address in a tracked file; per-department addresses (sales@, press@)
+without a new decision.
+
+**Compiled rules:** R-003 (contact-address clause; joint source with D2).
+
+---
+
+## D13 — The docs-as-memory method is defined once, in the private company repo
+
+- **Date:** 2026-07-27
+- **Status:** locked
+
+**Context.** `CLAUDE.md` §7 asserts that the canonical definition of the
+docs-as-memory model lives in `company/docs-as-memory.md` and is "referenced, never
+restated" — but no decision recorded that. D9 adopts the model here; it does not say
+where the method itself is defined. The identical claim for the Owner Operating Model
+*is* properly backed (D10/R-015), so this was a gap in wiring, not in intent. The
+method is shared across every Wrad Labs repo, so restating it per-repo would produce
+the same divergent copies D10 avoids.
+
+**Decision.** The method's canonical definition lives in the private `company` repo
+(`docs-as-memory.md`). This repo references it **by name only** and carries a short
+operational summary sufficient to work here — never a second copy of the method. D9
+remains the decision that adopts it; this decision records where it is defined.
+
+**Rules out.** A local `docs-as-memory.md` in this repo; expanding `CLAUDE.md` §7
+into a full restatement of the method; a private submodule in this public repo (same
+reasoning as D10); treating the summary in §7 as authoritative when it disagrees with
+the canonical file.
+
+**Compiled rules:** R-016.
+
+---
+
+## D14 — `status.md` session history is capped; git is the real history
+
+- **Date:** 2026-07-27
+- **Status:** locked
+
+**Context.** `status.md` is the *status* memory kind — "where we are right now,
+overwrite constantly." Its Session-history section is the opposite: append-only,
+past-tense, and unbounded. Left alone it would grow until the file a cold session
+reads first is mostly archive, which is how a status doc stops being read. The
+project already has a durable, complete history — `git log` — and `patterns.md`
+demonstrates that a cap only works when adding an entry *forces* a drop.
+
+**Decision.** Session history in `status.md` is capped at **5 entries**, newest
+first. Adding a sixth deletes the oldest in the same edit; the deleted entry is not
+archived anywhere, because the commit it describes is already in git. The section is
+a short orientation trail for a cold session, not a record.
+
+**Rules out.** An `ARCHIVE.md` or `history/` directory to hold evicted entries;
+raising the cap instead of dropping an entry; using session history as a second
+backlog (already forbidden by R-014); treating an evicted entry as lost memory.
+
+**Compiled rules:** R-017.

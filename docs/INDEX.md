@@ -37,14 +37,15 @@ before it writes a line.
 | File | Owns | Kind | Update rule |
 |---|---|---|---|
 | [`../CLAUDE.md`](../CLAUDE.md) | **Process**: golden rules, the three authority tiers, branch→PR workflow, coding standards, the memory loop (§7) | operating manual (not a memory kind) | Edit deliberately; changes to the tier model or workflow are owner-approved. Never put design constraints here — point at `rules/active.md`. |
-| [`../decisions.md`](../decisions.md) | Why the site is the way it is — D1–D11 (D5 superseded by D11), each with what it rules out | decisions | Append-only. New entry to supersede; the only edit to a past entry is flipping status + adding the pointer. |
-| [`../rules/active.md`](../rules/active.md) | The compiled constraint set (R-001–R-015; R-005 retired), each backlinked to a locked decision | rules | Generated. Recompile in the same commit that locks/supersedes a decision. Never add a rule from inference. |
-| [`../status.md`](../status.md) | Current live state + **the single backlog** (owner-blocked / agent queue) + session history | status | Overwrite. Updated in the *same commit* as the work it describes. |
+| [`../decisions.md`](../decisions.md) | Why the site is the way it is — D1–D14 (D5 superseded by D11), each with what it rules out | decisions | Append-only. New entry to supersede; the only edit to a past entry is flipping status + adding the pointer. |
+| [`../rules/active.md`](../rules/active.md) | The compiled constraint set (R-001–R-017; R-005 retired), each backlinked to a locked decision | rules | Generated. Recompile in the same commit that locks/supersedes a decision. Never add a rule from inference. |
+| [`../status.md`](../status.md) | Current live state + **the single backlog** (owner-blocked / agent queue) + session history, capped at 5 (R-017) | status | Overwrite. Updated in the *same commit* as the work it describes. |
 | [`../patterns.md`](../patterns.md) | Tentative observations about how work here actually goes | patterns (capped, expiring) | Max 7 entries; every entry expires and downgrades. Never a rule, never a backlog, never about the person. |
 | [`../README.md`](../README.md) | Public front door: what this repo is, structure, hosting, local preview | reference | Rewrite to stay true. |
 | [`../SECURITY.md`](../SECURITY.md) | Security posture, threat model, disclosure route, GitHub Pages limits | reference | Rewrite to stay true — especially when the third-party surface changes. |
-| [`ARCHITECTURE.md`](ARCHITECTURE.md) | Tech structure: stack, file layout, design tokens, page sections, JS blocks, deploy | reference | Rewrite to stay true. Verify against `index.html` / `script.js` / `style.css` before trusting it. |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | Tech structure: stack, file layout, design tokens, page sections, JS blocks, local preview, deploy | reference | Rewrite to stay true. Verify against `index.html` / `script.js` / `style.css`, then bump the **Verified against source** date at the top. |
 | [`INDEX.md`](INDEX.md) | This map | reference | Update whenever a doc is added, removed, or changes owner. |
+| `../.claude/launch.json` | Local preview config for AI tooling — **tracked, therefore public** | config (not a memory kind) | Keep it free of anything sensitive (R-003). Described in `ARCHITECTURE.md` § Local preview. |
 | `../OPERATIONS.local.md` | DNS, registrar, email routing, Pages settings | reference (**untracked**) | Local only — gitignored, never committed (R-003). |
 
 ## Where things are *not*
@@ -56,6 +57,11 @@ before it writes a line.
 - **Rationale** — only `decisions.md`. Not the reference docs, not the rules file.
 - **Anything financial, corporate, or product** — the private `company`
   repo. Never here (R-012).
+- **The definition of the docs-as-memory method itself** — the private `company`
+  repo (`docs-as-memory.md`). `CLAUDE.md` §7 carries a short operational summary and
+  nothing more; never restate or copy the method here (D13/R-016).
+- **Session history older than the last 5 entries** — `git log`. Evicted entries are
+  deleted, not archived; there is no history file (D14/R-017).
 - **The Owner Operating Model** (`owner.md`) — the private
   [`Wrad-Labs/owner-operating-model`](https://github.com/Wrad-Labs/owner-operating-model)
   repo, referenced by URL from `CLAUDE.md`. Cross-project governance, above the four
