@@ -393,3 +393,35 @@ raising the cap instead of dropping an entry; using session history as a second
 backlog (already forbidden by R-014); treating an evicted entry as lost memory.
 
 **Compiled rules:** R-017.
+
+---
+
+## D15 — Published retention: 24 months for inquiries, enforced by a manual sweep
+
+- **Date:** 2026-07-27
+- **Status:** locked
+
+**Context.** `privacy.html` had to state a retention period to satisfy R-007, and a
+retention clause is a **commitment, not a description** — nothing in the current
+setup deletes anything. A submission leaves two copies with very different lifetimes:
+Formspree's, which expires on its own after 30 days on the free plan (per Formspree's
+documented account limits), and the notification email in the support mailbox, which
+is kept indefinitely by default. The mailbox copy is therefore the only one a
+retention promise actually governs. The alternative — open-ended "as long as needed"
+wording — needs no maintenance but is the posture regulators like least, and at
+current volume a manual sweep costs roughly ten minutes a year.
+
+**Decision.** Inquiries and their reply threads are kept no longer than **24 months**
+from receipt, then deleted from the support mailbox. Enforcement is a **manual annual
+sweep** by the owner, not automation — no Google Vault retention rule is assumed. The
+first mandatory deletion falls due **2028-07** (the form went live 2026-07-04). The
+published figure and the actual sweep must stay in step: if the sweep stops happening,
+the policy text has to change, not the other way round.
+
+**Rules out.** Publishing a retention number with no mechanism behind it; treating
+Formspree's 30-day expiry as satisfying the commitment (it covers only one copy);
+open-ended retention of inquiry mail; changing the period in practice without
+updating `privacy.html` in the same change; assuming an automated deletion rule
+exists.
+
+**Compiled rules:** R-018.
