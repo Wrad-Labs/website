@@ -38,5 +38,24 @@ this file is a rule, and nothing here is authoritative. Rules live in
 
 ## Active entries
 
-*None yet (0 / 7).* Created empty on 2026-07-24 — entries are earned by
-observation, not seeded.
+*1 / 7.*
+
+### P-1 — Docs-only sessions arrive in same-day bursts, so an entry-count cap compresses the visible history faster than a per-session estimate suggests
+
+- Confidence: single-instance
+- First seen: 2026-07-27 · Last touched: 2026-07-27 · Expires: 2026-10-25
+- Evidence:
+  - 2026-07-27 — two docs-only sessions in one day (the wiring audit merged as
+    `5f72a69`, then the `privacy.html` rewrite) each added a session-history entry.
+    The second triggered the first R-017 eviction. The five surviving entries then
+    spanned **three days**, with two of the five from that single day.
+  - Same instance: the evicted 2026-07-04 entry was the only place the JSON-LD /
+    OG / `apple-touch-icon` work was described — no reference doc covers it (AQ-12).
+- So what: two suggestions, both tentative. **(1)** Read the session trail as
+  orientation weighted toward recent bookkeeping, not as a record of what shipped —
+  `status.md` § Now and `decisions.md` carry the milestones, and they should be
+  trusted over the trail when the two seem to disagree. **(2)** Treat an eviction
+  that *stings* as a signal that the fact belonged in a durable kind and was being
+  propped up by the trail; file it, rather than raising the cap. If this recurs —
+  a second, separately dated burst — that is the evidence for revisiting the cap
+  number in a new decision, and the promotion to `recurring` goes here first.

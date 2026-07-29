@@ -44,6 +44,16 @@ The contact form **collects and transmits** the visitor's name, email, message,
 and optional organization, posting them client-side to Formspree
 (`mvzjloro` → support@wradlabs.com) with a honeypot field for spam. A privacy
 policy (`privacy.html`, indexable) and a consent line on the form are published.
-Known gap: `privacy.html` does not yet name its processors or state a retention
-period — tracked as OB-1 in [`status.md`](status.md). Email (`@wradlabs.com`,
-Google Workspace) is managed at the DNS provider and is independent of this repo.
+The policy names every processor in the chain — Formspree, Google Workspace,
+GitHub Pages/Fastly, and Google Fonts — and states a retention period, satisfying
+R-007. The site sets **no cookies** and uses no analytics or tracking.
+
+Two copies of every submission exist, with different lifetimes: Formspree's, which
+expires after **30 days** on our plan, and the notification email in the support
+mailbox, which is governed by the published **24-month** retention commitment and
+deleted by manual sweep (D15/R-018, tracked as OB-8 in [`status.md`](status.md)).
+The mailbox copy is the one that needs acting on; Formspree's expires by itself.
+
+Adding any new form field or processor requires updating `privacy.html` **before**
+the change ships (R-007). Email (`@wradlabs.com`, Google Workspace) is configured
+off-repo and is independent of this repository.

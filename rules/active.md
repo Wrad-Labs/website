@@ -31,10 +31,14 @@ Current state only. No rationale, no history — follow the backlink for either.
 | R-015 | The Owner Operating Model (`owner.md`) is canonical in the private `owner-operating-model` repo; reference it by URL in `CLAUDE.md`, never copy it here and never embed it as a submodule in this public repo. | D10 |
 | R-016 | The docs-as-memory *method* is defined once, in the private `company` repo; reference it by name and keep only a short operational summary here — never restate or copy it. | D13 |
 | R-017 | Session history in `status.md` is capped at 5 entries; adding one drops the oldest in the same edit. Evicted entries are deleted, not archived — git holds the history. | D14 |
+| R-018 | Inquiries and their reply threads are deleted from the support mailbox at 24 months, by manual annual sweep. The figure published in `privacy.html` and the sweep that enforces it must change together. | D15 |
 
 ## Compile log
 
-Regenerated **2026-07-27** from `decisions.md` at D1–D14.
+Regenerated **2026-07-27** from `decisions.md` at D1–D15.
+
+- **D15 (new):** compiles **R-018**, the published 24-month retention commitment and
+  the manual sweep that has to back it.
 
 - **D12 (new):** gives R-003's contact-address clause a source. That clause had been
   authored rather than compiled — D2 never mentioned contact addresses. R-003's text
