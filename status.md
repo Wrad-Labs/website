@@ -88,6 +88,15 @@ Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
 
+- **2026-07-30** — Centralized three more rules found in the `company` repo, and compiled
+  them here: **OOM D-007** (never invent a fact) is now Golden rule 6, citing this repo's own
+  Cloudflare miss as the worked example; **D-008** and **D-009** are recorded in
+  `rules/active.md` as the upstream general forms of **R-013**, **R-014** and **R-016**. The
+  R-numbers stay — they compile from D9/D13 — but the rationale now lives once, upstream.
+  D-009 is the notable one: *one source of record per fact* turns out to be the principle
+  that D-002, D-003, R-014, R-016, C8 and every de-duplication this week are instances of.
+  Also completed `company` adoption ([company#1](https://github.com/Wrad-Labs/company/pull/1)),
+  where the submodule had the same stale-`index.lock` failure as Optants — two of three repos.
 - **2026-07-30** — Compiled two newly-centralized owner-model rules into §4: **OOM D-005**
   (every change lands through the gate, whoever authored it) and **OOM D-006** (never merge
   on red or pending checks — here, with no CI, that means stating what was verified by hand).
@@ -141,15 +150,5 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   a manual annual sweep → **OB-8**. A paid/free register of company-wide services
   (Workspace, Vercel, Claude) was raised and deliberately **not** started here — it is
   company scope under D8/R-012.
-- **2026-07-27** — Audited the docs-as-memory wiring end to end and fixed what it
-  found: removed the registrar/DNS detail `README.md` was publishing in breach of
-  R-003; recorded **D12** so R-003's contact-address clause compiles from a decision
-  instead of from inference; recorded **D13** (canonical docs-as-memory definition
-  lives in the private `company` repo) → **R-016**, backing a `CLAUDE.md` §7 claim
-  that had no decision behind it; recorded **D14** (session-history cap) → **R-017**
-  and applied the cap here. Corrected a stale "in flight" line, OB-5's tier, and
-  AQ-4's description of where the `mailto:` links are. Added AQ-10/AQ-11.
-  Documented the previously unmapped tracked file `.claude/launch.json` and
-  reconciled it with `CLAUDE.md` §6. Reference docs now carry a verification date.
 
 *(Older entries evicted by the cap — see `git log`.)*
