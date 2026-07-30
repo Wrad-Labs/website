@@ -49,11 +49,12 @@ development live in the private `company` repo (D8/R-012).
 |---|---|---|
 | OB-1 | **`privacy.html` processor disclosure — drafted 2026-07-27, awaiting publish.** Names Formspree, Google Workspace, GitHub Pages/Fastly, and Google Fonts; states 24-month retention (D15/R-018) and Formspree's 30-day expiry; confirms no cookies/analytics. Both open questions are now closed — the retention figure is decided, and Formspree is on the free plan (30-day submission history, per their documented limits). Remaining: publishing legal text is Tier 3, so this needs owner sign-off to merge. Until then R-007 is unmet on the live site. | 🔴 3 |
 | OB-2 | **Legal review of `privacy.html` wording.** The draft is plain-English and deliberately claims no specific regulatory framework (no GDPR/CCPA rights language) — confirm that matches the company's actual obligations. Date now reads "July 27, 2026" to match the rewrite. | 🔴 3 |
-| OB-3 | **Enable "Enforce HTTPS"** in GitHub Pages settings — live headers show no HSTS. Repo-side change is impossible; this is a Pages setting. | 🔴 3 |
+| OB-3 | **HSTS — reframed 2026-07-29.** "Enforce HTTPS" is **already enabled** (`https_enforced: true`, cert approved for apex + `www`, `http://` returns 301). The original item was misdiagnosed: GitHub Pages never sends HSTS on a custom domain and cannot set response headers at all. HSTS is achievable at **Cloudflare**, which fronts the site — step-by-step playbook given to the owner 2026-07-29. Verify SSL/TLS mode is Full (strict) first; start at the shortest max-age, verify, then raise; leave preload off. | 🔴 3 |
 | OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, and now `decisions.md` / `status.md` all return 200 at the live domain. Full suppression needs a Jekyll build, which D1 rules out — but AQ-10 can stop them being *indexed*, which shrinks this to "accept that they are reachable." Carried from WORKPLAN P0. | 🔴 3 |
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-7 | **Decide whether to add privacy-respecting analytics** (e.g. Plausible). Requires a privacy-policy disclosure. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-8 | **Annual inquiry sweep — delete support-mailbox mail older than 24 months (R-018).** First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
+| OB-9 | **`privacy.html` does not disclose Cloudflare — live R-007 breach.** Response headers show `Server: cloudflare` / `CF-RAY` in front of Fastly, so Cloudflare terminates TLS and sees every visitor's IP, but the policy published 2026-07-29 names only Formspree, Google Workspace, GitHub Pages/Fastly, and Google Fonts. Also correct "served behind Fastly" in `docs/ARCHITECTURE.md` and the Now section here, and add Cloudflare to the services register. Fix is ready to draft; publishing legal text is Tier 3. | 🔴 3 |
 
 ### Agent queue — ready to pick up
 
@@ -83,6 +84,19 @@ Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
 
+- **2026-07-29** — Wired the Owner Operating Model into this repo's loop, after a session
+  ran a redesign and three merged PRs without ever reading it. The root cause was local:
+  `docs/INDEX.md` said read three files "and stop," and no loop step triggered the model.
+  Added **D16** — owner model is step 0, upstream of the cold start; §7 step 4 expanded to
+  the three-part *Next steps* readout (immediate follow-through · backlog split · one
+  recommendation) that previously existed only in Optants's manual — and compiled
+  owner-model **D-001** (owner actions as step-by-step playbooks) into `CLAUDE.md`. Opened
+  [owner-operating-model PR #1](https://github.com/Wrad-Labs/owner-operating-model/pull/1)
+  proposing a canonical `decisions.md` (D-001 relocated out of Optants, plus **D-002** for
+  centralization monitoring), filled-in `owner.md` placeholders, and a per-project adoption
+  prompt. Chasing one owner handoff also corrected **OB-3** (Enforce HTTPS already on; HSTS
+  belongs at Cloudflare) and opened **OB-9** — Cloudflare fronts the site and is an
+  undisclosed processor, a live R-007 breach.
 - **2026-07-27** — Owner confirmed the Formspree activation email was clicked, so
   **OB-4 is closed and retired** (its ID is not reused). Rewrote `privacy.html` to
   disclose every processor (Formspree, Google Workspace, GitHub Pages/Fastly, Google
@@ -118,12 +132,5 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   meant to live here (resolved the former OB-5). Fixed the stale "PopOp" reference
   in `CLAUDE.md` to Optants/company. Standardized the private repo name to
   `company`. Confirmed website ⊥ Optants separation (distinct repos, stacks, docs).
-- **2026-07-24** — Adopted docs-as-memory: added `decisions.md` (D1–D9, all
-  locked), `rules/active.md` (R-001–R-014), `status.md`, `patterns.md`,
-  `docs/INDEX.md`. Folded `docs/WORKPLAN.md` into this backlog and deleted it.
-  Corrected stale reference docs against source: `docs/ARCHITECTURE.md` (page
-  sections, JS module count, form status), `README.md` (structure block, form
-  status), `SECURITY.md` (form "transmits nothing", privacy-policy prerequisite).
-  Added `CLAUDE.md` §7. No site behavior changed.
 
 *(Older entries evicted by the cap — see `git log`.)*
