@@ -462,3 +462,45 @@ restating owner-model reasoning here instead of citing its `D-nnn` ID.
 **Compiled rules:** *none.* This is a **process** decision, implemented in `CLAUDE.md`
 §"Owner Operating Model" and §7 — same treatment as [D3](#d3--three-tier-change-authority-model).
 `rules/active.md` stays behavioral/design only.
+
+---
+
+## D17 — The support address is published in plain text; no JS-dependent obfuscation
+
+- **Date:** 2026-07-30
+- **Status:** locked
+
+**Context.** Cloudflare's **Email Address Obfuscation** was rewriting every `mailto:` link
+at the edge — display text became the literal string "[email protected]" and the `href`
+became `/cdn-cgi/l/email-protection#<hash>`, decodable only by an injected script. Nothing
+in the repo showed this, because the rewrite happens after the repo; it was found by
+diffing the live HTML against source after the owner reported the production site not
+matching the design.
+
+Two consequences, the second worse than the first. The site did not render as designed on
+its two main calls to action. And with JavaScript disabled the address was **unreadable
+and the link dead** — a breach of R-008, on `privacy.html` as well, where all four
+addresses were obfuscated and *zero* plain-text addresses remained. The published policy
+offers email as the route to exercise access and deletion rights, so the policy's own
+remedy was JS-gated and displayed no address to a reader who had JS off.
+
+This also settles a latent conflict. **AQ-4** asked to "obfuscate or protect the `mailto:`
+links to cut harvesting." Any obfuscation that hides the address from a scraper hides it
+from a no-JS reader too, and R-008 is locked, so on a static host with no server-side
+rendering AQ-4 was never satisfiable as written. Cloudflare was providing exactly what
+AQ-4 asked for, and that is precisely why it had to be switched off.
+
+**Decision.** `support@wradlabs.com` appears in the markup as plain, readable text in both
+the link text and the `href`. Cloudflare's obfuscation is disabled per-link with
+`<!--email_off-->` … `<!--/email_off-->` (its documented opt-out) rather than by a
+dashboard toggle, so the exemption lives in the repo, is visible in review, and survives
+anyone changing zone settings. Readability wins over harvesting protection: the cost of
+the address being scraped is spam into a mailbox that already has filtering; the cost of
+the other choice is a visitor who cannot contact us and a privacy policy whose stated
+remedy does not work.
+
+**Rules out.** Cloudflare Email Address Obfuscation on this zone without the per-link
+opt-out; JS-dependent email obfuscation of any kind; "protecting" the address by rendering
+it from script; closing AQ-4 by adding an obfuscation scheme.
+
+**Compiled rules:** R-019. **Closes AQ-4** as not-satisfiable rather than done.
