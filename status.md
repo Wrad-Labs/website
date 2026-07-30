@@ -52,10 +52,12 @@ Last updated: **2026-07-30**
   truth about what a visitor receives.** Verify rendering against the live domain, not
   just locally.
 
-**In flight.** The **new mark** — branch `brand/new-corporate-mark`, PR open, **not yet
-merged**. Merging redeploys the live site, so the post-merge check is: hard-refresh
-www.wradlabs.com, confirm the tab icon changed, and re-scrape the share card (a cached
-`og:image` will keep serving the old one until the scraper refetches).
+**In flight.** Nothing. The mark shipped 2026-07-30 ([#11](https://github.com/Wrad-Labs/website/pull/11))
+and is **verified live**: every icon, `mark.svg` and `og.png` return 200 from the live
+domain, `logo.png` returns 404, and the served `mark.svg` and `og.png` are **byte-identical**
+to their sources in `company/brand/` — which is what R-020's one-source claim looks like when
+it is actually checked. One thing outlives the deploy: **social platforms cache `og:image`**,
+so shares created before today keep showing the old card until each scraper refetches (OB-10).
 
 **Not here.** Accounting, company funding, corporate filings, and product
 development live in the private `company` repo (D8/R-012).
@@ -73,6 +75,7 @@ development live in the private `company` repo (D8/R-012).
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-7 | **Decide whether to add privacy-respecting analytics** (e.g. Plausible). Requires a privacy-policy disclosure. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-8 | **Annual inquiry sweep — delete support-mailbox mail older than 24 months (R-018).** First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
+| OB-10 | **Force the social platforms to re-scrape the share card.** The new `og.png` is live and correct, but each platform caches the *old* image against the URL and will keep serving it — nothing in this repo can clear those caches, and they need a signed-in account. **LinkedIn:** open `https://www.linkedin.com/post-inspector/`, paste `https://www.wradlabs.com/`, click **Inspect** — it refetches on every run. **Facebook/Meta:** `https://developers.facebook.com/tools/debug/`, paste the URL, click **Scrape Again**. **X/Twitter:** no public validator remains; it refreshes on its own within about a week. **Verify:** each tool previews the card it now holds — you want the flask on off-white with a terracotta rule, not the old tree glyph. **Reverse:** nothing to undo; re-scraping only re-reads what the site already serves. | 🔴 3 |
 
 ### Agent queue — ready to pick up
 
@@ -100,7 +103,7 @@ Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
 
-- **2026-07-30** — **Replaced the placeholder mark with the real one (D18/R-020).** The
+- **2026-07-30** — **Replaced the placeholder mark with the real one (D18/R-020) — merged and live.** The
   owner signed off the flask-and-roots artwork; it was vectorised and built out in the
   private `company` repo (**C10**), which is now the source of truth — a mark is company IP
   and outlives any surface, so this repo holds **derived copies only**, and that repo's
