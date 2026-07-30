@@ -34,16 +34,23 @@ Deeper references:
 The owner's collaboration preferences are **canonical in one place** — the private
 repo **[`Wrad-Labs/owner-operating-model`](https://github.com/Wrad-Labs/owner-operating-model)**
 — and referenced, never copied, by every Wrad Labs repo. **Read it first, before the
-cold-start sequence below.** Two files, both cross-project:
+cold-start sequence below.** Start from that repo's
+[`README.md`](https://github.com/Wrad-Labs/owner-operating-model/blob/main/README.md),
+which maps the files; read the first two before any collaboration-style call:
 
 | File | Holds |
 |---|---|
 | `owner.md` | Stable collaboration preferences — communication, decisions, quality, defaults |
 | `decisions.md` | The cross-project working-agreement decision log (`D-001`, `D-002`, …) |
+| `adopt-owner-model.prompt.md` | One-off prompt to wire this model into a project's onboarding |
+
+The repo is private and not submoduled here (R-015), so fetch what you need:
 
 ```bash
 gh api repos/Wrad-Labs/owner-operating-model/contents/owner.md --jq '.content' | tr -d '\n' | base64 -d
 ```
+
+Swap `owner.md` for `decisions.md` or `README.md` to read those.
 
 Reading the owner model is **upstream of this repo's own onboarding.** The "read three
 files and stop" instruction in [`docs/INDEX.md`](docs/INDEX.md) is scoped to *project*

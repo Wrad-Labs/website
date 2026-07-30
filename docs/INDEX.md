@@ -74,4 +74,5 @@ before it writes a line.
   repo, referenced by URL from `CLAUDE.md`. Cross-project governance, above the four
   memory kinds; never copied here and never submoduled into this public repo (D10/R-015).
   Its decision IDs are `D-001`, `D-002`, … — deliberately hyphenated so they can never be
-  confused with this repo's `D1`–`D16`.
+  confused with this repo's `D1`–`D16`. That repo's `README.md` maps its files, including
+  `adopt-owner-model.prompt.md` (run once per project to wire the model into its onboarding).
