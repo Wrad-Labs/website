@@ -33,10 +33,19 @@ Current state only. No rationale, no history — follow the backlink for either.
 | R-017 | Session history in `status.md` is capped at 5 entries; adding one drops the oldest in the same edit. Evicted entries are deleted, not archived — git holds the history. | D14 |
 | R-018 | Inquiries and their reply threads are deleted from the support mailbox at 24 months, by manual annual sweep. The figure published in `privacy.html` and the sweep that enforces it must change together. | D15 |
 | R-019 | `support@wradlabs.com` is published as plain readable text in both link text and `href`. No JS-dependent obfuscation — every `mailto:` is wrapped in `<!--email_off-->` to opt out of Cloudflare's edge rewrite. | D17 |
+| R-020 | The brand mark's source of truth is `brand/` in the private `company` repo. Everything under `assets/images/` is a derived copy — never edit the artwork here. The mark is taller than it is wide: always size it by height. | D18 |
 
 ## Compile log
 
-Regenerated **2026-07-30** from `decisions.md` at D1–D17.
+Regenerated **2026-07-30** from `decisions.md` at D1–D18.
+
+- **D18 (new):** compiles **R-020**, and **partially closes D11** — the *mark* is signed
+  off and locked; the *palette* stays a working draft, so R-004 is untouched and R-005
+  stays retired. R-020 is a local instance of **D-009** (one source of record), the same
+  principle already behind R-014 and R-016: the mark now exists in two repos, and the rule
+  names which one is the source.
+
+Previous regeneration, **2026-07-30** from `decisions.md` at D1–D17.
 
 - **D17 (new):** compiles **R-019**. Cloudflare's edge obfuscation was rewriting every
   `mailto:` into a JS-only decoder, breaching R-008 and — on `privacy.html`, where all
@@ -81,5 +90,6 @@ process, implemented in `CLAUDE.md` §"Owner Operating Model" and §7.
 > | R-013 | **D-008** | Append-only records are corrected by a new dated entry, never by editing history. Scoped: reference and status docs are *meant* to be rewritten. |
 > | R-014 | **D-009** | One source of record per fact; every other copy is a pointer or a derived view. If a fact is maintained in two places, that is the bug. |
 > | R-016 | **D-009** | Same principle, applied to the docs-as-memory method itself. |
+> | R-020 | **D-009** | Same principle, applied to the brand mark: `company/brand/` is the source, everything here is a copy. |
 >
 > Do not restate the upstream rationale here — cite the `D-nnn` (**D-002**).

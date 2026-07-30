@@ -34,6 +34,7 @@ website/
 ├── robots.txt            # Crawl directives → sitemap
 ├── sitemap.xml           # Single-URL sitemap
 ├── CNAME                 # GitHub Pages custom domain (www.wradlabs.com)
+├── favicon.ico           # Multi-size (16/32/48) legacy tab icon, served from root
 ├── .nojekyll             # Serve files as-is (no Jekyll processing)
 ├── .gitignore
 ├── CLAUDE.md             # Operating manual / governance (PUBLIC)
@@ -54,16 +55,36 @@ website/
 └── assets/
     ├── css/style.css     # All styles; design tokens at top of file
     ├── js/script.js      # Nav, scroll reveal, hero canvas, contact form
-    └── images/           # logo.png, tree-backdrop.png, favicon.svg
+    └── images/           # Brand assets — see below
 ```
+
+## Brand assets
+
+**Everything in `assets/images/` (except `tree-backdrop.png`) is a DERIVED COPY.** The
+mark's source of truth is `brand/` in the private `company` repo, where the vector
+sources and the build script live (**D18 / R-020**). Never edit the artwork here: edit it
+there, re-run its build, re-copy. One asset per slot — the point of the set is that no
+single file is stretched across four jobs the way the old `logo.png` was.
+
+| File | Slot | Notes |
+| --- | --- | --- |
+| `mark.svg` | nav, footer, `privacy.html`, `404.html` | Referenced by `<img>`, not an inline `<symbol>` — one cached file instead of a 10.6 kB path duplicated into three pages. **512×939: size it by height, never width.** The `<img>` carries the intrinsic `width`/`height` so `width: auto` resolves without layout shift. |
+| `favicon.svg` | `<link rel="icon" type="image/svg+xml">` | Theme-adaptive: ink, flipping to paper under `prefers-color-scheme: dark`, so it survives a dark browser chrome. Used **only** here — an asset that changes colour on its own is a liability anywhere else. |
+| `favicon-48.png` | PNG favicon fallback | For browsers that ignore the SVG icon. |
+| `apple-touch-icon.png` | `<link rel="apple-touch-icon">` | 180², opaque; iOS applies its own corner mask. |
+| `og.png` | `og:image`, `twitter:image` | 1200×630, which is why `twitter:card` is `summary_large_image`. Text-free — there is no approved wordmark lockup yet. |
+| `icon-512.png` | JSON-LD `Organization.logo` | Square and opaque, which is what consumers of that field expect. |
+| `tree-backdrop.png` | *nothing* | 2 MB left over from the pre-2026-07-29 design. Referenced by no HTML, CSS or JS — pending deletion (AQ-13). |
 
 ## Design tokens
 
 Defined once in `:root` at the top of `assets/css/style.css`. **Always reference
 these; never hardcode** (R-004) — this discipline is locked and independent of
-*which* values are chosen. The **values themselves are a working draft** (D11): the
-palette and brand metaphor below are provisional pending owner sign-off, so treat
-this table as "what ships today," not a fixed identity.
+*which* values are chosen. The **palette below is still a working draft** (D11):
+provisional pending owner sign-off, so treat this table as "what ships today," not a
+fixed identity. The **mark is not** — it was signed off 2026-07-30 and locked by D18.
+The mark's ink is `--ink` `#1F2937`, restated inside the SVG because a file cannot read
+a CSS token; a palette change means changing it in the `company` repo too.
 
 Token **names are semantic, not literal** (`--ink`, not `--black`), so a future
 palette change means editing the `:root` block and nothing else.
