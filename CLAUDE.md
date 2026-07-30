@@ -33,12 +33,32 @@ Deeper references:
 
 The owner's collaboration preferences are **canonical in one place** — the private
 repo **[`Wrad-Labs/owner-operating-model`](https://github.com/Wrad-Labs/owner-operating-model)**
-(`owner.md`) — and referenced, never copied, by every Wrad Labs repo. Before making
-implementation or collaboration-style decisions, read it there.
+— and referenced, never copied, by every Wrad Labs repo. **Read it first, before the
+cold-start sequence below.** Two files, both cross-project:
+
+| File | Holds |
+|---|---|
+| `owner.md` | Stable collaboration preferences — communication, decisions, quality, defaults |
+| `decisions.md` | The cross-project working-agreement decision log (`D-001`, `D-002`, …) |
+
+```bash
+gh api repos/Wrad-Labs/owner-operating-model/contents/owner.md --jq '.content' | tr -d '\n' | base64 -d
+```
+
+Reading the owner model is **upstream of this repo's own onboarding.** The "read three
+files and stop" instruction in [`docs/INDEX.md`](docs/INDEX.md) is scoped to *project*
+memory and does not exempt you from the model (**D-002**; see D16 for why this is spelled
+out — a whole session once ran without it).
 
 - It is **owner-authored and read-only to agents.** Never create a local `owner.md`
   copy in this repo, and never edit the canonical one directly — propose changes in
-  conversation. (D10 / R-015.)
+  conversation, or open a PR against that repo. (D10 / R-015.)
+- **Owner actions are handed off as step-by-step playbooks, never assumed knowledge**
+  (**D-001**). When something needs the owner to act outside this repo — a Pages
+  setting, a DNS record, a Cloudflare toggle, a mailbox sweep — give the exact place to
+  go, what to enter, how to verify it worked, and how to reverse it, *at the moment they
+  need it*. Never a bare "enable X in settings". Sensitive specifics stay in
+  `OPERATIONS.local.md`; the click-path itself is not sensitive and may be tracked.
 - This **public** repo references the model **by URL only** — it deliberately does
   *not* embed it as a git submodule (that would expose the private repo and risk
   Pages serving it). The private Optants and company repos may submodule it instead.
@@ -165,6 +185,8 @@ Plus [`patterns.md`](patterns.md) (capped, expiring observations).
 
 **The loop, every time you work:**
 
+0. **Read the Owner Operating Model** (`owner.md` + `decisions.md`, above) before any
+   collaboration-style call. This step is not optional and not covered by step 1.
 1. **Read** the doc that owns the area before building (start cold →
    `status.md` → `rules/active.md` → the one reference doc that owns it).
 2. **Flag** before writing anything that contradicts a locked decision — don't
@@ -172,7 +194,11 @@ Plus [`patterns.md`](patterns.md) (capped, expiring observations).
 3. **Update** the affected doc(s) *and* `status.md` in the **same commit** as the
    work. If that commit locks or supersedes a decision, **recompile
    `rules/active.md`** in the same commit.
-4. **Close** with a readout that is a *view* of the backlog in `status.md`, never
-   a second list.
+4. **Close with next steps.** End every completed task with a short readout in three
+   parts: (1) any **immediate follow-through** this change created — a pending merge, a
+   setting to flip, a key to rotate; (2) the top of the backlog, split **owner-blocked**
+   vs **agent queue**; (3) **one recommendation** for what to pick up next. The readout
+   is a *view* of `status.md`, **never a second list** — anything worth listing gets a
+   backlog entry first (R-014). Owner actions in it follow the playbook rule (D-001).
 
 **Governing rule:** an undocumented change didn't happen.
