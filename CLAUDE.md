@@ -87,6 +87,13 @@ out — a whole session once ran without it).
    form is live (Formspree, client-side) and `privacy.html` is published — so any
    new field or processor must be reflected there before it ships. See
    [`status.md`](status.md) (OB-1) and R-007 in [`rules/active.md`](rules/active.md).
+6. **Never invent a fact** (**OOM D-007**). If something is unknown — a date, a
+   processor, a retention period — record that it is unknown with a placeholder *and*
+   a backlog entry, never a value that merely looks right. Where a claim is checkable,
+   check it against the source, not against the previous draft: this repo published a
+   policy asserting it named *every* processor while omitting Cloudflare, because the
+   claim was checked against the last thing written rather than the live response
+   headers. That is OB-9.
 
 ## 3. Scope of decisions & authority
 

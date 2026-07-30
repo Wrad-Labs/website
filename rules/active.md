@@ -61,3 +61,16 @@ process, implemented in `CLAUDE.md` §"Owner Operating Model" and §7.
 > Cross-project **owner-model** decisions use hyphenated IDs (`D-001`, `D-002`) and live
 > in the private `owner-operating-model` repo. They are not compiled into this table —
 > they govern collaboration, not site behavior — but they still bind. See D16.
+>
+> **Three rules above are local instances of centralized principles** (recorded 2026-07-30,
+> after the same rules were found reinvented in each repo). The R-numbers stay — they
+> compile from this repo's own locked decisions — but the general form and its rationale now
+> live once, upstream:
+>
+> | Local | Upstream | The general principle |
+> |---|---|---|
+> | R-013 | **D-008** | Append-only records are corrected by a new dated entry, never by editing history. Scoped: reference and status docs are *meant* to be rewritten. |
+> | R-014 | **D-009** | One source of record per fact; every other copy is a pointer or a derived view. If a fact is maintained in two places, that is the bug. |
+> | R-016 | **D-009** | Same principle, applied to the docs-as-memory method itself. |
+>
+> Do not restate the upstream rationale here — cite the `D-nnn` (**D-002**).
