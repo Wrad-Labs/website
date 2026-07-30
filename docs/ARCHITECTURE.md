@@ -66,14 +66,19 @@ sources and the build script live (**D18 / R-020**). Never edit the artwork here
 there, re-run its build, re-copy. One asset per slot — the point of the set is that no
 single file is stretched across four jobs the way the old `logo.png` was.
 
+**Two drawings of the mark exist upstream, and the medium picks between them (C11 /
+R-003):** square *raster* icons use the simplified solid `mark-small`, everything else
+uses the master. That is why the favicons and `mark.svg` below are not the same drawing
+— it is deliberate, not drift.
+
 | File | Slot | Notes |
 | --- | --- | --- |
-| `mark.svg` | nav, footer, `privacy.html`, `404.html` | Referenced by `<img>`, not an inline `<symbol>` — one cached file instead of a 10.6 kB path duplicated into three pages. **512×939: size it by height, never width.** The `<img>` carries the intrinsic `width`/`height` so `width: auto` resolves without layout shift. |
-| `favicon.svg` | `<link rel="icon" type="image/svg+xml">` | Theme-adaptive: ink, flipping to paper under `prefers-color-scheme: dark`, so it survives a dark browser chrome. Used **only** here — an asset that changes colour on its own is a liability anywhere else. |
-| `favicon-48.png` | PNG favicon fallback | For browsers that ignore the SVG icon. |
-| `apple-touch-icon.png` | `<link rel="apple-touch-icon">` | 180², opaque; iOS applies its own corner mask. |
-| `og.png` | `og:image`, `twitter:image` | 1200×630, which is why `twitter:card` is `summary_large_image`. Text-free — there is no approved wordmark lockup yet. |
-| `icon-512.png` | JSON-LD `Organization.logo` | Square and opaque, which is what consumers of that field expect. |
+| `mark.svg` | nav, footer, `privacy.html`, `404.html` | The **master** mark. Referenced by `<img>`, not an inline `<symbol>` — one cached file instead of a 10.6 kB path duplicated into three pages. **512×939: size it by height, never width.** The `<img>` carries the intrinsic `width`/`height` so `width: auto` resolves without layout shift. Vector, so 30px in the nav is 60 device pixels on a 2× display and stays crisp. |
+| `favicon.svg` | `<link rel="icon" type="image/svg+xml">` | The **small** mark, theme-adaptive: ink, flipping to paper under `prefers-color-scheme: dark`, so it survives a dark browser chrome. Used **only** here — an asset that changes colour on its own is a liability anywhere else. |
+| `favicon-48.png` | PNG favicon fallback | Small mark. For browsers that ignore the SVG icon. |
+| `apple-touch-icon.png` | `<link rel="apple-touch-icon">` | Small mark, 180², opaque; iOS applies its own corner mask. |
+| `og.png` | `og:image`, `twitter:image` | 1200×630, which is why `twitter:card` is `summary_large_image`. Carries the **horizontal lockup** — mark plus "WRAD LABS" — above a terracotta rule. The wordmark is outlined, so the card needs no font. |
+| `icon-512.png` | JSON-LD `Organization.logo` | Small mark, square and opaque, which is what consumers of that field expect. |
 | `tree-backdrop.png` | *nothing* | 2 MB left over from the pre-2026-07-29 design. Referenced by no HTML, CSS or JS — pending deletion (AQ-13). |
 
 ## Design tokens
