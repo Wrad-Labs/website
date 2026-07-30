@@ -32,10 +32,19 @@ Current state only. No rationale, no history — follow the backlink for either.
 | R-016 | The docs-as-memory *method* is defined once, in the private `company` repo; reference it by name and keep only a short operational summary here — never restate or copy it. | D13 |
 | R-017 | Session history in `status.md` is capped at 5 entries; adding one drops the oldest in the same edit. Evicted entries are deleted, not archived — git holds the history. | D14 |
 | R-018 | Inquiries and their reply threads are deleted from the support mailbox at 24 months, by manual annual sweep. The figure published in `privacy.html` and the sweep that enforces it must change together. | D15 |
+| R-019 | `support@wradlabs.com` is published as plain readable text in both link text and `href`. No JS-dependent obfuscation — every `mailto:` is wrapped in `<!--email_off-->` to opt out of Cloudflare's edge rewrite. | D17 |
 
 ## Compile log
 
-Regenerated **2026-07-27** from `decisions.md` at D1–D15.
+Regenerated **2026-07-30** from `decisions.md` at D1–D17.
+
+- **D17 (new):** compiles **R-019**. Cloudflare's edge obfuscation was rewriting every
+  `mailto:` into a JS-only decoder, breaching R-008 and — on `privacy.html`, where all
+  four addresses were affected — breaking the policy's own stated route for access and
+  deletion requests. Also **closes AQ-4** as not-satisfiable: any obfuscation that hides
+  the address from a scraper hides it from a no-JS reader, and R-008 is locked.
+
+Previous regeneration, **2026-07-27** from `decisions.md` at D1–D15.
 
 - **D15 (new):** compiles **R-018**, the published 24-month retention commitment and
   the manual sweep that has to back it.
