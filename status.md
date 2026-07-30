@@ -43,6 +43,12 @@ Last updated: **2026-07-30**
   `/favicon.ico`, `apple-touch-icon.png`, `og.png` (1200×630, so `twitter:card` is now
   `summary_large_image`), and `icon-512.png` for the JSON-LD `logo`. The old 317 kB
   `logo.png` did all of those jobs at once and is deleted.
+- **Two drawings of the mark, and the medium picks (upstream C11 / `R-003`).** Every
+  **square raster icon** here is the simplified solid **small mark**; `mark.svg` in the
+  nav, footer, legal and 404 is the **master**. They are not the same drawing and that is
+  deliberate — a 16px PNG gets 16 pixels, where the vector at 30px gets 60 on a 2× display.
+  **`og.png` now carries the company name:** the horizontal lockup, mark plus "WRAD LABS"
+  outlined from Inter 700, above a terracotta rule.
 - **Third-party surface:** Cloudflare (edge/TLS), Google Fonts, Formspree, GitHub
   Pages/Fastly, Google Workspace (email, off-repo). All five are named in `privacy.html`
   as of 2026-07-30 — R-007 is met on the live site.
@@ -52,7 +58,14 @@ Last updated: **2026-07-30**
   truth about what a visitor receives.** Verify rendering against the live domain, not
   just locally.
 
-**In flight.** Nothing. The mark shipped 2026-07-30 ([#11](https://github.com/Wrad-Labs/website/pull/11))
+**In flight.** The **small-mark favicon set and the lockup share card** — branch
+`brand/small-mark-and-wordmark`, PR open, **not yet merged**. Assets only: no HTML or CSS
+changes, because every slot already points at the right filename. The wordmark did **not**
+replace the site's live `.logo-word` text — real text stays selectable, translatable and
+readable to a screen reader, and the CSS already sets it in the same Inter 700 the
+wordmark was outlined from.
+
+Previously: the mark shipped 2026-07-30 ([#11](https://github.com/Wrad-Labs/website/pull/11))
 and is **verified live**: every icon, `mark.svg` and `og.png` return 200 from the live
 domain, `logo.png` returns 404, and the served `mark.svg` and `og.png` are **byte-identical**
 to their sources in `company/brand/` — which is what R-020's one-source claim looks like when
