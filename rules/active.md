@@ -55,4 +55,9 @@ Previous regeneration, **2026-07-24** at D1–D11:
 
 Decisions that produced no rule: **D3** (three-tier authority) — process, implemented
 in `CLAUDE.md` §3. **D5** — superseded by D11. **D9** — the adoption itself; its
-constraints compile as R-013/R-014.
+constraints compile as R-013/R-014. **D16** (owner model read before cold start) —
+process, implemented in `CLAUDE.md` §"Owner Operating Model" and §7.
+
+> Cross-project **owner-model** decisions use hyphenated IDs (`D-001`, `D-002`) and live
+> in the private `owner-operating-model` repo. They are not compiled into this table —
+> they govern collaboration, not site behavior — but they still bind. See D16.

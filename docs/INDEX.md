@@ -9,7 +9,14 @@ in the private `company` repo (D8) and is referenced here by name only.
 
 ## Starting a session cold
 
-Read **three files**, in this order, and stop:
+**First, outside this repo:** read the **Owner Operating Model** (`owner.md` and
+`decisions.md` in the private `owner-operating-model` repo — see
+[`../CLAUDE.md`](../CLAUDE.md) for the fetch command). It is cross-project governance and
+sits *above* everything below. The list that follows is **project** memory only; it has
+never been a licence to skip the owner model, and a session once read it as exactly that
+(D16 / **D-002**).
+
+Then read **three files**, in this order, and stop:
 
 1. [`../status.md`](../status.md) — where the project is right now, and the backlog.
 2. [`../rules/active.md`](../rules/active.md) — the constraints you must not break.
@@ -62,7 +69,9 @@ before it writes a line.
   nothing more; never restate or copy the method here (D13/R-016).
 - **Session history older than the last 5 entries** — `git log`. Evicted entries are
   deleted, not archived; there is no history file (D14/R-017).
-- **The Owner Operating Model** (`owner.md`) — the private
+- **The Owner Operating Model** (`owner.md` **and** `decisions.md`) — the private
   [`Wrad-Labs/owner-operating-model`](https://github.com/Wrad-Labs/owner-operating-model)
   repo, referenced by URL from `CLAUDE.md`. Cross-project governance, above the four
   memory kinds; never copied here and never submoduled into this public repo (D10/R-015).
+  Its decision IDs are `D-001`, `D-002`, … — deliberately hyphenated so they can never be
+  confused with this repo's `D1`–`D16`.
