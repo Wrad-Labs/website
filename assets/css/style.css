@@ -1,8 +1,9 @@
 /* ============ TOKENS ============
    Declared once, referenced everywhere (R-004 — never hardcode these values).
-   The VALUES are a working draft (D11): the palette and brand mark stay open to
-   revision until the owner signs off on a final identity. The token *system* is
-   what's locked, not the colors below.
+   The PALETTE is still a working draft (D11) — the colors below stay open to
+   revision until the owner signs off. The MARK is no longer a draft: it was
+   signed off 2026-07-30 and is locked by D18. The token *system* is what D11
+   locked, not the colors below.
 
    Names are semantic, not literal (--ink, not --black), so a future palette
    change means editing this block and nothing else. */
@@ -198,21 +199,21 @@ section + section { border-top: 1px solid var(--line); }
 .nav-mobile a { color: var(--ink-body); font-size: 0.95rem; }
 
 /* ============ LOGO MARK ============
-   The mark is a placeholder pending a new identity — it lives in ONE <symbol>
-   in each page's sprite, so swapping it means editing that symbol only.
-   Strokes inherit currentColor; .mark-knockout fills track the page background
-   so the mark reads correctly on any surface. */
+   The mark is `assets/images/mark.svg`, referenced by <img> from every page —
+   ONE file, cached across the site, so swapping it means replacing that file.
+   Its source of truth is the private company repo, `brand/` (D18); this copy is
+   derived and is never the place to edit the artwork.
+
+   ALWAYS SIZE IT BY HEIGHT. The mark is taller than it is wide (512x939, aspect
+   0.545); a width would make it tower over the type beside it. The width/height
+   attributes on the <img> are the intrinsic size, which is what lets `width:
+   auto` resolve without a layout shift while the SVG loads. */
 .logo-mark {
-  height: 26px;
+  height: 30px;
   width: auto;
   display: block;
-  color: var(--ink);
-  /* `fill` is an INHERITED property, so this reaches the .mark-knockout shapes
-     inside the <use> shadow tree — a descendant selector cannot. The stroked
-     paths carry their own fill="none" and are unaffected. */
-  fill: var(--bg);
 }
-.logo-mark-footer { height: 46px; }
+.logo-mark-footer { height: 52px; }
 
 /* ============ HERO ============ */
 .hero {
