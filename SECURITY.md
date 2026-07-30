@@ -26,9 +26,17 @@ days for a response. Do not open public issues for security reports.
   unaffected, and the absence of preload keeps the policy reversible after the
   max-age window. GitHub Pages alone cannot send HSTS on a custom domain.
 - **Edge path:** requests traverse **Cloudflare → Fastly (GitHub Pages)**.
-  Cloudflare terminates TLS, so it observes visitor IPs; it is a processor and must
-  be named in `privacy.html` (open as OB-9 in [`status.md`](status.md) — the policy
-  text does not yet name it).
+  Cloudflare terminates TLS, so it observes visitor IPs; it is a processor and **is
+  named in `privacy.html`** as of 2026-07-30.
+- **Cloudflare can rewrite the HTML we ship.** Its Email Address Obfuscation was
+  rewriting every `mailto:` into a `/cdn-cgi/` decoder requiring injected JavaScript —
+  a change no one could see by reading the repo, and a breach of R-008 that also broke
+  `privacy.html`'s own stated route for access and deletion requests. Now opted out
+  per-link with `<!--email_off-->` (D17/R-019). **Security consequence:** a zone-level
+  toggle can alter served markup and inject script without a commit, so the repo is not
+  the whole truth about what a visitor receives. Any future CSP work (AQ-3) has to
+  account for Cloudflare-injected `/cdn-cgi/` scripts, and rendering claims should be
+  verified against the live domain.
 - **Third-party surface:** Cloudflare (edge/TLS), Google Fonts (CSS/font requests),
   and **Formspree** (the contact form posts submissions to it client-side). Email
   runs on Google Workspace, off-repo. Any further service (analytics, embeds) is a

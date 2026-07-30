@@ -8,7 +8,7 @@ No rules (see [`rules/active.md`](rules/active.md)), no rationale (see
 an *index*: one line per item, tier tag, and a pointer to detail that lives
 elsewhere — never a second copy of the detail.
 
-Last updated: **2026-07-27**
+Last updated: **2026-07-30**
 
 ---
 
@@ -25,8 +25,10 @@ Last updated: **2026-07-27**
 - **Contact form:** live, posting to Formspree (`mvzjloro` → support@wradlabs.com)
   with honeypot and a native-POST fallback. Formspree activation **confirmed by the
   owner 2026-07-27** — submissions are being delivered.
-- **Ventures section** is a placeholder — "Coming soon" / "Future Ventures". The
-  product it will eventually describe is tracked in the private company repo.
+- **Ventures section** names **Optants** ("The home of popular opinion.") plus a
+  "Future Ventures" card. No product link yet — none exists to point at, so the card
+  carries an "In development" label instead of a dead link. Product/build detail lives
+  in the private `optants` repo; the corporate view lives in `company`.
 - **Brand / look-and-feel is a working DRAFT (D11), not locked.** The site now runs
   a warm off-white palette with a terracotta accent and a Source Serif 4 / Inter
   pairing, replacing the dark navy + blue→green scheme (2026-07-29). This is still a
@@ -34,13 +36,17 @@ Last updated: **2026-07-27**
   logo is in progress; it lives in one `<symbol>` per page so swapping it is a
   one-block edit. The token *system* (declare once, never hardcode — R-004) stays;
   the specific *values* do not.
-- **Third-party surface:** Google Fonts, Formspree, GitHub Pages, Google Workspace
-  (email, off-repo).
+- **Third-party surface:** Cloudflare (edge/TLS), Google Fonts, Formspree, GitHub
+  Pages/Fastly, Google Workspace (email, off-repo). All five are named in `privacy.html`
+  as of 2026-07-30 — R-007 is met on the live site.
+- **Cloudflare rewrites HTML at the edge.** Email Address Obfuscation was turning every
+  `mailto:` into a JS-only decoder until 2026-07-30 (D17/R-019). Treat any zone-level
+  Cloudflare feature as capable of changing what ships: **the repo is no longer the whole
+  truth about what a visitor receives.** Verify rendering against the live domain, not
+  just locally.
 
-**In flight.** Redesign on branch `feat/light-brand-redesign` — full visual rebuild
-to match an owner-supplied mockup. **Tier 2: needs approval before merge**, and is
-additionally blocked on the real Optants URL (the "View product" link is a `#`
-placeholder).
+**In flight.** Nothing. The redesign, the privacy rewrite, the owner-model wiring, and
+the Cloudflare disclosure are all merged and verified live.
 
 **Not here.** Accounting, company funding, corporate filings, and product
 development live in the private `company` repo (D8/R-012).
@@ -53,13 +59,11 @@ development live in the private `company` repo (D8/R-012).
 
 | # | Item | Tier |
 |---|---|---|
-| OB-1 | **`privacy.html` processor disclosure — drafted 2026-07-27, awaiting publish.** Names Formspree, Google Workspace, GitHub Pages/Fastly, and Google Fonts; states 24-month retention (D15/R-018) and Formspree's 30-day expiry; confirms no cookies/analytics. Both open questions are now closed — the retention figure is decided, and Formspree is on the free plan (30-day submission history, per their documented limits). Remaining: publishing legal text is Tier 3, so this needs owner sign-off to merge. Until then R-007 is unmet on the live site. | 🔴 3 |
-| OB-2 | **Legal review of `privacy.html` wording.** The draft is plain-English and deliberately claims no specific regulatory framework (no GDPR/CCPA rights language) — confirm that matches the company's actual obligations. Date now reads "July 27, 2026" to match the rewrite. | 🔴 3 |
+| OB-2 | **Legal review of `privacy.html` wording.** Published and plain-English; it deliberately claims no specific regulatory framework (no GDPR/CCPA rights language) — confirm that matches the company's actual obligations. Now dated July 30, 2026 and naming all five processors. | 🔴 3 |
 | OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, and now `decisions.md` / `status.md` all return 200 at the live domain. Full suppression needs a Jekyll build, which D1 rules out — but AQ-10 can stop them being *indexed*, which shrinks this to "accept that they are reachable." Carried from WORKPLAN P0. | 🔴 3 |
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-7 | **Decide whether to add privacy-respecting analytics** (e.g. Plausible). Requires a privacy-policy disclosure. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-8 | **Annual inquiry sweep — delete support-mailbox mail older than 24 months (R-018).** First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
-| OB-9 | **`privacy.html` does not disclose Cloudflare — live R-007 breach.** Cloudflare fronts the site and terminates TLS, so it sees every visitor's IP, but the policy published 2026-07-29 names only Formspree, Google Workspace, GitHub Pages/Fastly, and Google Fonts. The reference docs are corrected (this file + `SECURITY.md`; `ARCHITECTURE.md` pending in PR #4) — **what remains is the policy text itself, which is Tier 3 to publish.** Add Cloudflare to the services register too. | 🔴 3 |
 
 ### Agent queue — ready to pick up
 
@@ -68,7 +72,6 @@ development live in the private `company` repo (D8/R-012).
 | AQ-1 | Remove the dead placeholder guard in `assets/js/script.js` that checks `form.action` for `'YOUR_FORM_ID'` — unreachable since D4. Separate PR. | 🟢 1 |
 | AQ-2 | Add `<meta name="referrer" content="strict-origin-when-cross-origin">`. Carried from WORKPLAN P2. | 🟢 1 |
 | AQ-3 | Add a `<meta http-equiv="Content-Security-Policy">` scoped to Google Fonts + Formspree. Can break rendering — test both breakpoints. Carried from WORKPLAN P2. | 🟡 2 |
-| AQ-4 | Obfuscate or protect the two `mailto:support@wradlabs.com` links in `index.html` (contact section, footer — the nav has none) to cut harvesting. Carried from WORKPLAN P2. | 🟢 1 |
 | AQ-5 | Add a "skip to content" link. Carried from WORKPLAN P3. | 🟢 1 |
 | AQ-7 | Reduce layout shift — preload the hero/tree image. Carried from WORKPLAN P3. | 🟢 1 |
 | AQ-8 | Generate a proper `favicon.ico` + sized PNG icon set instead of reusing `logo.png`. Carried from WORKPLAN P1. | 🟢 1 |
@@ -88,6 +91,19 @@ Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
 
+- **2026-07-30** — **Closed OB-9** and fixed a live rendering defect the owner reported.
+  `privacy.html` now names **Cloudflare** as a processor (it terminates TLS and sees every
+  visitor IP), so R-007 is met on the live site. Investigating why production didn't match
+  the design found the cause: **Cloudflare's Email Address Obfuscation was rewriting every
+  `mailto:` at the edge** into "[email protected]" behind a JS-only `/cdn-cgi/` decoder.
+  Invisible in the repo, because it happens after it. That broke the two main CTAs *and*
+  R-008 — on `privacy.html` all four addresses were obfuscated with **zero** plain-text
+  addresses left, so the policy's own access/deletion route displayed no address and
+  required JS. Opted out per-link with `<!--email_off-->` (Cloudflare's documented
+  mechanism, checked against their docs rather than memory). Locked **D17 → R-019**, which
+  also **closes AQ-4** as not-satisfiable: any obfuscation hiding the address from a
+  scraper hides it from a no-JS reader, and R-008 is locked. Standing lesson recorded in
+  `SECURITY.md` — a zone-level toggle can alter served markup without a commit.
 - **2026-07-30** — Centralized three more rules found in the `company` repo, and compiled
   them here: **OOM D-007** (never invent a fact) is now Golden rule 6, citing this repo's own
   Cloudflare miss as the worked example; **D-008** and **D-009** are recorded in
@@ -135,20 +151,5 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   `html.js` gate. Named **Optants** on the first card per owner decision, without a
   product link — no destination exists yet. Brand mark left as a placeholder pending
   the new logo. Palette stays a D11 draft — nothing locked.
-- **2026-07-27** — Owner confirmed the Formspree activation email was clicked, so
-  **OB-4 is closed and retired** (its ID is not reused). Rewrote `privacy.html` to
-  disclose every processor (Formspree, Google Workspace, GitHub Pages/Fastly, Google
-  Fonts), state a 24-month retention period, and record that the site sets no cookies
-  and runs no analytics — verified at 375px and 1280px with no console errors.
-  **Not yet published:** publishing legal text is Tier 3, so OB-1/OB-2 stay open
-  until the owner signs off on the retention figure and the wording. This edit also
-  triggered the first **R-017 eviction** (the 2026-07-04 WORKPLAN closeout), which
-  exposed that the SEO/metadata surface it described lives in no reference doc →
-  **AQ-12**. Recorded the cap's compression effect as **P-1**, the first earned
-  entry in `patterns.md`. Confirmed Formspree is on the free plan (30-day submission
-  history) and locked **D15/R-018**: 24-month retention for inquiry mail, enforced by
-  a manual annual sweep → **OB-8**. A paid/free register of company-wide services
-  (Workspace, Vercel, Claude) was raised and deliberately **not** started here — it is
-  company scope under D8/R-012.
 
 *(Older entries evicted by the cap — see `git log`.)*

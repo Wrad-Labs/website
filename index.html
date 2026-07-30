@@ -157,7 +157,11 @@
       <p class="eyebrow reveal">Contact</p>
       <h2 class="reveal">Let's build something that lasts.</h2>
       <p class="body-lg reveal">Whether you're interested in collaboration, partnerships, or learning more about Wrad Labs, we'd love to hear from you.</p>
-      <p class="contact-email reveal"><a href="mailto:support@wradlabs.com">support@wradlabs.com</a></p>
+      <!-- email_off: Cloudflare's Email Address Obfuscation rewrites mailto links at the
+           edge into "[email protected]" behind a JS-only /cdn-cgi/ decoder. That breaks
+           R-008 (the page must read and function with JS off) and is not what the design
+           shows. See D17. -->
+      <p class="contact-email reveal"><!--email_off--><a href="mailto:support@wradlabs.com">support@wradlabs.com</a><!--/email_off--></p>
 
       <!-- Submits to Formspree (endpoint mvzjloro → support@wradlabs.com). -->
       <form class="contact-form reveal" id="contactForm" action="https://formspree.io/f/mvzjloro" method="POST">
@@ -199,7 +203,7 @@
       <span class="logo-word logo-word-footer">Wrad Labs</span>
     </div>
     <p class="footer-tagline">Building Businesses That Fund a Better Future.</p>
-    <a class="footer-email" href="mailto:support@wradlabs.com">support@wradlabs.com</a>
+    <!--email_off--><a class="footer-email" href="mailto:support@wradlabs.com">support@wradlabs.com</a><!--/email_off-->
     <p class="footer-copy">&copy; 2026 Wrad Labs Inc. All rights reserved. &middot; <a href="privacy.html" class="footer-link">Privacy Policy</a></p>
   </div>
 </footer>
