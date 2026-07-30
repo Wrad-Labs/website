@@ -88,6 +88,17 @@ Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
 
+- **2026-07-30** — Compiled two newly-centralized owner-model rules into §4: **OOM D-005**
+  (every change lands through the gate, whoever authored it) and **OOM D-006** (never merge
+  on red or pending checks — here, with no CI, that means stating what was verified by hand).
+  Both were surfaced by running the adoption prompt against Optants, where they had been
+  locked into that repo's manual alone; they are cited here, never restated (D-002). Also
+  completed the cross-project adoption work: Optants' submodule pointer was frozen from
+  2026-07-16 behind a stale `index.lock` (fixed, [optants#85](https://github.com/Wrad-Labs/optants/pull/85)),
+  its duplicate `D-001` reduced to a pointer and an unindexed live runbook found by a D-003
+  orphan audit ([optants#87](https://github.com/Wrad-Labs/optants/pull/87)). Owner-model
+  repo now carries D-001–D-006, a README index, and `adoption.md` tracking cross-project
+  actions X-1–X-5.
 - **2026-07-29** — Wired the Owner Operating Model into this repo's loop, after a session
   ran a redesign and three merged PRs without ever reading it. The root cause was local:
   `docs/INDEX.md` said read three files "and stop," and no loop step triggered the model.
@@ -140,9 +151,5 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   AQ-4's description of where the `mailto:` links are. Added AQ-10/AQ-11.
   Documented the previously unmapped tracked file `.claude/launch.json` and
   reconciled it with `CLAUDE.md` §6. Reference docs now carry a verification date.
-- **2026-07-24** — Marked brand look-and-feel as an explicit draft: added D11
-  (supersedes D5), kept the token discipline (R-004, retied to D11), retired R-005
-  (blue→green palette semantic no longer a locked rule). Logo/palette now revisable
-  via Tier-2 without sign-off; final identity to be locked by a future decision.
 
 *(Older entries evicted by the cap — see `git log`.)*
