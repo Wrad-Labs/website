@@ -425,3 +425,40 @@ updating `privacy.html` in the same change; assuming an automated deletion rule
 exists.
 
 **Compiled rules:** R-018.
+
+---
+
+## D16 — The Owner Operating Model is read before this repo's cold-start list
+
+- **Date:** 2026-07-29
+- **Status:** locked
+- **Upstream:** owner-model **D-002** (proposed 2026-07-29) — cross-project rules live in
+  the `owner-operating-model` repo, and reading that model is upstream of any project's
+  onboarding.
+
+**Context.** On 2026-07-29 a session ran a full redesign and three merged PRs — including
+a published privacy policy — without once opening `owner.md`. It was not carelessness
+alone: `docs/INDEX.md` said to read three named files "**and stop**," the §7 loop listed
+only project docs, and the Owner Operating Model section sat above the loop with no step
+that triggered it. Following this repo's onboarding *correctly* produced a session that
+skipped the owner model. The cost was concrete — the owner was handed a bare "enable
+Enforce HTTPS in GitHub Pages settings," which breaches owner-model **D-001** (owner
+actions are step-by-step playbooks, never assumed knowledge). D-001 had been locked since
+2026-07-23, but it was recorded inside the Optants repo, so nothing here could see it.
+
+**Decision.** Reading the owner model — `owner.md` **and** its `decisions.md` — is **step
+0** of the memory loop, explicitly upstream of the three-file cold start. `docs/INDEX.md`
+says so at the point of the "and stop" instruction, so the two can't be read as being in
+conflict. §7 step 4 is expanded to the full three-part closing readout (immediate
+follow-through · backlog split owner-blocked vs agent queue · one recommendation), which
+had existed only in Optants's manual. D-001 is compiled operatively into §"Owner Operating
+Model" so it binds sessions here.
+
+**Rules out.** Treating a project cold-start list as exhaustive of what must be read;
+citing "read three files and stop" as grounds for skipping cross-project governance;
+handing the owner a bare setting name with no click-path, verification, or reversal;
+restating owner-model reasoning here instead of citing its `D-nnn` ID.
+
+**Compiled rules:** *none.* This is a **process** decision, implemented in `CLAUDE.md`
+§"Owner Operating Model" and §7 — same treatment as [D3](#d3--three-tier-change-authority-model).
+`rules/active.md` stays behavioral/design only.

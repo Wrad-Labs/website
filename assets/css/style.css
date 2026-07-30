@@ -278,6 +278,17 @@ section + section { border-top: 1px solid var(--line); }
 .card-icon .ring-arc { fill: none; stroke: var(--accent); stroke-width: 7; stroke-linecap: butt; }
 .card-icon .disc { fill: var(--arch); }
 .card .link-arrow { margin-top: auto; padding-top: 14px; }
+/* Bottom-aligned status label, for a card with no destination to link to yet.
+   Occupies the same slot as .link-arrow so cards stay the same height. */
+.card-stage {
+  margin: auto 0 0;
+  padding-top: 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-muted);
+}
 
 /* ============ CONTACT ============ */
 .contact-email { font-size: 1.05rem; margin-bottom: 36px; }

@@ -18,7 +18,7 @@ if it disagrees with the source, the doc is wrong.
 | Styling | Plain CSS, custom properties | One file, `assets/css/style.css` |
 | Behavior | Vanilla JS (ES6), no deps | One file, `assets/js/script.js` |
 | Fonts | Google Fonts (Source Serif 4, Inter) | External `<link>` in `<head>` |
-| Hosting | GitHub Pages, served via Fastly | Deploy from `main`, root folder |
+| Hosting | GitHub Pages (Fastly), behind Cloudflare | Deploy from `main`, root folder |
 | DNS/domain | See `OPERATIONS.local.md` | Not in tracked docs |
 
 **No build step. No package manager. No backend.** What is in the repo is what
@@ -160,6 +160,12 @@ resolve only when served.
 
 ## Deploy
 
-Push/merge to `main` → GitHub Pages rebuilds (~1–2 min) → live behind Fastly
-CDN (`Cache-Control: max-age=600`, so hard-refresh when verifying). No CI, no
-tests, no artifact — the repo *is* the deploy.
+Push/merge to `main` → GitHub Pages rebuilds (~1–2 min) → served through
+**Cloudflare → Fastly** (`Cache-Control: max-age=600`). No CI, no tests, no
+artifact — the repo *is* the deploy.
+
+Two caches sit in front of a change, so when verifying on the live domain, expect
+a stale response for a minute or two even after Pages reports `built`. A
+cache-busting query string (`?v=$(date +%s)`) is the quickest way past them;
+`gh api repos/Wrad-Labs/website/pages/builds/latest` confirms the build itself.
+Cloudflare also terminates TLS and sends HSTS — see [`../SECURITY.md`](../SECURITY.md).

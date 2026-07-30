@@ -15,7 +15,9 @@ Last updated: **2026-07-27**
 ## Now
 
 **Live.** www.wradlabs.com — static single page on GitHub Pages, deployed from
-`main`, custom domain via `CNAME`, served behind Fastly (`max-age=600`).
+`main`, custom domain via `CNAME`. Edge path is **Cloudflare in front of Fastly**
+(GitHub's CDN), `max-age=600`. **HTTPS enforced and HSTS live** since 2026-07-29:
+`max-age=15552000` (6 months) on apex and `www`, no `includeSubDomains`, no preload.
 
 - **Page:** `#home` (hero + decorative arch SVG) → `#ventures` (2 cards, the first
   naming **Optants**) → `#contact`. Plus `privacy.html`, `404.html`, `robots.txt`,
@@ -53,11 +55,11 @@ development live in the private `company` repo (D8/R-012).
 |---|---|---|
 | OB-1 | **`privacy.html` processor disclosure — drafted 2026-07-27, awaiting publish.** Names Formspree, Google Workspace, GitHub Pages/Fastly, and Google Fonts; states 24-month retention (D15/R-018) and Formspree's 30-day expiry; confirms no cookies/analytics. Both open questions are now closed — the retention figure is decided, and Formspree is on the free plan (30-day submission history, per their documented limits). Remaining: publishing legal text is Tier 3, so this needs owner sign-off to merge. Until then R-007 is unmet on the live site. | 🔴 3 |
 | OB-2 | **Legal review of `privacy.html` wording.** The draft is plain-English and deliberately claims no specific regulatory framework (no GDPR/CCPA rights language) — confirm that matches the company's actual obligations. Date now reads "July 27, 2026" to match the rewrite. | 🔴 3 |
-| OB-3 | **Enable "Enforce HTTPS"** in GitHub Pages settings — live headers show no HSTS. Repo-side change is impossible; this is a Pages setting. | 🔴 3 |
 | OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, and now `decisions.md` / `status.md` all return 200 at the live domain. Full suppression needs a Jekyll build, which D1 rules out — but AQ-10 can stop them being *indexed*, which shrinks this to "accept that they are reachable." Carried from WORKPLAN P0. | 🔴 3 |
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-7 | **Decide whether to add privacy-respecting analytics** (e.g. Plausible). Requires a privacy-policy disclosure. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-8 | **Annual inquiry sweep — delete support-mailbox mail older than 24 months (R-018).** First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
+| OB-9 | **`privacy.html` does not disclose Cloudflare — live R-007 breach.** Cloudflare fronts the site and terminates TLS, so it sees every visitor's IP, but the policy published 2026-07-29 names only Formspree, Google Workspace, GitHub Pages/Fastly, and Google Fonts. The reference docs are corrected (this file + `SECURITY.md`; `ARCHITECTURE.md` pending in PR #4) — **what remains is the policy text itself, which is Tier 3 to publish.** Add Cloudflare to the services register too. | 🔴 3 |
 
 ### Agent queue — ready to pick up
 
@@ -86,6 +88,23 @@ Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
 
+- **2026-07-29** — Wired the Owner Operating Model into this repo's loop, after a session
+  ran a redesign and three merged PRs without ever reading it. The root cause was local:
+  `docs/INDEX.md` said read three files "and stop," and no loop step triggered the model.
+  Added **D16** — owner model is step 0, upstream of the cold start; §7 step 4 expanded to
+  the three-part *Next steps* readout (immediate follow-through · backlog split · one
+  recommendation) that previously existed only in Optants's manual — and compiled
+  owner-model **D-001** (owner actions as step-by-step playbooks) into `CLAUDE.md`. Opened
+  [owner-operating-model PR #1](https://github.com/Wrad-Labs/owner-operating-model/pull/1)
+  proposing a canonical `decisions.md` (D-001 relocated out of Optants, plus **D-002** for
+  centralization monitoring), filled-in `owner.md` placeholders, and a per-project adoption
+  prompt. Chasing one owner handoff also corrected **OB-3** (Enforce HTTPS already on; HSTS
+  belongs at Cloudflare) and opened **OB-9** — Cloudflare fronts the site and is an
+  undisclosed processor, a live R-007 breach. The owner then enabled HSTS at
+  Cloudflare the same day; verified on apex and `www` (`max-age=15552000`, no
+  `includeSubDomains`, no preload), so **OB-3 is closed and retired**. Corrected the
+  edge path from "behind Fastly" to "Cloudflare in front of Fastly" here and in
+  `SECURITY.md`; OB-9 now covers only the policy text, which is Tier 3 to publish.
 - **2026-07-29** — Rebuilt the visual design against an owner-supplied mockup: warm
   off-white surfaces, terracotta accent, Source Serif 4 + Inter, hairline section
   rules, white cards, static hero arch replacing the particle canvas (JS blocks 4→3).
@@ -93,8 +112,9 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   which **closes AQ-6** (its `--medium-gray` no longer exists). Fixed a pre-existing
   **R-008 breach** found while verifying — `.reveal { opacity: 0 }` applied with no JS,
   so a JS-disabled visitor got a blank page; reveal is now default-visible behind an
-  `html.js` gate. Named **Optants** on the first card per owner decision. Brand mark
-  left as a placeholder pending the new logo. Palette stays a D11 draft — nothing locked.
+  `html.js` gate. Named **Optants** on the first card per owner decision, without a
+  product link — no destination exists yet. Brand mark left as a placeholder pending
+  the new logo. Palette stays a D11 draft — nothing locked.
 - **2026-07-27** — Owner confirmed the Formspree activation email was clicked, so
   **OB-4 is closed and retired** (its ID is not reused). Rewrote `privacy.html` to
   disclose every processor (Formspree, Google Workspace, GitHub Pages/Fastly, Google
@@ -124,10 +144,5 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   (supersedes D5), kept the token discipline (R-004, retied to D11), retired R-005
   (blue→green palette semantic no longer a locked rule). Logo/palette now revisable
   via Tier-2 without sign-off; final identity to be locked by a future decision.
-- **2026-07-24** — Wired the Owner Operating Model as a cross-project pointer:
-  added D10/R-015, a "by URL, no submodule" reference to `CLAUDE.md` pointing at
-  the canonical `Wrad-Labs/owner-operating-model` repo. Confirmed `owner.md` is not
-  meant to live here (resolved the former OB-5). Fixed the stale "PopOp" reference
-  in `CLAUDE.md` to Optants/company. Standardized the private repo name to
-  `company`. Confirmed website ⊥ Optants separation (distinct repos, stacks, docs).
+
 *(Older entries evicted by the cap — see `git log`.)*
