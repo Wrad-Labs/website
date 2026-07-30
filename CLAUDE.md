@@ -140,6 +140,19 @@ There is no staging environment. Therefore:
 8. **Commit hygiene.** Commit/push **only when the user asks.** End commit
    messages with the required `Co-Authored-By` trailer.
 
+Two cross-project rules bind this workflow. Both are canonical in the owner model —
+cited here, not restated (**D-002**):
+
+- **Every change lands through the gate — whoever authored it** (**OOM D-005**).
+  Branch → PR → review, whichever agent, tool, or session produced the work. Authoring
+  outside the repo is fine; *landing* outside the workflow is not. `main` publishes to
+  Pages on push, so there is no such thing as a change here that "just needs committing".
+  The Tier-1 exception in step 5 is this repo's own narrow carve-out, not a general one.
+- **Never merge a PR whose checks are red or still pending — read them first**
+  (**OOM D-006**). This repo runs **no CI**, so the equivalent obligation is to state what
+  was verified by hand: the affected breakpoints, the console, and the live URL after
+  deploy. "Docs only" is a reason the check is cheap, not a reason to skip saying it.
+
 ## 5. Coding standards
 
 - **HTML:** semantic, accessible (labels, aria, alt). One `<h1>`; logical
