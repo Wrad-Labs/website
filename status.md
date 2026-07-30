@@ -17,24 +17,28 @@ Last updated: **2026-07-27**
 **Live.** www.wradlabs.com — static single page on GitHub Pages, deployed from
 `main`, custom domain via `CNAME`, served behind Fastly (`max-age=600`).
 
-- **Page:** `#home` (hero + particle canvas) → `#ventures` (2 cards) → `#contact`.
-  Plus `privacy.html`, `404.html`, `robots.txt`, `sitemap.xml`.
+- **Page:** `#home` (hero + decorative arch SVG) → `#ventures` (2 cards, the first
+  naming **Optants**) → `#contact`. Plus `privacy.html`, `404.html`, `robots.txt`,
+  `sitemap.xml`.
 - **Contact form:** live, posting to Formspree (`mvzjloro` → support@wradlabs.com)
   with honeypot and a native-POST fallback. Formspree activation **confirmed by the
   owner 2026-07-27** — submissions are being delivered.
 - **Ventures section** is a placeholder — "Coming soon" / "Future Ventures". The
   product it will eventually describe is tracked in the private company repo.
-- **Brand / look-and-feel is a working DRAFT (D11), not locked.** The current
-  blue→green palette, the roots→canopy accent meaning, and the logo/brand mark are
-  provisional and open to revision until owner sign-off. The token *system* (declare
-  once, never hardcode — R-004) stays; the specific *values* do not. A rebrand is a
-  normal Tier-2 change, not a decision violation.
+- **Brand / look-and-feel is a working DRAFT (D11), not locked.** The site now runs
+  a warm off-white palette with a terracotta accent and a Source Serif 4 / Inter
+  pairing, replacing the dark navy + blue→green scheme (2026-07-29). This is still a
+  draft, not a locked identity. **The brand mark is an explicit placeholder** — a new
+  logo is in progress; it lives in one `<symbol>` per page so swapping it is a
+  one-block edit. The token *system* (declare once, never hardcode — R-004) stays;
+  the specific *values* do not.
 - **Third-party surface:** Google Fonts, Formspree, GitHub Pages, Google Workspace
   (email, off-repo).
 
-**In flight.** Nothing. The docs-as-memory adoption merged to `main` (PR #1,
-`7b5138b`) and the site is deployed. No site behavior has changed since 2026-07-04 —
-every commit since has been docs-only.
+**In flight.** Redesign on branch `feat/light-brand-redesign` — full visual rebuild
+to match an owner-supplied mockup. **Tier 2: needs approval before merge**, and is
+additionally blocked on the real Optants URL (the "View product" link is a `#`
+placeholder).
 
 **Not here.** Accounting, company funding, corporate filings, and product
 development live in the private `company` repo (D8/R-012).
@@ -64,7 +68,6 @@ development live in the private `company` repo (D8/R-012).
 | AQ-3 | Add a `<meta http-equiv="Content-Security-Policy">` scoped to Google Fonts + Formspree. Can break rendering — test both breakpoints. Carried from WORKPLAN P2. | 🟡 2 |
 | AQ-4 | Obfuscate or protect the two `mailto:support@wradlabs.com` links in `index.html` (contact section, footer — the nav has none) to cut harvesting. Carried from WORKPLAN P2. | 🟢 1 |
 | AQ-5 | Add a "skip to content" link. Carried from WORKPLAN P3. | 🟢 1 |
-| AQ-6 | Check `--medium-gray` (`#94A3B8`) body text on `--bg` against WCAG AA at small sizes; bump the token if it fails. Carried from WORKPLAN P3. | 🟢 1 |
 | AQ-7 | Reduce layout shift — preload the hero/tree image. Carried from WORKPLAN P3. | 🟢 1 |
 | AQ-8 | Generate a proper `favicon.ico` + sized PNG icon set instead of reusing `logo.png`. Carried from WORKPLAN P1. | 🟢 1 |
 | AQ-9 | Self-host the fonts to drop the Google Fonts request (privacy + performance). Interacts with OB-1 and AQ-3. Carried from WORKPLAN P3. | 🟡 2 |
@@ -83,6 +86,15 @@ Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
 
+- **2026-07-29** — Rebuilt the visual design against an owner-supplied mockup: warm
+  off-white surfaces, terracotta accent, Source Serif 4 + Inter, hairline section
+  rules, white cards, static hero arch replacing the particle canvas (JS blocks 4→3).
+  Tokens renamed to semantic names; all ink/accent pairs measured and passing WCAG AA,
+  which **closes AQ-6** (its `--medium-gray` no longer exists). Fixed a pre-existing
+  **R-008 breach** found while verifying — `.reveal { opacity: 0 }` applied with no JS,
+  so a JS-disabled visitor got a blank page; reveal is now default-visible behind an
+  `html.js` gate. Named **Optants** on the first card per owner decision. Brand mark
+  left as a placeholder pending the new logo. Palette stays a D11 draft — nothing locked.
 - **2026-07-27** — Owner confirmed the Formspree activation email was clicked, so
   **OB-4 is closed and retired** (its ID is not reused). Rewrote `privacy.html` to
   disclose every processor (Formspree, Google Workspace, GitHub Pages/Fastly, Google
@@ -118,12 +130,4 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   meant to live here (resolved the former OB-5). Fixed the stale "PopOp" reference
   in `CLAUDE.md` to Optants/company. Standardized the private repo name to
   `company`. Confirmed website ⊥ Optants separation (distinct repos, stacks, docs).
-- **2026-07-24** — Adopted docs-as-memory: added `decisions.md` (D1–D9, all
-  locked), `rules/active.md` (R-001–R-014), `status.md`, `patterns.md`,
-  `docs/INDEX.md`. Folded `docs/WORKPLAN.md` into this backlog and deleted it.
-  Corrected stale reference docs against source: `docs/ARCHITECTURE.md` (page
-  sections, JS module count, form status), `README.md` (structure block, form
-  status), `SECURITY.md` (form "transmits nothing", privacy-policy prerequisite).
-  Added `CLAUDE.md` §7. No site behavior changed.
-
 *(Older entries evicted by the cap — see `git log`.)*
