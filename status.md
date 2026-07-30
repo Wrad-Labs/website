@@ -29,13 +29,20 @@ Last updated: **2026-07-30**
   "Future Ventures" card. No product link yet — none exists to point at, so the card
   carries an "In development" label instead of a dead link. Product/build detail lives
   in the private `optants` repo; the corporate view lives in `company`.
-- **Brand / look-and-feel is a working DRAFT (D11), not locked.** The site now runs
-  a warm off-white palette with a terracotta accent and a Source Serif 4 / Inter
-  pairing, replacing the dark navy + blue→green scheme (2026-07-29). This is still a
-  draft, not a locked identity. **The brand mark is an explicit placeholder** — a new
-  logo is in progress; it lives in one `<symbol>` per page so swapping it is a
-  one-block edit. The token *system* (declare once, never hardcode — R-004) stays;
-  the specific *values* do not.
+- **The mark is LOCKED (D18/R-020); the palette is still a working DRAFT (D11).** The
+  flask-and-roots mark replaced the placeholder tree/node glyph on 2026-07-30 and is
+  signed off. It is **`assets/images/mark.svg`, referenced by `<img>`** from nav, footer,
+  `privacy.html` and `404.html` — one cached file, no inline sprite. It is **taller than
+  it is wide (512×939)**: size it by height, never width. Its source of truth is `brand/`
+  in the private `company` repo (C10) — **the copies here are derived; never edit the
+  artwork in this repo.** The palette is unchanged and still a draft: warm off-white,
+  terracotta accent, Source Serif 4 / Inter. The token *system* (declare once, never
+  hardcode — R-004) stays; the palette *values* remain open.
+- **Icons and share card, one asset per slot.** `favicon.svg` (theme-adaptive: ink,
+  flipping to paper in dark browser chrome), `favicon-48.png`, a real multi-size
+  `/favicon.ico`, `apple-touch-icon.png`, `og.png` (1200×630, so `twitter:card` is now
+  `summary_large_image`), and `icon-512.png` for the JSON-LD `logo`. The old 317 kB
+  `logo.png` did all of those jobs at once and is deleted.
 - **Third-party surface:** Cloudflare (edge/TLS), Google Fonts, Formspree, GitHub
   Pages/Fastly, Google Workspace (email, off-repo). All five are named in `privacy.html`
   as of 2026-07-30 — R-007 is met on the live site.
@@ -45,8 +52,10 @@ Last updated: **2026-07-30**
   truth about what a visitor receives.** Verify rendering against the live domain, not
   just locally.
 
-**In flight.** Nothing. The redesign, the privacy rewrite, the owner-model wiring, and
-the Cloudflare disclosure are all merged and verified live.
+**In flight.** The **new mark** — branch `brand/new-corporate-mark`, PR open, **not yet
+merged**. Merging redeploys the live site, so the post-merge check is: hard-refresh
+www.wradlabs.com, confirm the tab icon changed, and re-scrape the share card (a cached
+`og:image` will keep serving the old one until the scraper refetches).
 
 **Not here.** Accounting, company funding, corporate filings, and product
 development live in the private `company` repo (D8/R-012).
@@ -74,10 +83,10 @@ development live in the private `company` repo (D8/R-012).
 | AQ-3 | Add a `<meta http-equiv="Content-Security-Policy">` scoped to Google Fonts + Formspree. Can break rendering — test both breakpoints. Carried from WORKPLAN P2. | 🟡 2 |
 | AQ-5 | Add a "skip to content" link. Carried from WORKPLAN P3. | 🟢 1 |
 | AQ-7 | Reduce layout shift — preload the hero/tree image. Carried from WORKPLAN P3. | 🟢 1 |
-| AQ-8 | Generate a proper `favicon.ico` + sized PNG icon set instead of reusing `logo.png`. Carried from WORKPLAN P1. | 🟢 1 |
 | AQ-9 | Self-host the fonts to drop the Google Fonts request (privacy + performance). Interacts with OB-1 and AQ-3. Carried from WORKPLAN P3. | 🟡 2 |
 | AQ-10 | Add `Disallow: /*.md$` to `robots.txt` so the tracked docs stop being *indexed*. They stay reachable — no build step, so D1 is untouched — but this is the only mitigation available for OB-5 and it costs nothing. | 🟢 1 |
 | AQ-11 | Add `privacy.html` to `sitemap.xml`. It carries a canonical URL and `index, follow` but is absent from the single-URL sitemap. | 🟢 1 |
+| AQ-13 | **`assets/images/tree-backdrop.png` (2 MB) is referenced by nothing** — no HTML, CSS or JS points at it; only `docs/ARCHITECTURE.md` mentions it. It belonged to the pre-2026-07-29 design. Confirm it is dead, then delete it. Surfaced while replacing the mark; deliberately left alone in that PR to keep the diff to one subject. | 🟢 1 |
 | AQ-12 | **Document the SEO/metadata surface in `docs/ARCHITECTURE.md`** — the JSON-LD `Organization` schema, Twitter/OG meta, and `apple-touch-icon` are 11 lines of `index.html` that no reference doc describes. Surfaced when the R-017 cap evicted the only session entry that recorded them. | 🟢 1 |
 
 Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
@@ -90,6 +99,26 @@ Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
 Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
+
+- **2026-07-30** — **Replaced the placeholder mark with the real one (D18/R-020).** The
+  owner signed off the flask-and-roots artwork; it was vectorised and built out in the
+  private `company` repo (**C10**), which is now the source of truth — a mark is company IP
+  and outlives any surface, so this repo holds **derived copies only**, and that repo's
+  build script deliberately stops at the boundary rather than syncing here (**OOM D-005**:
+  an asset that arrives without review is an asset that ships without review). This
+  **partially closes D11** — the *mark* is locked, the *palette* stays a draft, so R-004 is
+  untouched and R-005 stays retired. Delivery changed with it: the placeholder was a
+  stroked `<symbol>` duplicated into each page's sprite, but the new mark is a single
+  **10.6 kB** path, so inlining it three times would have roughly doubled an 11 kB
+  `index.html` for a capability a one-colour mark does not need. It is now one cached
+  `assets/images/mark.svg` referenced by `<img>`. The new mark is also **taller than wide**
+  where the old one was near-square — hence R-020's size-by-height clause and the intrinsic
+  `width`/`height` on every `<img>`. **Closes AQ-8**: each icon slot now has an asset built
+  for it — theme-adaptive SVG favicon, 48 px PNG, a real multi-size `/favicon.ico`,
+  apple-touch, a 1200×630 `og.png` (so `twitter:card` becomes `summary_large_image`), and a
+  square `icon-512.png` for the JSON-LD `logo` — replacing the one 317 kB `logo.png` that
+  had been doing all four jobs, now deleted. Found in passing and **not** touched, to keep
+  the diff to one subject: `tree-backdrop.png`, 2 MB and referenced by nothing (**AQ-13**).
 
 - **2026-07-30** — **Closed OB-9** and fixed a live rendering defect the owner reported.
   `privacy.html` now names **Cloudflare** as a processor (it terminates TLS and sees every
@@ -141,15 +170,4 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   `includeSubDomains`, no preload), so **OB-3 is closed and retired**. Corrected the
   edge path from "behind Fastly" to "Cloudflare in front of Fastly" here and in
   `SECURITY.md`; OB-9 now covers only the policy text, which is Tier 3 to publish.
-- **2026-07-29** — Rebuilt the visual design against an owner-supplied mockup: warm
-  off-white surfaces, terracotta accent, Source Serif 4 + Inter, hairline section
-  rules, white cards, static hero arch replacing the particle canvas (JS blocks 4→3).
-  Tokens renamed to semantic names; all ink/accent pairs measured and passing WCAG AA,
-  which **closes AQ-6** (its `--medium-gray` no longer exists). Fixed a pre-existing
-  **R-008 breach** found while verifying — `.reveal { opacity: 0 }` applied with no JS,
-  so a JS-disabled visitor got a blank page; reveal is now default-visible behind an
-  `html.js` gate. Named **Optants** on the first card per owner decision, without a
-  product link — no destination exists yet. Brand mark left as a placeholder pending
-  the new logo. Palette stays a D11 draft — nothing locked.
-
 *(Older entries evicted by the cap — see `git log`.)*
