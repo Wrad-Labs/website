@@ -504,3 +504,57 @@ opt-out; JS-dependent email obfuscation of any kind; "protecting" the address by
 it from script; closing AQ-4 by adding an obfuscation scheme.
 
 **Compiled rules:** R-019. **Closes AQ-4** as not-satisfiable rather than done.
+
+---
+
+## D18 — The flask-and-roots mark is the Wrad Labs identity; this repo holds copies, not the source
+
+- **Date:** 2026-07-30
+- **Status:** locked
+- **Upstream:** `company` **C10** (locked 2026-07-30) — the corporate decision this
+  implements. Sources, exports, build script and provenance live there in `brand/`;
+  cited, not restated (**D-002**).
+- **Partially closes:** [D11](#d11--brand-look-and-feel-is-a-working-draft-not-locked),
+  which said *"When the owner signs off on a final visual identity, lock it with a new
+  decision (D-nn) and recompile the palette/logo rule(s) then — not before."* This is that
+  sign-off, **for the mark only**. The palette stays a working draft under D11.
+
+**Context.** The mark shipping until now was an explicit placeholder — a circular
+tree/node glyph, labelled `PLACEHOLDER pending a new identity` in the markup and called
+out as a placeholder in `status.md` and the CSS. The owner supplied new artwork on
+2026-07-30 and it was vectorised and built out in the private `company` repo.
+
+That repo is the source of truth, and deliberately so: a mark is company IP and outlives
+any one surface, so the marketing site cannot be the place it lives. Its build script also
+stops at the repo boundary rather than syncing here — landing a change on this repo's
+`main` publishes to Pages, so an asset that arrives without review is an asset that ships
+without review (**OOM D-005**).
+
+**Decision.** Three parts:
+
+1. **Adopt the mark.** The flask-and-roots artwork replaces the placeholder everywhere it
+   appeared: nav, footer, `privacy.html`, `404.html`, the favicons, the share card, and the
+   JSON-LD `logo`. The mark is no longer a draft.
+2. **This repo holds derived copies.** `assets/images/mark.svg` and every icon are copies
+   of `company/brand/`. **Never edit the artwork here** — edit it there, rebuild, re-copy.
+3. **Delivery changes from an inline sprite to one referenced file.** The placeholder was a
+   4-path stroked `<symbol>` duplicated into each page's sprite. The new mark is a single
+   **10.6 kB** path: inlining it three times would have roughly doubled the weight of an
+   11 kB `index.html` for a capability the mark does not need — it is one flat colour, so
+   nothing depends on `currentColor` or the knockout fills the old symbol needed. It is now
+   `assets/images/mark.svg`, referenced by `<img>` and cached once across all three pages.
+
+**Consequences worth stating.** The mark is **taller than it is wide** (512×939, aspect
+0.545) where the placeholder was near-square — so every consumer sizes it **by height**,
+and the `<img>` carries intrinsic `width`/`height` so `width: auto` resolves without a
+layout shift. `twitter:card` moves from `summary` to `summary_large_image`, because there
+is now a real 1200×630 card to show. `assets/images/logo.png` is **deleted**: it was the
+old identity at 317 kB, doing quadruple duty as favicon, share image, apple-touch icon and
+JSON-LD logo, and each of those slots now has an asset built for it.
+
+**Rules out.** Editing the artwork in this repo; treating `assets/images/mark.svg` as a
+source of truth; reintroducing the `<symbol>` sprite for the mark; sizing the mark by
+width; pointing multiple icon slots at one oversized image again; restating the mark's
+provenance or build here instead of citing `company` C10.
+
+**Compiled rules:** R-020.
