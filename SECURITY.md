@@ -19,14 +19,21 @@ days for a response. Do not open public issues for security reports.
   in the **untracked** `OPERATIONS.local.md`, excluded via `.gitignore`.
 - **No backend, no secrets, no server code.** The site is fully static, so there
   is no server-side execution to exploit and no credentials to leak.
-- **Transport:** served over HTTPS via GitHub Pages / Fastly. "Enforce HTTPS"
-  should be enabled in Pages settings so HSTS is sent (see the backlog in
-  [`status.md`](status.md), OB-3).
-- **Third-party surface:** Google Fonts (CSS/font requests) and **Formspree**
-  (the contact form posts submissions to it client-side). Email runs on Google
-  Workspace, off-repo. Any further service (analytics, embeds) is a new exposure,
-  reviewed as a Tier-2 change (see [`CLAUDE.md`](CLAUDE.md) §3) and reflected in
-  `privacy.html`.
+- **Transport:** HTTPS end to end. GitHub Pages "Enforce HTTPS" is enabled
+  (`http://` returns a 301), and **HSTS is live at the Cloudflare edge** as of
+  2026-07-29: `Strict-Transport-Security: max-age=15552000` on both the apex and
+  `www`, without `includeSubDomains` or preload. Subdomains are deliberately
+  unaffected, and the absence of preload keeps the policy reversible after the
+  max-age window. GitHub Pages alone cannot send HSTS on a custom domain.
+- **Edge path:** requests traverse **Cloudflare → Fastly (GitHub Pages)**.
+  Cloudflare terminates TLS, so it observes visitor IPs; it is a processor and must
+  be named in `privacy.html` (open as OB-9 in [`status.md`](status.md) — the policy
+  text does not yet name it).
+- **Third-party surface:** Cloudflare (edge/TLS), Google Fonts (CSS/font requests),
+  and **Formspree** (the contact form posts submissions to it client-side). Email
+  runs on Google Workspace, off-repo. Any further service (analytics, embeds) is a
+  new exposure, reviewed as a Tier-2 change (see [`CLAUDE.md`](CLAUDE.md) §3) and
+  reflected in `privacy.html`.
 
 ## Known limitations (GitHub Pages)
 

@@ -15,7 +15,9 @@ Last updated: **2026-07-27**
 ## Now
 
 **Live.** www.wradlabs.com — static single page on GitHub Pages, deployed from
-`main`, custom domain via `CNAME`, served behind Fastly (`max-age=600`).
+`main`, custom domain via `CNAME`. Edge path is **Cloudflare in front of Fastly**
+(GitHub's CDN), `max-age=600`. **HTTPS enforced and HSTS live** since 2026-07-29:
+`max-age=15552000` (6 months) on apex and `www`, no `includeSubDomains`, no preload.
 
 - **Page:** `#home` (hero + particle canvas) → `#ventures` (2 cards) → `#contact`.
   Plus `privacy.html`, `404.html`, `robots.txt`, `sitemap.xml`.
@@ -49,12 +51,11 @@ development live in the private `company` repo (D8/R-012).
 |---|---|---|
 | OB-1 | **`privacy.html` processor disclosure — drafted 2026-07-27, awaiting publish.** Names Formspree, Google Workspace, GitHub Pages/Fastly, and Google Fonts; states 24-month retention (D15/R-018) and Formspree's 30-day expiry; confirms no cookies/analytics. Both open questions are now closed — the retention figure is decided, and Formspree is on the free plan (30-day submission history, per their documented limits). Remaining: publishing legal text is Tier 3, so this needs owner sign-off to merge. Until then R-007 is unmet on the live site. | 🔴 3 |
 | OB-2 | **Legal review of `privacy.html` wording.** The draft is plain-English and deliberately claims no specific regulatory framework (no GDPR/CCPA rights language) — confirm that matches the company's actual obligations. Date now reads "July 27, 2026" to match the rewrite. | 🔴 3 |
-| OB-3 | **HSTS — reframed 2026-07-29.** "Enforce HTTPS" is **already enabled** (`https_enforced: true`, cert approved for apex + `www`, `http://` returns 301). The original item was misdiagnosed: GitHub Pages never sends HSTS on a custom domain and cannot set response headers at all. HSTS is achievable at **Cloudflare**, which fronts the site — step-by-step playbook given to the owner 2026-07-29. Verify SSL/TLS mode is Full (strict) first; start at the shortest max-age, verify, then raise; leave preload off. | 🔴 3 |
 | OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, and now `decisions.md` / `status.md` all return 200 at the live domain. Full suppression needs a Jekyll build, which D1 rules out — but AQ-10 can stop them being *indexed*, which shrinks this to "accept that they are reachable." Carried from WORKPLAN P0. | 🔴 3 |
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-7 | **Decide whether to add privacy-respecting analytics** (e.g. Plausible). Requires a privacy-policy disclosure. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-8 | **Annual inquiry sweep — delete support-mailbox mail older than 24 months (R-018).** First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
-| OB-9 | **`privacy.html` does not disclose Cloudflare — live R-007 breach.** Response headers show `Server: cloudflare` / `CF-RAY` in front of Fastly, so Cloudflare terminates TLS and sees every visitor's IP, but the policy published 2026-07-29 names only Formspree, Google Workspace, GitHub Pages/Fastly, and Google Fonts. Also correct "served behind Fastly" in `docs/ARCHITECTURE.md` and the Now section here, and add Cloudflare to the services register. Fix is ready to draft; publishing legal text is Tier 3. | 🔴 3 |
+| OB-9 | **`privacy.html` does not disclose Cloudflare — live R-007 breach.** Cloudflare fronts the site and terminates TLS, so it sees every visitor's IP, but the policy published 2026-07-29 names only Formspree, Google Workspace, GitHub Pages/Fastly, and Google Fonts. The reference docs are corrected (this file + `SECURITY.md`; `ARCHITECTURE.md` pending in PR #4) — **what remains is the policy text itself, which is Tier 3 to publish.** Add Cloudflare to the services register too. | 🔴 3 |
 
 ### Agent queue — ready to pick up
 
@@ -96,7 +97,11 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   centralization monitoring), filled-in `owner.md` placeholders, and a per-project adoption
   prompt. Chasing one owner handoff also corrected **OB-3** (Enforce HTTPS already on; HSTS
   belongs at Cloudflare) and opened **OB-9** — Cloudflare fronts the site and is an
-  undisclosed processor, a live R-007 breach.
+  undisclosed processor, a live R-007 breach. The owner then enabled HSTS at
+  Cloudflare the same day; verified on apex and `www` (`max-age=15552000`, no
+  `includeSubDomains`, no preload), so **OB-3 is closed and retired**. Corrected the
+  edge path from "behind Fastly" to "Cloudflare in front of Fastly" here and in
+  `SECURITY.md`; OB-9 now covers only the policy text, which is Tier 3 to publish.
 - **2026-07-27** — Owner confirmed the Formspree activation email was clicked, so
   **OB-4 is closed and retired** (its ID is not reused). Rewrote `privacy.html` to
   disclose every processor (Formspree, Google Workspace, GitHub Pages/Fastly, Google
