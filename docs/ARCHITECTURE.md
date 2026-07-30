@@ -5,7 +5,7 @@ to stay true against the source.** Companion to [`../CLAUDE.md`](../CLAUDE.md)
 (governance), [`INDEX.md`](INDEX.md) (the doc map), and
 [`../status.md`](../status.md) (current state + backlog).
 
-**Verified against source: 2026-07-27** — tokens, page sections, JS blocks, and the
+**Verified against source: 2026-07-29** — tokens, page sections, JS blocks, and the
 file tree were checked line-by-line against `style.css`, `index.html`, and
 `script.js` on this date. Re-verify and bump this line whenever you edit the doc;
 if it disagrees with the source, the doc is wrong.
@@ -17,8 +17,8 @@ if it disagrees with the source, the doc is wrong.
 | Markup | Hand-written HTML5 | Single page, `index.html` |
 | Styling | Plain CSS, custom properties | One file, `assets/css/style.css` |
 | Behavior | Vanilla JS (ES6), no deps | One file, `assets/js/script.js` |
-| Fonts | Google Fonts (Space Grotesk, Inter) | External `<link>` in `<head>` |
-| Hosting | GitHub Pages, served via Fastly | Deploy from `main`, root folder |
+| Fonts | Google Fonts (Source Serif 4, Inter) | External `<link>` in `<head>` |
+| Hosting | GitHub Pages (Fastly), behind Cloudflare | Deploy from `main`, root folder |
 | DNS/domain | See `OPERATIONS.local.md` | Not in tracked docs |
 
 **No build step. No package manager. No backend.** What is in the repo is what
@@ -65,46 +65,73 @@ these; never hardcode** (R-004) — this discipline is locked and independent of
 palette and brand metaphor below are provisional pending owner sign-off, so treat
 this table as "what ships today," not a fixed identity.
 
+Token **names are semantic, not literal** (`--ink`, not `--black`), so a future
+palette change means editing the `:root` block and nothing else.
+
 | Token | Value | Use |
 |---|---|---|
-| `--bg` | `#0F172A` | Page background (deep navy) |
-| `--bg-raised` | `#131c34` | Raised surfaces / cards |
-| `--green` | `#34C759` | Canopy / accent (impact) |
-| `--blue` | `#246BCE` | Roots / accent (commercial) |
-| `--white` | `#FFFFFF` | Headings |
-| `--light-gray` | `#F8FAFC` | Body text on dark |
-| `--medium-gray` | `#94A3B8` | Muted text |
-| `--border` | `rgba(148,163,184,0.14)` | Hairlines |
-| `--font-display` | Space Grotesk | Headings, eyebrows |
-| `--font-body` | Inter | Body copy |
+| `--bg` | `#F9F7F3` | Page background (warm off-white) |
+| `--surface` | `#FFFFFF` | Cards, form inputs |
+| `--surface-sunk` | `#F3F1EC` | Optional recessed band |
+| `--ink` | `#1F2937` | Headings — 13.7:1 on `--bg` |
+| `--ink-body` | `#44403C` | Body copy — 9.6:1 |
+| `--ink-muted` | `#57534E` | Labels, meta — 7.1:1 |
+| `--stone` | `#78716C` | **Decorative only** — 4.5:1, borderline for small text |
+| `--line` / `--line-strong` | `#E7E5E4` / `#D6D3D1` | Hairlines, input borders |
+| `--accent` / `--accent-hover` | `#C2410C` / `#9A3412` | Terracotta — 4.8:1 as text |
+| `--accent-soft` | `#FBEDE7` | Focus ring |
+| `--on-accent` | `#FFFFFF` | Text on accent — 5.2:1 |
+| `--success` / `--danger` | `#15803D` / `#B91C1C` | Form feedback only |
+| `--nav-scrim` | `rgba(249,247,243,.88)` | Scrolled nav backdrop; keep in step with `--bg` |
+| `--arch` / `--botanical` | `#E5DED2` / `#D8D0C2` | Hero decorative SVG |
+| `--font-display` | Source Serif 4 | Headings |
+| `--font-body` | Inter | Body, nav, buttons, wordmark |
 | `--container` | `1160px` | Max content width |
+| `--radius` / `--radius-lg` | `6px` / `14px` | Controls / cards |
 | `--ease` | `cubic-bezier(0.16,1,0.3,1)` | Standard easing |
 
-The blue→green gradient currently encodes the brand metaphor: **roots (blue) →
-canopy (green)**. This semantic is a **draft** (D11), not a locked rule — it's the
-present direction, but the palette and logo are open to revision until the owner
-locks a final identity. Changing them is a normal Tier-2 proposal.
+Every ink/accent pair above was measured against its background and passes WCAG AA
+for normal text. `--stone` is deliberately **not** an ink token for that reason.
+
+The palette and the brand mark remain an explicit **draft** (D11), not a locked
+rule — the current warm-neutral/terracotta direction is what ships today, and a
+further change is a normal Tier-2 proposal, not a decision violation. **No decision
+locks the logo**; the mark in the SVG sprite is a placeholder pending a new identity.
 
 ## Page sections (in order)
 
-`#home` (hero + particle canvas) → `#ventures` (two-card grid) → `#contact`
-(Formspree form). Footer follows. `privacy.html` is a separate page.
+`#home` (hero: left-aligned copy + decorative arch SVG) → `#ventures` (two-card
+grid) → `#contact` (Formspree form). Footer follows. `privacy.html` is a separate
+page. Sections are separated by a `--line` hairline (`section + section`).
 
 ## JavaScript blocks (`assets/js/script.js`)
 
-All plain DOM, no framework. Four independent blocks:
+All plain DOM, no framework. **Three** independent blocks:
 
 1. **Nav** — adds `.solid` to the header past 40px scroll; mobile hamburger toggle.
 2. **Scroll reveal** — `IntersectionObserver` adds `.in-view` to `.reveal` elements once.
-3. **Hero canvas** — drifting "circuit" particle field with connecting lines;
-   honors `prefers-reduced-motion` (renders one static frame instead of animating).
-4. **Contact form** — submits to Formspree via `fetch` with inline success/error
+3. **Contact form** — submits to Formspree via `fetch` with inline success/error
    messaging; native POST fallback with JS off. Not a placeholder (see D4 in
    [`../decisions.md`](../decisions.md)).
 
-> A dead guard in block 4 still checks `form.action` for `'YOUR_FORM_ID'` — a
+> A dead guard in block 3 still checks `form.action` for `'YOUR_FORM_ID'` — a
 > leftover from the placeholder era, unreachable now. Slated for removal (AQ-1 in
 > [`../status.md`](../status.md)).
+
+The former hero particle canvas was removed with the 2026-07-29 redesign; the hero
+art is now a static, `aria-hidden` inline SVG with no scripting.
+
+### The `html.js` gate
+
+`index.html` adds `class="js"` to `<html>` via a small inline `<script>` in `<head>`.
+`.reveal` defaults to **visible**, and only `html.js .reveal` starts hidden — so with
+JavaScript disabled the page renders fully instead of blank (R-008). Before this gate
+existed, `.reveal { opacity: 0 }` applied unconditionally and a no-JS visitor saw an
+empty page. Keep the default-visible direction if you touch the reveal CSS.
+
+> Note for AQ-3 (`Content-Security-Policy` meta): that inline script needs a hash or
+> `'unsafe-inline'`, or it must move into a file — in which case the reveal state has
+> to stay default-visible to avoid reintroducing the blank-page bug.
 
 ## Conventions
 
@@ -133,6 +160,12 @@ resolve only when served.
 
 ## Deploy
 
-Push/merge to `main` → GitHub Pages rebuilds (~1–2 min) → live behind Fastly
-CDN (`Cache-Control: max-age=600`, so hard-refresh when verifying). No CI, no
-tests, no artifact — the repo *is* the deploy.
+Push/merge to `main` → GitHub Pages rebuilds (~1–2 min) → served through
+**Cloudflare → Fastly** (`Cache-Control: max-age=600`). No CI, no tests, no
+artifact — the repo *is* the deploy.
+
+Two caches sit in front of a change, so when verifying on the live domain, expect
+a stale response for a minute or two even after Pages reports `built`. A
+cache-busting query string (`?v=$(date +%s)`) is the quickest way past them;
+`gh api repos/Wrad-Labs/website/pages/builds/latest` confirms the build itself.
+Cloudflare also terminates TLS and sends HSTS — see [`../SECURITY.md`](../SECURITY.md).

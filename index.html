@@ -32,15 +32,19 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
+<!-- Marks JS as available so the scroll-reveal animation can hide elements before
+     revealing them. Without JS this never runs, the .reveal defaults stay visible,
+     and the page reads normally (R-008). Runs in <head> to avoid a content flash. -->
+<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
-<!-- Background circuit texture (fixed, whole page) -->
-<div class="bg-grid" aria-hidden="true"></div>
-
-<!-- Brand mark: clean monochrome line circuit-tree (inherits color via currentColor), referenced by nav + footer. -->
+<!-- Brand mark — PLACEHOLDER pending a new identity. It is defined once here and
+     referenced by nav + footer via <use>, so replacing the logo means editing this
+     one <symbol> (and its twin in privacy.html / 404.html). Strokes inherit
+     currentColor; .mark-knockout fills track the page background via CSS. -->
 <svg width="0" height="0" class="svg-sprite" aria-hidden="true" focusable="false">
   <defs>
     <symbol id="wrad-mark" viewBox="0 0 48 58">
@@ -50,13 +54,13 @@
         <path d="M24 27C30 23 33.5 18 35.5 15.5"/>
         <path d="M24 35C31 33 36 30 38 28"/>
       </g>
-      <g fill="#0F172A" stroke="currentColor" stroke-width="2.2">
+      <g class="mark-knockout" stroke="currentColor" stroke-width="2.2">
         <circle cx="24" cy="8" r="3.2"/>
         <circle cx="11" cy="15" r="3"/>
         <circle cx="37" cy="14" r="3"/>
         <circle cx="40" cy="28" r="2.7"/>
       </g>
-      <circle cx="24" cy="48" r="5.6" fill="#0F172A" stroke="currentColor" stroke-width="2.8"/>
+      <circle class="mark-knockout" cx="24" cy="48" r="5.6" stroke="currentColor" stroke-width="2.8"/>
     </symbol>
   </defs>
 </svg>
@@ -88,14 +92,31 @@
 
   <!-- SECTION 1: HERO -->
   <section id="home" class="hero">
-    <canvas id="heroCanvas" aria-hidden="true"></canvas>
-    <div class="hero-content">
-      <p class="eyebrow reveal">Wrad Labs Inc.</p>
-      <h1 class="hero-headline reveal">Building Businesses<br>That Fund a Better Future.</h1>
-      <p class="hero-sub reveal">We build commercially successful technology, then reinvest the profit into ethical enterprise and long-term impact.</p>
-      <div class="hero-actions reveal">
-        <a href="#ventures" class="btn btn-primary">Our Ventures</a>
-        <a href="#contact" class="btn btn-secondary">Contact Us</a>
+    <div class="hero-inner">
+      <!-- Decorative arch + botanical. Static SVG, no JS, aria-hidden. -->
+      <svg class="hero-art" viewBox="0 0 460 560" aria-hidden="true" focusable="false">
+        <path class="arch" d="M97 560V245a133 133 0 0 1 266 0v315"/>
+        <g class="stem">
+          <path d="M150 560c0-58 10-104 26-136"/>
+          <path d="M176 560c0-44-7-83-19-112"/>
+          <path d="M163 560c0-70 20-124 44-156"/>
+        </g>
+        <g class="leaf">
+          <ellipse cx="182" cy="405" rx="6" ry="14" transform="rotate(-32 182 405)"/>
+          <ellipse cx="164" cy="430" rx="5.5" ry="13" transform="rotate(24 164 430)"/>
+          <ellipse cx="197" cy="378" rx="5" ry="12" transform="rotate(-45 197 378)"/>
+          <ellipse cx="152" cy="452" rx="5" ry="12" transform="rotate(18 152 452)"/>
+        </g>
+      </svg>
+
+      <div class="hero-content">
+        <p class="eyebrow reveal">Wrad Labs Inc.</p>
+        <h1 class="hero-headline reveal">Building businesses that fund a better future.</h1>
+        <p class="hero-sub reveal">We build commercially successful technology, then reinvest the profit into ethical enterprise and long-term impact.</p>
+        <div class="hero-actions reveal">
+          <a href="#ventures" class="btn btn-primary">Explore our ventures</a>
+          <a href="#contact" class="link-arrow">Get in touch <span aria-hidden="true">&rarr;</span></a>
+        </div>
       </div>
     </div>
   </section>
@@ -105,16 +126,26 @@
     <div class="container">
       <p class="eyebrow reveal center">What we're building</p>
       <h2 class="reveal center">Our ventures.</h2>
-      <div class="card-grid card-grid-2">
-        <article class="card venture-card reveal">
-          <h3>Coming soon</h3>
-          <p>Our first venture is in development. Details will be shared here soon.</p>
-          <p class="venture-stage">Stage <span>In development</span></p>
+      <div class="card-grid">
+        <article class="card reveal">
+          <svg class="card-icon" viewBox="0 0 52 52" aria-hidden="true" focusable="false">
+            <circle class="ring-track" cx="26" cy="26" r="20"/>
+            <circle class="ring-arc" cx="26" cy="26" r="20" stroke-dasharray="34 92" transform="rotate(-40 26 26)"/>
+          </svg>
+          <h3>Optants</h3>
+          <p>The home of popular opinion.</p>
+          <!-- No "View product" link yet: Optants has no public destination. Add
+               <a class="link-arrow" href="URL">View product <span aria-hidden="true">&rarr;</span></a>
+               here once one exists — the card layout already reserves the space. -->
+          <p class="card-stage">In development</p>
         </article>
-        <article class="card venture-card reveal">
+        <article class="card reveal">
+          <svg class="card-icon" viewBox="0 0 52 52" aria-hidden="true" focusable="false">
+            <circle class="disc" cx="26" cy="26" r="20"/>
+          </svg>
           <h3>Future Ventures</h3>
           <p>New businesses, cultivated from the ground up &mdash; funded by the ventures already standing.</p>
-          <p class="venture-stage">Stage <span>Concept</span></p>
+          <a class="link-arrow" href="#contact">Get in touch <span aria-hidden="true">&rarr;</span></a>
         </article>
       </div>
     </div>
