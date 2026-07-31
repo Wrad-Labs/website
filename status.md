@@ -88,6 +88,19 @@ Last updated: **2026-07-31**
   release renaming a class rendered unstyled. Seen live 2026-07-30 (the new hero art
   showed as a solid black shape). `script.js` is deliberately *not* versioned — under
   R-008 a stale copy degrades rather than breaks.
+- **Accessibility: skip link on all three pages** (2026-07-31). First tab stop, jumping to
+  `#main` and skipping 4 nav stops. Two details it will not survive losing: it is
+  **`position: fixed`**, because `absolute` puts it above the viewport the moment the page
+  is scrolled — which is exactly when someone re-entering from the browser chrome reaches
+  for it; and **`<main>` carries `tabindex="-1"`**, because without it the browser moves
+  the scroll but leaves focus at the top of the document and the next Tab goes straight
+  back into the nav. Both were caught in testing, not by reading.
+- **Measured CLS is 0**, and there is **no hero image** — the hero art is an inline `<svg>`,
+  every `<img>` carries intrinsic `width`/`height`. Closed AQ-7, which asked to preload a
+  `tree-backdrop.png` that no longer exists. The only remaining shift source is **font
+  swap**, which is AQ-9's to fix.
+- **`referrer` = `strict-origin-when-cross-origin`** on all three pages: Google Fonts and
+  Formspree receive the origin, never the path.
 - **Crawl surface, as of 2026-07-31.** `sitemap.xml` lists **two** URLs — `/` and
   `/privacy.html`, which had been absent despite carrying a canonical URL and
   `index, follow`. `robots.txt` **disallows `/*.md$`**, so compliant crawlers stop fetching
@@ -154,13 +167,8 @@ development live in the private `company` repo (D8/R-012).
 
 | # | Item | Tier |
 |---|---|---|
-| AQ-1 | Remove the dead placeholder guard in `assets/js/script.js` that checks `form.action` for `'YOUR_FORM_ID'` — unreachable since D4. Separate PR. | 🟢 1 |
-| AQ-2 | Add `<meta name="referrer" content="strict-origin-when-cross-origin">`. Carried from WORKPLAN P2. | 🟢 1 |
-| AQ-3 | Add a `<meta http-equiv="Content-Security-Policy">` scoped to Google Fonts + Formspree. Can break rendering — test both breakpoints. Carried from WORKPLAN P2. | 🟡 2 |
-| AQ-5 | Add a "skip to content" link. Carried from WORKPLAN P3. | 🟢 1 |
-| AQ-7 | Reduce layout shift — preload the hero/tree image. Carried from WORKPLAN P3. | 🟢 1 |
-| AQ-9 | Self-host the fonts to drop the Google Fonts request (privacy + performance). Interacts with OB-1 and AQ-3. Carried from WORKPLAN P3. | 🟡 2 |
-| AQ-12 | **Document the SEO/metadata surface in `docs/ARCHITECTURE.md`** — the JSON-LD `Organization` schema, Twitter/OG meta, and `apple-touch-icon` are 11 lines of `index.html` that no reference doc describes. Surfaced when the R-017 cap evicted the only session entry that recorded them. | 🟢 1 |
+| AQ-3 | Add a `<meta http-equiv="Content-Security-Policy">` scoped to Google Fonts + Formspree. Can break rendering — test both breakpoints. **Sequence after AQ-9**, which removes two origins from the policy; writing it first means writing it twice. Must also allow Cloudflare's `/cdn-cgi/` injections (D17), which are not in the repo. Carried from WORKPLAN P2. | 🟡 2 |
+| AQ-9 | **Self-host the fonts** to drop the Google Fonts request. Three things ride on it, which is why it is worth doing before AQ-3: it removes a **named processor from `privacy.html`** (R-007), it removes the **last measurable CLS source** — font swap, the only one left now that AQ-7 is closed — and it shrinks AQ-3's CSP to `self` + Formspree. Needs the owner's go-ahead: committing font binaries means **downloading files from Google**, and the licence (SIL OFL for both families) should be confirmed and carried in-repo. | 🟡 2 |
 
 Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
 [`CLAUDE.md`](CLAUDE.md) §3.
@@ -172,6 +180,24 @@ Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
 Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
+
+- **2026-07-31** — **Swept the agent queue: five of seven closed, two escalated.** AQ-1
+  (dead `YOUR_FORM_ID` guard), AQ-2 (`referrer` meta on all three pages), AQ-5 (skip link),
+  AQ-7 and AQ-12 (metadata/a11y/CLS docs). **Two of the five did not survive contact with
+  a browser as written, which is the useful part.** *AQ-5* was written as "add a skip
+  link"; the naive version passed inspection and failed twice under test — `position:
+  absolute` put it above the viewport at any scroll offset (caught rendering at viewport
+  top −141 at scrollY 151, and re-entering a scrolled page is precisely when a keyboard
+  user wants it), and without `tabindex="-1"` on `<main>` the browser moved the scroll but
+  left focus on `BODY`, so the next Tab went back into the nav and the link skipped
+  nothing. Now verified the real way: one Tab, one Enter, 4 nav stops skipped, next stop
+  *"Explore our ventures"*. *AQ-7* asked to preload the hero image to cut layout shift —
+  **there is no hero image**; it is an inline `<svg>`, every `<img>` carries intrinsic
+  dimensions, and measured **CLS is 0**. Closed as obsolete rather than implemented, with
+  its real residue (font swap) folded into AQ-9. **A backlog item can rot into describing a
+  page that no longer exists** — check the premise before building the fix. AQ-3 and AQ-9
+  stay open and are now sequenced: AQ-9 first, because self-hosting removes two origins
+  from the CSP AQ-3 has to write, and writing it first means writing it twice.
 
 - **2026-07-31** — **Seven owner-directed changes; D20 supersedes D12, D21 recorded.** The
   one with teeth: **the published address moved from `support@` to `hello@`** — markup,
@@ -281,13 +307,6 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   also **closes AQ-4** as not-satisfiable: any obfuscation hiding the address from a
   scraper hides it from a no-JS reader, and R-008 is locked. Standing lesson recorded in
   `SECURITY.md` — a zone-level toggle can alter served markup without a commit.
-- **2026-07-30** — Centralized three more rules found in the `company` repo, and compiled
-  them here: **OOM D-007** (never invent a fact) is now Golden rule 6, citing this repo's own
-  Cloudflare miss as the worked example; **D-008** and **D-009** are recorded in
-  `rules/active.md` as the upstream general forms of **R-013**, **R-014** and **R-016**. The
-  R-numbers stay — they compile from D9/D13 — but the rationale now lives once, upstream.
-  D-009 is the notable one: *one source of record per fact* turns out to be the principle
-  that D-002, D-003, R-014, R-016, C8 and every de-duplication this week are instances of.
-  Also completed `company` adoption ([company#1](https://github.com/Wrad-Labs/company/pull/1)),
-  where the submodule had the same stale-`index.lock` failure as Optants — two of three repos.
-*(Older entries evicted by the cap — see `git log`.)*
+*(Older entries evicted by the cap — see `git log`. The 2026-07-30 rule-centralization entry
+went here; its durable content is Golden rule 6 in `CLAUDE.md` and the D-008/D-009 table in
+`rules/active.md`, both still current.)*
