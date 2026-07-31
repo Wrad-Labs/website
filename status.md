@@ -95,19 +95,29 @@ Last updated: **2026-07-31**
   start above y=228, the vessel rim** — lower and they appear to grow out of the glass.
   **Their widths are CLASSES, not `stroke-width` attributes:** a presentation attribute
   loses to any CSS rule, and writing them inline silently flattened all three to 7.
-- **Icons and share card, one asset per slot.** `favicon.svg` (theme-adaptive: ink,
-  flipping to paper in dark browser chrome — **but see OB-14: that flip misfires under a
-  custom browser theme**), `favicon-48.png`, a real multi-size
-  `/favicon.ico`, `apple-touch-icon.png`, `og.png` (1200×630, so `twitter:card` is now
-  `summary_large_image`), and `icon-512.png` for the JSON-LD `logo`. The old 317 kB
-  `logo.png` did all of those jobs at once and is deleted.
+- **Every brand asset is Canopy, and the derived copies match upstream** (2026-07-31,
+  company **C13**). `mark.svg` now renders `#1E2318` — **the same ink as the headings beside
+  it**, which is what `brand/README.md` always claimed and was briefly false while the
+  palette moved. `og.png` carries a **leaf-green rule and zero terracotta pixels**
+  (verified by decomposing the image, not by eye). Closed OB-14.
+- **`favicon.svg` is the mark on its own ground** — ink glyph on a paper tile, 512² with a
+  96 corner radius (company **C12**). It replaced a theme-adaptive glyph that flipped on
+  `prefers-color-scheme`, **which is not the colour of the tab strip**: under a custom
+  browser theme the two disagree and the icon vanished (owner screenshot). A tile does not
+  need to contrast with the strip — the glyph contrasts with the tile, and that never
+  changes. The paper tile was chosen over the ink one because it matches what the PNG
+  exports have always done.
+- **The rest, one asset per slot.** `favicon-48.png`, a real multi-size `/favicon.ico`,
+  `apple-touch-icon.png`, `og.png` (1200×630, so `twitter:card` is `summary_large_image`),
+  and `icon-512.png` for the JSON-LD `logo`. The old 317 kB `logo.png` did all of those
+  jobs at once and is deleted.
 - **Two drawings of the mark, and the medium picks (upstream C11 / `R-003`).** Every
   **square raster icon** here is the **small mark** — the master's own vial filled solid
   with the tendrils clipped off, derived from the master rather than redrawn; `mark.svg` in the
   nav, footer, legal and 404 is the **master**. They are not the same drawing and that is
   deliberate — a 16px PNG gets 16 pixels, where the vector at 30px gets 60 on a 2× display.
   **`og.png` now carries the company name:** the horizontal lockup, mark plus "WRAD LABS"
-  outlined from Inter 700, above a terracotta rule.
+  outlined from Inter 700, above a leaf-green rule.
 - **Third-party surface, five processors:** Cloudflare (edge/TLS), **Cloudflare Web
   Analytics**, Formspree, GitHub Pages/Fastly, Google Workspace (email, off-repo). All five
   are named in `privacy.html`, dated **July 31, 2026**. **Google Fonts is gone**
@@ -225,8 +235,7 @@ development live in the private `company` repo (D8/R-012).
 | OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, `decisions.md` and `status.md` all return 200 at the live domain. **The available mitigation has now shipped** (AQ-10, 2026-07-31): `robots.txt` disallows `/*.md$`, so compliant crawlers stop fetching them. It does **not** make them private and never could — full suppression needs a Jekyll build, which D1 rules out, and a `.md` file can carry neither a robots meta tag nor an `X-Robots-Tag` on Pages. So this is now purely the owner's question: **accept that these files are reachable to anyone with the URL, or reopen D1/D2.** Nothing further an agent can do. Carried from WORKPLAN P0. | 🔴 3 |
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-8 | **Annual inquiry sweep — delete contact-mailbox mail older than 24 months (R-018).** **One mailbox**, reached by both `hello@` and `support@` as aliases (owner-confirmed 2026-07-31), so the sweep scope is settled. First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
-| OB-14 | **Re-sync the brand assets to Canopy, and ship the grounded favicon — both upstream in `company/brand/`.** Two things, one root cause. **(a) Palette drift:** every derived SVG here bakes the *old* ink `#1F2937` and paper `#F9F7F3` (`mark.svg`, `logo-stacked.svg`, `favicon.svg`), and `og.png` bakes terracotta `#C2410C`. After D28 the nav mark renders `#1F2937` beside `#1E2318` headings — breaking `brand/README.md`’s own stated promise that the mark sits in the same ink as the headings beside it. It is 14 SVGs plus `build.mjs` plus the README, then a rerun of the export script. **Deliberately not started until the palette settled** — it moved twice on 2026-07-31 (D26 → D28), and re-cutting every raster against a value that then changes is the waste this entry exists to avoid. **(b) Favicon ground:** the adaptive favicon follows `prefers-color-scheme`, which does **not** track the tab-strip colour — under a custom browser theme it paints the paper glyph onto a light strip and vanishes (owner screenshot, 2026-07-31). **Already built upstream** as `mark-small-tile.svg` (paper tile, ink glyph) and `mark-small-tile-dark.svg`, merged in [company#5](https://github.com/Wrad-Labs/company/pull/5) — the owner still picks which ships. **Both must originate in `company/brand/` (R-020) — never edit the artwork here** — then `tools/build.mjs` regenerates `exports/`, and the copies land here through review. **Do this before OB-10:** `og.png` still carries the terracotta rule, so re-scraping the social caches now would publish a stale card and need doing twice. | 🔴 3 |
-| OB-10 | **Force the social platforms to re-scrape the share card.** The new `og.png` is live and correct, but each platform caches the *old* image against the URL and will keep serving it — nothing in this repo can clear those caches, and they need a signed-in account. **LinkedIn:** open `https://www.linkedin.com/post-inspector/`, paste `https://www.wradlabs.com/`, click **Inspect** — it refetches on every run. **Facebook/Meta:** `https://developers.facebook.com/tools/debug/`, paste the URL, click **Scrape Again**. **X/Twitter:** no public validator remains; it refreshes on its own within about a week. **Verify:** each tool previews the card it now holds — you want the flask on off-white with a terracotta rule, not the old tree glyph. **Reverse:** nothing to undo; re-scraping only re-reads what the site already serves. | 🔴 3 |
+| OB-10 | **Force the social platforms to re-scrape the share card.** **Now unblocked and worth doing** — `og.png` was re-cut to Canopy on 2026-07-31 (leaf-green rule, zero terracotta), so a re-scrape finally publishes the right card. Each platform caches the *old* image against the URL and will keep serving it — nothing in this repo can clear those caches, and they need a signed-in account. **LinkedIn:** open `https://www.linkedin.com/post-inspector/`, paste `https://www.wradlabs.com/`, click **Inspect** — it refetches on every run. **Facebook/Meta:** `https://developers.facebook.com/tools/debug/`, paste the URL, click **Scrape Again**. **X/Twitter:** no public validator remains; it refreshes on its own within about a week. **Verify:** each tool previews the card it now holds — you want the flask on off-white with a terracotta rule, not the old tree glyph. **Reverse:** nothing to undo; re-scraping only re-reads what the site already serves. | 🔴 3 |
 
 ### Agent queue — ready to pick up
 
@@ -243,6 +252,23 @@ Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
 Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
+
+- **2026-07-31** — **Finalised Canopy across every surface; closed OB-14.** The palette
+  lived in four places, only one of which was the stylesheet: **16 brand SVGs**, the
+  `PAPER`/`ACCENT` constants in `company`'s `build.mjs`, that repo's README, and **14 raster
+  exports** — because rasters cannot read CSS tokens. Re-synced upstream in one pass
+  ([company#6](https://github.com/Wrad-Labs/company/pull/6), **C13**), rebuilt, then the
+  derived copies came down here through review. **The visible defect it fixed:** `mark.svg`
+  had been rendering `#1F2937` beside `#1E2318` headings, breaking `brand/README.md`'s own
+  promise that the brand sits in the same ink as the headings next to it — and `og.png` was
+  publishing a **terracotta** rule for an accent that no longer existed. **Verified by
+  sampling pixels, not by eye:** icons read paper at the corner and ink at the centre, and
+  the share card decomposes to 1,008 leaf-green pixels and **zero terracotta**. The
+  favicon also became the **grounded tile** (C12), retiring an adaptive glyph that keyed off
+  `prefers-color-scheme` — which is not the tab-strip colour, so a custom browser theme made
+  it disappear. **One property worth reusing:** running the export build *before* any edit
+  reproduced the existing rasters byte-for-byte, so the build is deterministic and a diff in
+  `exports/` is always a real source change.
 
 - **2026-07-31** — **Canopy replaces Cool Stone within hours (D28 supersedes D26); the hero
   now carries the right side.** D26 shipped a palette that passed **15 measured contrast
@@ -326,30 +352,13 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   deliberately is not, since `unicode-range` means most readers never fetch it), and
   shrank AQ-3 to `self` + Formspree.
 
-- **2026-07-31** — **Swept the agent queue: five of seven closed, two escalated.** AQ-1
-  (dead `YOUR_FORM_ID` guard), AQ-2 (`referrer` meta on all three pages), AQ-5 (skip link),
-  AQ-7 and AQ-12 (metadata/a11y/CLS docs). **Two of the five did not survive contact with
-  a browser as written, which is the useful part.** *AQ-5* was written as "add a skip
-  link"; the naive version passed inspection and failed twice under test — `position:
-  absolute` put it above the viewport at any scroll offset (caught rendering at viewport
-  top −141 at scrollY 151, and re-entering a scrolled page is precisely when a keyboard
-  user wants it), and without `tabindex="-1"` on `<main>` the browser moved the scroll but
-  left focus on `BODY`, so the next Tab went back into the nav and the link skipped
-  nothing. Now verified the real way: one Tab, one Enter, 4 nav stops skipped, next stop
-  *"Explore our ventures"*. *AQ-7* asked to preload the hero image to cut layout shift —
-  **there is no hero image**; it is an inline `<svg>`, every `<img>` carries intrinsic
-  dimensions, and measured **CLS is 0**. Closed as obsolete rather than implemented, with
-  its real residue (font swap) folded into AQ-9. **A backlog item can rot into describing a
-  page that no longer exists** — check the premise before building the fix. AQ-3 and AQ-9
-  stay open and are now sequenced: AQ-9 first, because self-hosting removes two origins
-  from the CSP AQ-3 has to write, and writing it first means writing it twice.
-
-*(Older entries evicted by the cap — see `git log`. Five went from here: the 2026-07-30
+*(Older entries evicted by the cap — see `git log`. Six went from here: the 2026-07-30
 rule-centralization entry, whose durable content is Golden rule 6 in `CLAUDE.md` and the
 D-008/D-009 table in `rules/active.md`; the 2026-07-30 OB-9 / email-obfuscation entry, whose
 lesson lives in `SECURITY.md` and whose rule is R-019; the 2026-07-30 brand-mark entry
 (D18/R-020), whose durable content is the mark bullet in **Now** and D18 itself; the
 2026-07-30 nine-change site pass (D19/R-021), whose structural half is the full-viewport
-bullet in **Now**; and the 2026-07-31 seven-change contact/copy pass (D20/D21), whose
-outcomes are the address, contact-section and footer bullets in **Now**. All still
-current.)*
+bullet in **Now**; the 2026-07-31 seven-change contact/copy pass (D20/D21), whose outcomes
+are the address, contact-section and footer bullets in **Now**; and the 2026-07-31
+agent-queue sweep (AQ-1/2/5/7/12), whose outcomes are the skip-link, CLS and referrer
+bullets in **Now**. All still current.)*
