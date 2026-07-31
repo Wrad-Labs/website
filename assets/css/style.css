@@ -69,48 +69,68 @@
 
 /* ============ TOKENS ============
    Declared once, referenced everywhere (R-004 — never hardcode these values).
-   The PALETTE is still a working draft (D11) — the colors below stay open to
-   revision until the owner signs off. The MARK is no longer a draft: it was
-   signed off 2026-07-30 and is locked by D18. The token *system* is what D11
-   locked, not the colors below.
+   **COOL STONE — the palette is LOCKED as of 2026-07-31 (D26).** It is no longer
+   the working draft D11 left open; D11 is now fully closed, its mark half having
+   been locked by D18 a day earlier.
+
+   WHY IT IS COOL. The previous palette was a warm off-white (#F9F7F3) with a
+   terracotta accent. Optants — the venture this site links to — ships a warm
+   off-white of #FAFAF8 and the same body typeface. One step apart on the ground
+   colour, identical letterforms: the two sites read as one. The accents were
+   never the problem (terracotta vs Optants' teal #115E59 is a clean split);
+   the GROUND was. Every neutral below has had its warmth removed, which is the
+   single change that separates the two at a glance. Do not warm them back up
+   without reading D26.
 
    Names are semantic, not literal (--ink, not --black), so a future palette
-   change means editing this block and nothing else. */
+   change means editing this block and nothing else. Every ratio below is
+   measured, not estimated. */
 :root {
-  /* Surfaces — warm off-white, not pure white */
-  --bg: #F9F7F3;
+  /* Surfaces — cool stone. Deliberately NOT warm; see the note above. */
+  --bg: #F1F3F5;
   --surface: #FFFFFF;
-  --surface-sunk: #F3F1EC;
+  --surface-sunk: #E4E8EB;
 
   /* Ink — all three pass WCAG AA on --bg at body size */
-  --ink: #1F2937;        /* headings            13.0:1 */
-  --ink-body: #44403C;   /* body copy            9.7:1 */
-  --ink-muted: #57534E;  /* labels, meta         7.1:1 */
+  --ink: #131A21;        /* headings           15.77:1 */
+  --ink-body: #39434C;   /* body copy           9.07:1 */
+  --ink-muted: #56616B;  /* labels, meta        5.69:1 */
 
-  /* Stone — decorative only. #78716C is 4.5:1 on --bg, i.e. borderline for
-     small text, so it is deliberately NOT an ink token. Use for shapes/icons. */
-  --stone: #78716C;
+  /* Stone — decorative only. 3.29:1 on --bg clears the 3:1 bar for shapes and
+     icons but NOT the 4.5:1 for text, so it is deliberately not an ink token. */
+  --stone: #7C8791;
 
   /* Lines */
-  --line: #E7E5E4;
-  --line-strong: #D6D3D1;
+  --line: #D5DBDF;
+  --line-strong: #C3CBD1;
 
-  /* Accent — terracotta. 4.9:1 on --bg as text, 5.2:1 white-on-accent. */
-  --accent: #C2410C;
-  --accent-hover: #9A3412;
-  --accent-soft: #FBEDE7;
+  /* Accent — oxblood. 7.32:1 on --bg as text, 8.14:1 white-on-accent. Chosen to
+     sit far from Optants' teal without shouting; it reads institutional, which
+     suits a studio that owns ventures rather than sells one. */
+  --accent: #8C2F39;
+  --accent-hover: #6E232B;
+  --accent-soft: #F6E8EA;
   --on-accent: #FFFFFF;
 
-  /* Status — form feedback only */
-  --success: #15803D;
-  --danger: #B91C1C;
+  /* Status — form feedback only.
+     --danger is a VERMILLION, not the old dark red. With an oxblood accent, a
+     dark-red error message reads as a link: every candidate red measured only
+     1.2–1.6:1 of luminance separation from --accent, so the distinction has to
+     come from hue instead. If errors are ever still mistaken for links, fix it
+     with weight or an icon — pushing the hue further just makes it orange.
+     --success was #15803D, which measured 4.51:1 here: passing by 0.01 is not
+     passing, so it is a step darker. */
+  --success: #14713A;    /* 5.47:1 */
+  --danger: #CC3311;     /* 4.66:1 */
 
   /* Translucent nav backdrop; matches --bg. Must stay in step if --bg changes. */
-  --nav-scrim: rgba(249, 247, 243, 0.88);
+  --nav-scrim: rgba(241, 243, 245, 0.88);
 
-  /* Hero arch + botanical */
-  --arch: #E5DED2;
-  --botanical: #D8D0C2;
+  /* Hero art masses. Picked to hold the SAME visual weight against --bg as the
+     warm pair did against the old one (1.19 / 1.42 vs 1.25 / 1.43), so the
+     artwork reads identically — only its temperature changed. */
+  --arch: #DAE1E7;
+  --botanical: #C5CFD6;
 
   /* Type */
   --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
@@ -403,12 +423,25 @@ html { scroll-padding-top: var(--nav-h); }
 .hero-art .vessel,
 .hero-art .roots { fill: var(--arch); }
 .hero-art .liquid { fill: var(--botanical); }
+/* The trunk is a FILLED tapered shape (D27); the branches stay strokes, thinning
+   as they go out.
+
+   The widths are CLASSES, not `stroke-width` attributes in the markup. An SVG
+   presentation attribute loses to any CSS rule, so `.trunk { stroke-width: 7 }`
+   silently flattened all three branches to 7 when they were written inline —
+   the taper simply did not render. Caught by reading computed styles, not by
+   looking at the page, because a 7px branch where 12 was intended still looks
+   like a branch. */
+.hero-art .trunk-solid { fill: var(--botanical); }
 .hero-art .trunk {
   fill: none;
   stroke: var(--botanical);
   stroke-width: 7;
   stroke-linecap: round;
 }
+.hero-art .branch-major { stroke-width: 12; }
+.hero-art .branch-mid   { stroke-width: 9; }
+.hero-art .branch-minor { stroke-width: 7; }
 
 /* ============ CARDS ============ */
 .card-grid {

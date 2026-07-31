@@ -888,3 +888,96 @@ actually cross-origin first; editing the inline script without recomputing its h
 treating a local pass as sufficient verification.
 
 **Compiled rules:** R-025.
+
+---
+
+## D26 — Cool Stone: the palette is locked, and it is deliberately not warm
+
+- **Date:** 2026-07-31
+- **Status:** locked
+- **Owner-directed**, chosen from four rendered options.
+- **Closes D11.** D18 locked its mark half on 2026-07-30; this locks the palette half.
+  D11 is now fully closed and `R-005`'s ID stays retired.
+
+**Context.** The owner noticed that moving from wradlabs.com to optants.com "almost feels
+like the same site." It does, and the cause was measurable rather than a matter of taste:
+
+| | Wrad Labs (was) | Optants |
+|---|---|---|
+| ground | `#F9F7F3` | `#FAFAF8` |
+| sunk surface | `#F3F1EC` | `#F2F1EE` |
+| body typeface | Inter | Inter |
+| accent | terracotta `#C2410C` | **teal `#115E59`** |
+
+One step apart on the ground, identical letterforms. **The accents were never the problem** —
+an early reading of Optants' stylesheet by hex frequency mistook Tailwind's stock
+`--color-red-*` scale for brand colour and concluded Optants "owns red." Its actual
+semantic token is `--signal: #115E59`, and terracotta against teal was already a clean
+split. That error is recorded because the wrong diagnosis nearly produced the wrong fix:
+moving the accent, which would have changed the thing that was working and left the thing
+that was broken.
+
+**Decision.** Wrad Labs moves, not Optants. Optants is the product accruing equity with
+real users; this is a studio page whose palette was still an explicit draft. Every neutral
+has its warmth removed — ground `#F1F3F5`, sunk `#E4E8EB`, ink `#131A21` — and the accent
+becomes **oxblood `#8C2F39`**, which sits far from teal and reads institutional. The
+palette is now **locked**, not a draft.
+
+**Two consequences that are not obvious.**
+
+- **`--danger` had to move too, and not for contrast reasons.** With an oxblood accent, a
+  dark-red error message reads as a link. Every candidate red measured **1.2–1.6:1** of
+  luminance separation from `--accent`, so the distinction cannot come from lightness; it
+  has to come from hue. `--danger` is now a vermillion `#CC3311`. If errors are still
+  mistaken for links, the fix is weight or an icon — pushing hue further just makes it
+  orange. **This is the standing cost of a red-family brand accent**, and it is the one
+  argument against oxblood worth remembering.
+- **`--success` was `#15803D`, which measured 4.51:1 on the new ground.** Passing AA by
+  0.01 is not passing in any meaningful sense, so it is a step darker at `#14713A`
+  (5.47:1). Found only because every ratio was measured against the new ground rather than
+  carried over.
+
+**Every value is measured, not estimated.** The hero art tones were chosen to hold the
+*same* visual weight against the new ground as the warm pair held against the old
+(1.19/1.42 vs 1.25/1.43), so the artwork reads identically and only its temperature
+changed.
+
+**Rules out.** Warming the neutrals back up without superseding this; reintroducing
+terracotta as `--accent`; treating the palette as a draft; a `--danger` in the same hue
+family as `--accent`; adding a colour without measuring it against the ground it will
+actually sit on.
+
+**Compiled rules:** R-026.
+
+---
+
+## D27 — The hero trunk is a tapered solid; branches clear the vessel
+
+- **Date:** 2026-07-31
+- **Status:** locked
+- **Owner-directed.**
+
+**Context.** The hero trunk was a uniform 7px stroke with two branches mirrored at the
+same height — symmetrical, thin, and reading as a drawn line beside the vessel, which is
+itself a solid shape. The owner asked for a thicker, asymmetric trunk.
+
+**Decision.** The trunk is a **filled tapered path** — roughly 28 units wide at the base
+inside the vessel, 6 at the top — with **three** stroked branches thinning outward
+(12 / 9 / 7) at different heights, two left and one right.
+
+**Every branch starts above y=228, the vessel rim.** A first draft began its lowest branch
+at y=268, which put it inside the glass; the owner's note was that it "feels too busy," and
+the cause was a branch appearing to grow out of the vessel rather than from the stem above
+it. The trunk itself still runs down inside the vessel — that is the image.
+
+**The branch widths are CLASSES, not `stroke-width` attributes.** Written inline first,
+they were silently flattened to 7 by `.hero-art .trunk { stroke-width: 7 }`: an SVG
+presentation attribute loses to any CSS rule. **The taper did not render at all**, and it
+was invisible on the page because a 7px branch where 12 was intended still looks like a
+branch. Caught by reading computed styles.
+
+**Rules out.** Re-symmetrising the branches; a uniform-width trunk; a branch originating
+below y=228; setting branch widths with presentation attributes.
+
+**Compiled rules:** none — presentation inside the token system. Recorded for the
+attribute-vs-CSS trap, which will cost the next person the same hour.

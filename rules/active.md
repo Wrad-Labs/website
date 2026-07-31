@@ -18,7 +18,7 @@ Current state only. No rationale, no history — follow the backlink for either.
 | R-002 | Site behavior is vanilla ES6 with zero runtime dependencies. | D1 |
 | R-003 | Every tracked file is public and served at the live domain: no secrets, keys, tokens, personal data, financial figures, or DNS/registrar/email detail, and no contact address beyond hello@wradlabs.com — except inside superseded `decisions.md` entries, which R-013 forbids rewriting. Operational specifics live only in untracked `OPERATIONS.local.md`. | D2 · D20 |
 | R-004 | Never hardcode colors or fonts; use the design tokens at the top of `assets/css/style.css`. | D11 |
-| ~~R-005~~ | *Retired 2026-07-24 (D11): the blue→green roots→canopy palette semantic is now a working draft, not a locked constraint.* | ~~D5~~ |
+| ~~R-005~~ | *Retired 2026-07-24 (D11). The palette is locked again as of 2026-07-31, but by **R-026** from D26 — this ID is not reused.* | ~~D5~~ |
 | R-006 | The contact form posts to Formspree from the browser; no server-side handling and no credentials in the repo. | D4 |
 | R-007 | `privacy.html` must accurately describe every field the form collects and every processor that receives it. | D4 |
 | R-008 | The page must read and function with JavaScript disabled; JS only enhances. | D6 |
@@ -35,6 +35,7 @@ Current state only. No rationale, no history — follow the backlink for either.
 | R-019 | `hello@wradlabs.com` is published as plain readable text in both link text and `href`. No JS-dependent obfuscation — every `mailto:` is wrapped in `<!--email_off-->` to opt out of Cloudflare's edge rewrite. | D17 · D20 |
 | R-020 | The brand mark's source of truth is `brand/` in the private `company` repo. Everything under `assets/images/` is a derived copy — never edit the artwork here. The mark is taller than it is wide: always size it by height. | D18 |
 | R-021 | Sections are full-viewport pages via **`min-height`**, never `height` — a section must always be able to grow past the viewport when its content does not fit. Reserve the fixed nav with `--nav-h`. | D19 |
+| R-026 | The palette is **Cool Stone and LOCKED** (D26) — neutrals are deliberately cool, accent is oxblood. Do not warm them back up, and do not reintroduce terracotta as `--accent`, without superseding D26. `--danger` must stay in a different **hue** family from `--accent`; luminance alone cannot separate them. Every new colour is measured against the ground it will sit on before it ships. | D26 |
 | R-025 | All three pages carry an **identical** `<meta>` CSP, placed first in `<head>`. `script-src` uses a hash, never `'unsafe-inline'` — editing the inline script means recomputing it. Any origin added must be shown to be genuinely cross-origin first, and every change is verified in a real browser on the live domain, because the repo does not contain everything a visitor receives. | D25 |
 | R-024 | The site runs **Cloudflare Web Analytics**, injected at the edge and present in no commit. `privacy.html` must disclose it, and any CSP must allow `static.cloudflareinsights.com`. Disabling it and updating the policy happen together — the disclosure and the setting move as one. | D24 |
 | R-023 | Fonts are **self-hosted from this origin** — no third-party font service, stylesheet or `preconnect`. Files in `assets/fonts/` are derived copies under SIL OFL, with the licences carried beside them; never hand-edit the binaries. Any change to the font delivery path updates `privacy.html`'s processor list in the same commit. | D23 |
@@ -42,7 +43,19 @@ Current state only. No rationale, no history — follow the backlink for either.
 
 ## Compile log
 
-Regenerated **2026-07-31** from `decisions.md` at D1–D25.
+Regenerated **2026-07-31** from `decisions.md` at D1–D27.
+
+- **D26 (new): closes D11.** Compiles **R-026** and finally locks the palette — D18 locked
+  D11's mark half on 2026-07-30, this locks its colour half, and D11 is now fully closed.
+  R-004 (never hardcode) is untouched and still traces to D11. **R-005's ID stays retired
+  and is not reused**, even though the palette is locked again, because the thing being
+  locked is a different palette for different reasons. The `--danger` clause is the part
+  that will look arbitrary later: it is there because an oxblood accent and a red error
+  state cannot be told apart by lightness, only by hue.
+- **D27 (new):** compiles nothing. Presentation inside the token system, recorded for the
+  presentation-attribute-vs-CSS trap that silently flattened the hero branch taper.
+
+Previous regeneration, **2026-07-31** from `decisions.md` at D1–D25.
 
 - **D24 (new):** compiles **R-024**. The rule exists because the *thing being ruled on is
   not in the repo* — an edge-injected beacon that `curl` cannot see. Without a written
