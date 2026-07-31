@@ -1,4 +1,17 @@
 User-agent: *
 Allow: /
 
+# Every tracked file is served at the live domain (D2) — /CLAUDE.md, /status.md,
+# /decisions.md and the rest all return 200, and there is no build step to hide
+# them (D1). This stops crawlers fetching them. It does NOT make them private:
+# they stay reachable to anyone with the URL, which is OB-5's actual question.
+# A disallowed URL can still be listed by Google if something external links to
+# it — without content, since the file is never fetched. That is the ceiling here;
+# a .md file cannot carry a robots meta tag, and X-Robots-Tag needs headers we
+# do not control on Pages.
+#
+# `*` and `$` are the Google/Bing wildcard extensions, not original robots.txt
+# syntax. Crawlers that ignore them fall back to Allow: / and fetch as before.
+Disallow: /*.md$
+
 Sitemap: https://www.wradlabs.com/sitemap.xml
