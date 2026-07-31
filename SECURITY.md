@@ -37,6 +37,19 @@ days for a response. Do not open public issues for security reports.
   the whole truth about what a visitor receives. Any future CSP work (AQ-3) has to
   account for Cloudflare-injected `/cdn-cgi/` scripts, and rendering claims should be
   verified against the live domain.
+- **Cloudflare also rewrites files that are not HTML — confirmed on `robots.txt`,
+  2026-07-31.** The live file is not the committed one: Cloudflare **prepends** its own
+  `User-agent: *` group carrying a `Content-Signal:` line and a block-list of AI crawlers
+  (ClaudeBot, GPTBot, CCBot, Google-Extended, Bytespider, Amazonbot, Applebot-Extended,
+  meta-externalagent and others), then serves the repo's content after it. **This is
+  additive injection, not a rewrite** — the committed directives survive intact, and
+  because a crawler must combine every group matching its user-agent, the repo's
+  `Disallow: /*.md$` still applies despite arriving in a second `User-agent: *` group
+  (verified against Google's robots.txt spec, not assumed). **Security consequence:** the
+  earlier lesson generalizes — it is not "Cloudflare can rewrite the HTML," it is
+  **Cloudflare can change any file it serves, including ones with no markup in them.**
+  The site is publishing a crawler policy that exists in no commit. Whether to keep it is
+  OB-12 in [`status.md`](status.md).
 - **Third-party surface:** Cloudflare (edge/TLS), Google Fonts (CSS/font requests),
   and **Formspree** (the contact form posts submissions to it client-side). Email
   runs on Google Workspace, off-repo. Any further service (analytics, embeds) is a

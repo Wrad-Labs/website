@@ -94,6 +94,16 @@ Last updated: **2026-07-31**
   stay reachable to anyone with the URL, and a disallowed URL can still be listed (without
   content) if something external links to it. It is the ceiling available: no build step
   (D1), and a `.md` carries neither a robots meta tag nor an `X-Robots-Tag` on Pages.
+- **The live `robots.txt` is NOT the committed one — Cloudflare prepends to it.** Found on
+  deploy, 2026-07-31. Ahead of our content it injects its own `User-agent: *` group with a
+  `Content-Signal: search=yes,ai-train=no,use=reference` line and a **block-list of AI
+  crawlers** (ClaudeBot, GPTBot, CCBot, Google-Extended, Bytespider, Amazonbot,
+  Applebot-Extended, meta-externalagent…). **Our rule still works:** a crawler must combine
+  all groups matching its user-agent, so `Disallow: /*.md$` applies even though it lands in
+  a *second* `User-agent: *` group — checked against Google's robots.txt spec, not assumed.
+  **This is the D17 lesson generalizing:** Cloudflare alters not just markup but any file
+  it serves. The site publishes a crawler policy that exists in no commit — keep it or not
+  is **OB-12**.
 - **Cloudflare rewrites HTML at the edge.** Email Address Obfuscation was turning every
   `mailto:` into a JS-only decoder until 2026-07-30 (D17/R-019). Treat any zone-level
   Cloudflare feature as capable of changing what ships: **the repo is no longer the whole
@@ -131,6 +141,7 @@ development live in the private `company` repo (D8/R-012).
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-7 | **Decide whether to add privacy-respecting analytics** (e.g. Plausible). Requires a privacy-policy disclosure. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-8 | **Annual inquiry sweep — delete contact-mailbox mail older than 24 months (R-018).** **One mailbox**, reached by both `hello@` and `support@` as aliases (owner-confirmed 2026-07-31), so the sweep scope is settled. First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
+| OB-12 | **Decide whether to keep Cloudflare's injected `robots.txt` policy — and confirm it was deliberate.** The live file carries a `Content-Signal: search=yes,ai-train=no,use=reference` and blocks ~10 AI crawlers by name; none of it is in this repo, and no decision here records choosing it. It is a **public statement of policy** the site is making, so it should be intentional either way. **Look:** Cloudflare dashboard → the `wradlabs.com` zone → **AI Crawl Control** (older accounts: *Security → Bots*, "AI Scrapers and Crawlers" / "Manage robots.txt"). Compare what is enabled there against `https://www.wradlabs.com/robots.txt`. **Decide:** keep it (then record it as a decision here so it stops looking like drift), or turn it off and manage crawler policy in the repo where it can be reviewed. **Verify either way:** re-fetch the live URL — the injected block appears above our `User-agent: *` group. **Reverse:** the same toggle. **No urgency** — it is not breaking anything; our own `Disallow: /*.md$` survives the injection. | 🔴 3 |
 | OB-10 | **Force the social platforms to re-scrape the share card.** The new `og.png` is live and correct, but each platform caches the *old* image against the URL and will keep serving it — nothing in this repo can clear those caches, and they need a signed-in account. **LinkedIn:** open `https://www.linkedin.com/post-inspector/`, paste `https://www.wradlabs.com/`, click **Inspect** — it refetches on every run. **Facebook/Meta:** `https://developers.facebook.com/tools/debug/`, paste the URL, click **Scrape Again**. **X/Twitter:** no public validator remains; it refreshes on its own within about a week. **Verify:** each tool previews the card it now holds — you want the flask on off-white with a terracotta rule, not the old tree glyph. **Reverse:** nothing to undo; re-scraping only re-reads what the site already serves. | 🔴 3 |
 
 ### Agent queue — ready to pick up
@@ -191,7 +202,12 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   and `privacy.html` joins the sitemap. AQ-10 was carried as OB-5's mitigation, and
   shipping it **does not close OB-5** — it lowers the ceiling to "reachable but not
   crawled" and hands the remaining question back to the owner, which the backlog entry now
-  says outright instead of implying a fix is pending.
+  says outright instead of implying a fix is pending. **Verifying that deploy found
+  something bigger than the change:** the live `robots.txt` is not the committed file —
+  Cloudflare prepends an AI-crawler block-list and a `Content-Signal` line to it. **D17
+  generalizes: the edge alters any file it serves, not just markup.** Our directive still
+  binds (groups matching a user-agent are combined — checked against the spec), but the
+  site is publishing a policy that exists in no commit → **OB-12**.
 
 - **2026-07-30** — **Nine owner-directed site changes; D19 → R-021.** The structural one:
   **every section is now a full-viewport page** — `min-height: 100svh`, content centred
