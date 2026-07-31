@@ -69,68 +69,72 @@
 
 /* ============ TOKENS ============
    Declared once, referenced everywhere (R-004 — never hardcode these values).
-   **COOL STONE — the palette is LOCKED as of 2026-07-31 (D26).** It is no longer
-   the working draft D11 left open; D11 is now fully closed, its mark half having
-   been locked by D18 a day earlier.
+   **CANOPY — the palette is LOCKED as of 2026-07-31 (D28, superseding D26).**
 
-   WHY IT IS COOL. The previous palette was a warm off-white (#F9F7F3) with a
-   terracotta accent. Optants — the venture this site links to — ships a warm
-   off-white of #FAFAF8 and the same body typeface. One step apart on the ground
-   colour, identical letterforms: the two sites read as one. The accents were
-   never the problem (terracotta vs Optants' teal #115E59 is a clean split);
-   the GROUND was. Every neutral below has had its warmth removed, which is the
-   single change that separates the two at a glance. Do not warm them back up
-   without reading D26.
+   WHY THIS ONE. Two constraints pull against each other. It must not read as
+   Optants (warm off-white #FAFAF8, teal #115E59, same body typeface — the reason
+   the two sites felt like one), and it must read as a studio that builds
+   commercial products in order to fund public good. D26's Cool Stone satisfied
+   the first and failed the second: cool greys and an oxblood accent read austere
+   and vinous, which is the opposite of generative.
+
+   Canopy keeps a WARM ground and takes the accent to leaf green. On R-minus-B,
+   Optants' ground sits at +2 and Cool Stone at -4; this one is +12, so it is
+   warm where Optants is neutral rather than warm where Optants is warm. The
+   accent is olive at hue 87°, well clear of Optants' blue-green teal at 174°.
 
    Names are semantic, not literal (--ink, not --black), so a future palette
    change means editing this block and nothing else. Every ratio below is
-   measured, not estimated. */
+   measured against the ground it actually sits on, not estimated. */
 :root {
-  /* Surfaces — cool stone. Deliberately NOT warm; see the note above. */
-  --bg: #F1F3F5;
+  /* Surfaces — warm paper. Warmer than Optants, not merely different from it. */
+  --bg: #F6F3EA;
   --surface: #FFFFFF;
-  --surface-sunk: #E4E8EB;
+  --surface-sunk: #EBE7DA;
 
   /* Ink — all three pass WCAG AA on --bg at body size */
-  --ink: #131A21;        /* headings           15.77:1 */
-  --ink-body: #39434C;   /* body copy           9.07:1 */
-  --ink-muted: #56616B;  /* labels, meta        5.69:1 */
+  --ink: #1E2318;        /* headings           14.46:1 */
+  --ink-body: #3F4634;   /* body copy           8.86:1 */
+  --ink-muted: #5D6450;  /* labels, meta        5.56:1 */
 
-  /* Stone — decorative only. 3.29:1 on --bg clears the 3:1 bar for shapes and
-     icons but NOT the 4.5:1 for text, so it is deliberately not an ink token. */
-  --stone: #7C8791;
+  /* Stone — decorative only. Clears the 3:1 bar for shapes and icons but NOT
+     the 4.5:1 for text, so it is deliberately not an ink token. */
+  --stone: #8A9078;
 
   /* Lines */
-  --line: #D5DBDF;
-  --line-strong: #C3CBD1;
+  --line: #DCD7C7;
+  --line-strong: #CCC6B2;
 
-  /* Accent — oxblood. 7.32:1 on --bg as text, 8.14:1 white-on-accent. Chosen to
-     sit far from Optants' teal without shouting; it reads institutional, which
-     suits a studio that owns ventures rather than sells one. */
-  --accent: #8C2F39;
-  --accent-hover: #6E232B;
-  --accent-soft: #F6E8EA;
+  /* Accent — leaf green, hue 87° (olive/yellow-green). 6.7:1 on --bg as text,
+     7.43:1 white-on-accent. Deliberately NOT the blue-green of Optants' teal
+     (hue 174°): neighbouring families would have reintroduced the problem the
+     palette exists to solve. */
+  --accent: #3F5E18;
+  --accent-hover: #334C12;
+  --accent-soft: #EAEFDD;
   --on-accent: #FFFFFF;
 
   /* Status — form feedback only.
-     --danger is a VERMILLION, not the old dark red. With an oxblood accent, a
-     dark-red error message reads as a link: every candidate red measured only
-     1.2–1.6:1 of luminance separation from --accent, so the distinction has to
-     come from hue instead. If errors are ever still mistaken for links, fix it
-     with weight or an icon — pushing the hue further just makes it orange.
-     --success was #15803D, which measured 4.51:1 here: passing by 0.01 is not
-     passing, so it is a step darker. */
-  --success: #14713A;    /* 5.47:1 */
-  --danger: #CC3311;     /* 4.66:1 */
+     A GREEN ACCENT INVERTS D26'S PROBLEM. Under oxblood, --danger was the token
+     that clashed and had to move to a vermillion. Here red sits 87° from the
+     accent — the largest gap available — so --danger returns to a normal dark
+     red. It is --success that now needs care: it must stay green while not
+     reading as accent text. #116B4A is a blue-green at hue 158°, a 71° gap from
+     the accent's 87°, which is the widest separation that still reads as
+     "success". Keep that gap if either token ever moves. */
+  --success: #116B4A;    /* 5.87:1, hue 158° */
+  --danger: #B91C1C;     /* 5.83:1, hue 0°   */
 
   /* Translucent nav backdrop; matches --bg. Must stay in step if --bg changes. */
-  --nav-scrim: rgba(241, 243, 245, 0.88);
+  --nav-scrim: rgba(246, 243, 234, 0.88);
 
-  /* Hero art masses. Picked to hold the SAME visual weight against --bg as the
-     warm pair did against the old one (1.19 / 1.42 vs 1.25 / 1.43), so the
-     artwork reads identically — only its temperature changed. */
-  --arch: #DAE1E7;
-  --botanical: #C5CFD6;
+  /* Hero art masses — sage, and DELIBERATELY HEAVIER than before. The homepage
+     was left-loaded: a text column against a pale shape that barely registered.
+     These are pushed from 1.25 / 1.43 against the ground (every prior palette)
+     to 1.34 / 1.73, so the art holds the right side instead of decorating it.
+     They are green now because the art IS the canopy the palette is named for. */
+  --arch: #CFD8B8;
+  --botanical: #B3C191;
 
   /* Type */
   --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
@@ -144,8 +148,14 @@
   --container: 1160px;
   /* Width of the hero's text column. Declared here because two rules depend on
      the SAME number: `.hero-content` is capped by it, and `.hero-art` starts at
-     it in order to centre itself in the whitespace beside the text. */
-  --hero-col: 560px;
+     it in order to centre itself in the whitespace beside the text.
+
+     NARROWED 560 → 520 to rebalance the homepage. This token does double duty:
+     it takes 40px off the text column AND hands those 40px to the whitespace the
+     art centres in, so the art can grow without colliding with the copy. Raising
+     the art's height alone would not have worked — width follows height from the
+     viewBox, and the art would have eaten into the text column. */
+  --hero-col: 520px;
   --radius: 6px;
   --radius-lg: 14px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -411,9 +421,12 @@ html { scroll-padding-top: var(--nav-h); }
   margin-inline: auto;
   top: 50%;
   transform: translateY(-50%);
-  height: min(600px, calc(100vh - var(--nav-h) - 140px));
+  /* Raised 600 → 700 and the reserved padding cut 140 → 110, so the art claims
+     more of the page. Paired with the narrowed --hero-col: growing this alone
+     would push the art into the text column, because width follows height. */
+  height: min(700px, calc(100vh - var(--nav-h) - 110px));
   width: auto;
-  max-width: 42%;
+  max-width: 48%;
   z-index: 0;
   pointer-events: none;
 }
