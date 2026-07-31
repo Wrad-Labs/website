@@ -24,6 +24,21 @@ if it disagrees with the source, the doc is wrong.
 **No build step. No package manager. No backend.** What is in the repo is what
 ships. Edit files directly; refresh the browser.
 
+### Stylesheet versioning
+
+Every page links the CSS as **`style.css?v=N`**. That query is a cache-buster, and it has
+to be **bumped in all three pages whenever selectors change**.
+
+The reason is a lifetime mismatch, hit in production on 2026-07-30: the HTML is
+`max-age=600` but the CSS is `max-age=14400` (Cloudflare's default for static assets), so
+for up to four hours a returning visitor holds **new markup against old styles**. Any
+release that renames a class then renders unstyled — that day it showed the new hero art
+as a solid black shape. Changing the query changes the URL, so the browser fetches the new
+CSS immediately instead of waiting out its TTL.
+
+`script.js` is deliberately **not** versioned: under R-008 the page must work with no
+JavaScript at all, so a stale copy degrades rather than breaks.
+
 ## File structure
 
 ```
@@ -80,6 +95,8 @@ else uses the master itself. That is why the favicons and `mark.svg` below are n
 | `apple-touch-icon.png` | `<link rel="apple-touch-icon">` | Small mark, 180², opaque; iOS applies its own corner mask. |
 | `og.png` | `og:image`, `twitter:image` | 1200×630, which is why `twitter:card` is `summary_large_image`. Carries the **horizontal lockup** — mark plus "WRAD LABS" — above a terracotta rule. The wordmark is outlined, so the card needs no font. |
 | `icon-512.png` | JSON-LD `Organization.logo` | Small mark, square and opaque, which is what consumers of that field expect. |
+| `logo-stacked.svg` | footer lockup | Mark above wordmark as ONE asset, from `company/brand/`. Sized by height; `alt` carries the name. |
+| `optants-logo.svg` | the Optants venture tile | **A different upstream:** Optants' own brand, from `Wrad-Labs/optants/brand/`. Same derived-copy rule (R-020) — never edit it here. |
 
 ## Design tokens
 
@@ -110,6 +127,7 @@ palette change means editing the `:root` block and nothing else.
 | `--success` / `--danger` | `#15803D` / `#B91C1C` | Form feedback only |
 | `--nav-scrim` | `rgba(249,247,243,.88)` | Scrolled nav backdrop; keep in step with `--bg` |
 | `--arch` / `--botanical` | `#E5DED2` / `#D8D0C2` | Hero decorative SVG |
+| `--nav-h` | `72px` | Height of the fixed nav. Sections reserve it; also drives `scroll-padding-top` |
 | `--font-display` | Source Serif 4 | Headings |
 | `--font-body` | Inter | Body, nav, buttons, wordmark |
 | `--container` | `1160px` | Max content width |
@@ -129,8 +147,23 @@ it on 2026-07-30, and there is no SVG sprite any more — see § Brand assets ab
 `#home` (hero: left-aligned copy + decorative SVG — the brand mark under a canopy,
 which replaced the arch on 2026-07-30; its vessel, liquid and root tendrils are
 extracted from `brand/mark.svg` upstream rather than drawn here) → `#ventures` (two-card
-grid) → `#contact` (Formspree form). Footer follows. `privacy.html` is a separate
-page. Sections are separated by a `--line` hairline (`section + section`).
+grid; the Optants tile is a whole-card link to optants.com) → `#contact` (Formspree
+form). Footer follows. `privacy.html` is a separate page. Sections are separated by a
+`--line` hairline (`section + section`).
+
+**Each section is a full-viewport page** (D19 / **R-021**): `min-height: 100svh`, content
+centred in the space below the fixed nav, which is reserved by `--nav-h`.
+
+- **`min-height`, never `height`.** A section must be able to grow past the viewport
+  when its content does not fit — the contact form is taller than a short laptop, and
+  fixing the height would clip it rather than scroll it.
+- `100svh` (small viewport height) is used over `100vh` so mobile sections don't jump as
+  the browser bar collapses; `100vh` stays as the preceding fallback declaration.
+- A `max-height: 620px` query drops the full-viewport rule entirely, below roughly a
+  landscape phone, where forcing a viewport height only guarantees an overflow.
+- `html { scroll-padding-top: var(--nav-h) }` keeps anchor jumps clear of the fixed bar.
+- The footer is **not** a section and is deliberately not full-viewport: it trails the
+  contact page rather than becoming a fourth one.
 
 ## JavaScript blocks (`assets/js/script.js`)
 
