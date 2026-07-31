@@ -319,7 +319,9 @@ part D5 got right, retained) hardcoding color/font values instead of using token
 ## D12 — support@wradlabs.com is the only contact address in tracked files
 
 - **Date:** 2026-07-27
-- **Status:** locked
+- **Status:** **superseded by [D20](#d20--the-published-contact-address-is-hellowradlabscom)**
+  (2026-07-30) — the *one address only* constraint survives verbatim; the address it
+  names changed to `hello@wradlabs.com`.
 - **Source:** recorded 2026-07-27 to give R-003's contact-address clause an origin;
   the constraint was already being enforced in practice.
 
@@ -603,3 +605,92 @@ jump; nesting interactive elements inside the card link; editing either logo in 
 repo; a card-as-link with no visible hover *and* focus affordance.
 
 **Compiled rules:** R-021.
+
+---
+
+## D20 — The published contact address is hello@wradlabs.com
+
+- **Date:** 2026-07-30
+- **Status:** locked
+- **Owner-directed.** Part of a seven-change site pass; the other six are copy and
+  layout and need no decision.
+- **Supersedes:** D12 (the address only — its *one address, nothing else* constraint
+  is carried forward unchanged).
+
+**Context.** Every address in the repo was `support@wradlabs.com`: the contact section,
+the footer, four places in `privacy.html`, the JSON-LD `email`, the two form-failure
+strings in `script.js`, `SECURITY.md`'s disclosure route, and `README.md`. The owner
+confirmed `hello@wradlabs.com` receives mail before the change was made. `support@`
+framed a one-person venture studio as a help desk; `hello@` matches what the page
+actually invites — collaboration and partnership inquiries, not support tickets.
+
+**Decision.** `hello@wradlabs.com` is the single contact address that may appear in any
+tracked file — markup, docs, or metadata. Everything else D12 ruled out still is:
+personal or role addresses, per-department addresses, phone numbers, and the physical
+business address stay out of the repo and live in `OPERATIONS.local.md` if needed.
+
+**What this does NOT change, and the trap in it.** The site's `mailto:` links are the
+*only* part of the delivery path that lives in this repo. **The contact form does not
+route through them.** Its submissions go to Formspree endpoint `mvzjloro`, and the
+recipient is configured in Formspree's dashboard, not here — so editing the markup
+moves the visible address while form mail keeps landing wherever it landed before. Two
+things follow, and neither is satisfiable from the repo:
+
+1. **Formspree's recipient must be changed by the owner** — tracked as **OB-11**, with
+   the click-path there. Until it is, the page and the form disagree.
+2. **R-018's 24-month sweep names a mailbox.** If `hello@` is an alias delivering into
+   the same Google Workspace mailbox, the sweep is unchanged. If it is a separate
+   mailbox, the sweep must cover it or the published retention figure stops being true —
+   a commitment with no mechanism behind it, which the owner model rules out. The
+   distinction is mailbox-side and unknowable from here; confirming it is part of OB-11
+   rather than assumed either way (**OOM D-007** — do not invent the answer).
+
+**Rules out.** Publishing `support@` in a tracked file; keeping the two addresses live
+in parallel as separate published channels; assuming a markup edit re-routes Formspree;
+adjusting the published retention figure without knowing which mailbox now receives.
+
+**Compiled rules:** R-003 (contact-address clause; source becomes D2 · D20), R-018
+(mailbox naming), R-019 (address named in the plain-text rule).
+
+---
+
+## D21 — The direct address reads on from the invitation, not as its own channel
+
+- **Date:** 2026-07-30
+- **Status:** locked
+- **Owner-directed.**
+
+**Context.** D19 gave contact three tiers: intro, then the address as a bordered row
+under an "Email us directly" eyebrow, then the form. Set off by rules top and bottom, it
+read as a second, competing channel announced beside the form — on a page whose whole
+job is to get one message sent. The owner asked for the label and the rules to go, with
+the address sitting directly after "we'd love to hear from you."
+
+**Decision.** Two tiers, not three. The address is the last line of the invitation,
+inside `.contact-head`, at the invitation's own size with no label and no rules. The
+form remains the primary path; the address is the alternative for anyone who prefers it,
+not a headline. The same restraint applies to the footer: the tagline and the address
+are removed there, leaving the lockup and the copyright line — the tagline had become
+the third place on one page saying a version of the same sentence, and the address the
+second.
+
+**Also settled here** (layout, recorded because both were owner-directed and both have a
+failure mode worth naming):
+
+- **The hero art centres in the whitespace beside the text column, not against the
+  container edge.** `left: var(--hero-col); right: 0; margin-inline: auto` — for an
+  absolutely positioned replaced element the width resolves from the aspect ratio first,
+  then the two auto margins split the remainder. **The two offsets are a pair:**
+  overriding just one of them at a breakpoint silently re-pins the art to an edge, which
+  is exactly what the old `right: -20px` in the 1080px query did.
+- **Button and consent line are one group.** The consent line sat a full form row plus
+  the status note's reserved line below the button — roughly 50px. Grouping them puts it
+  10px under the button; the status note follows the group, because it is feedback about
+  a submission rather than part of the call to action.
+
+**Rules out.** Reintroducing a labelled, ruled-off address row; a footer that repeats the
+tagline or the address; overriding `left` or `right` on `.hero-art` alone; separating the
+consent line from the button by a form row.
+
+**Compiled rules:** none — presentation, inside the existing token system and R-021.
+Recorded because each part has a specific way of going wrong quietly.
