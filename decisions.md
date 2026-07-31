@@ -740,3 +740,54 @@ in the `optants` repo, next to the policy it must agree with (D8/R-012).
 guidance for Optants or any property carrying user content.
 
 **Compiled rules:** R-022.
+
+---
+
+## D23 — Fonts are self-hosted; no third-party font service
+
+- **Date:** 2026-07-31
+- **Status:** locked
+- **Owner-approved** (AQ-9), including the download and commit of font binaries.
+
+**Context.** Both typefaces came from `fonts.googleapis.com` / `fonts.gstatic.com` on every
+page load. That made Google a processor of every visitor's IP address purely to render
+text — the one entry in `privacy.html`'s processor list that existed for *presentation*
+rather than for a capability the site needs. It also left the last measurable source of
+layout shift (a swap from the fallback face) and forced any future CSP to allow two extra
+origins.
+
+**Decision.** The two families are served from this origin. `assets/fonts/` holds four
+`woff2` files — latin and latin-ext per family — with `@font-face` blocks at the top of
+`assets/css/style.css`. No `fonts.googleapis.com` link, no `preconnect`, no third-party
+request on load. The two **latin** files are preloaded; latin-ext deliberately is not,
+because its `unicode-range` means most readers never fetch it.
+
+**Consequences worth stating.**
+
+- **`privacy.html` changed in the same commit** and is dated **July 31, 2026**. Google
+  Fonts is no longer listed as a processor, because it no longer receives anything — and a
+  policy naming a processor that receives nothing is as wrong as one omitting a processor
+  that does (R-007 cuts both ways). Four processors remain: Formspree, Google Workspace,
+  Cloudflare, GitHub Pages/Fastly. The policy's own promise — that a provider change
+  updates the page and its date before shipping — is what made the date bump mandatory
+  rather than cosmetic.
+- **The files are DERIVED COPIES**, exactly as `assets/images/` is (R-020's principle, a
+  different upstream). Both families are **SIL OFL**; the licences ship beside them as
+  `assets/fonts/OFL-Inter.txt` and `OFL-SourceSerif4.txt`. Never hand-edit the binaries —
+  re-fetch from the `css2` URL recorded in the CSS comment.
+- **One variable file per subset, not one per weight.** Upstream served four `@font-face`
+  blocks per subset that all resolved to the *same* URL — how Google delivers a variable
+  font. Collapsed here to one block declaring `font-weight: 400 700`. **Verified, not
+  assumed:** rendered widths increase monotonically across weights (Inter 400/500/600/700
+  → 520.4/528.6/536.6/544.8px), which is the axis interpolating rather than the browser
+  synthesizing a fake bold.
+- **AQ-3 gets simpler.** The CSP it has to write drops two origins and is now `self` plus
+  Formspree — plus whatever Cloudflare injects at the edge (D17), which is still the part
+  that repo inspection cannot tell you.
+
+**Rules out.** Re-adding a `fonts.googleapis.com` stylesheet or `preconnect`; adding any
+third-party font, icon-font or CDN-hosted face; editing the `woff2` binaries in place;
+shipping a font whose licence is not carried in `assets/fonts/`; changing the font
+delivery path without updating `privacy.html`'s processor list in the same commit.
+
+**Compiled rules:** R-023.

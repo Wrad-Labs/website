@@ -17,7 +17,7 @@ if it disagrees with the source, the doc is wrong.
 | Markup | Hand-written HTML5 | Single page, `index.html` |
 | Styling | Plain CSS, custom properties | One file, `assets/css/style.css` |
 | Behavior | Vanilla JS (ES6), no deps | One file, `assets/js/script.js` |
-| Fonts | Google Fonts (Source Serif 4, Inter) | External `<link>` in `<head>` |
+| Fonts | **Self-hosted** (Source Serif 4, Inter) | `assets/fonts/`, `@font-face` at the top of `style.css` (D23/R-023) |
 | Hosting | GitHub Pages (Fastly), behind Cloudflare | Deploy from `main`, root folder |
 | DNS/domain | See `OPERATIONS.local.md` | Not in tracked docs |
 
@@ -75,6 +75,7 @@ website/
 ├── index.html            # Entire page: nav, hero, ventures, contact, footer
 ├── privacy.html          # Privacy policy (indexable)
 ├── 404.html              # Custom GitHub Pages 404
+├── assets/fonts/         # Self-hosted woff2 + SIL OFL licences (D23/R-023)
 ├── robots.txt            # Crawl directives → sitemap; disallows /*.md$ (see below)
 ├── sitemap.xml           # Two URLs: / and /privacy.html
 ├── CNAME                 # GitHub Pages custom domain (www.wradlabs.com)
@@ -186,7 +187,7 @@ readable form, and a stale one contradicts the page.
 | `twitter:card`, `twitter:title/description/image` | X | `summary_large_image`, valid only because a real 1200×630 card exists (D18) |
 | JSON-LD `Organization` | Google knowledge panel | `name`, `url`, `logo` → `icon-512.png` (square, per schema.org), `email`, `description` |
 | `<link rel="apple-touch-icon">` | iOS home screen | 180×180 PNG; iOS ignores SVG favicons |
-| `<meta name="referrer">` | Outbound requests | `strict-origin-when-cross-origin` — Google Fonts and Formspree see the origin, not the path |
+| `<meta name="referrer">` | Outbound requests | `strict-origin-when-cross-origin` — since D23 the only cross-origin destination is Formspree, on submit |
 | `<meta name="robots">` | Crawlers | Only on the other two pages: `index, follow` on `privacy.html`, `noindex` on `404.html`. `index.html` carries none, which *is* the default |
 
 **Two traps.** The JSON-LD `logo` wants a **square** image, so it points at
@@ -214,9 +215,27 @@ Beyond R-010's markup baseline, three things are easy to break by accident:
 elements (`mark.svg`, `optants-logo.svg`, `logo-stacked.svg`) carry intrinsic
 `width`/`height`, so `width: auto` and `height`-based sizing resolve without reflow.
 
-The one remaining theoretical source is **font swap** — `&display=swap` on the Google
-Fonts request means a fallback paints first. That is the residue of AQ-9 (self-hosting),
-not something a `preload` of a non-existent image would fix.
+Font swap was the one remaining theoretical source, and **D23 closed it**: the fonts come
+from this origin, and the two `latin` files are preloaded in `<head>`. `font-display: swap`
+is still declared, so a fallback can still paint on a cold cache — the preload is what
+makes that window small rather than a network round-trip wide.
+
+### Fonts
+
+Four `woff2` files in `assets/fonts/`, ~348 kB total, plus both SIL OFL licences.
+**Derived copies** — same rule as `assets/images/` (R-020's principle, different upstream).
+To update, re-fetch the `css2` URL recorded in the CSS comment with a modern browser UA and
+replace the files; never hand-edit a binary.
+
+Two things about the shape of it:
+
+- **One variable file per subset, not one per weight.** Google served four `@font-face`
+  blocks per subset that all resolved to the *same* URL — that is how a variable font is
+  delivered. Collapsed here into one block per subset declaring `font-weight: 400 700`.
+- **`unicode-range` is load-bearing.** `latin` and `latin-ext` are both committed, but a
+  reader who never encounters a Central European character never downloads latin-ext. That
+  is why only the two `latin` files are preloaded, and why carrying both subsets costs repo
+  size but not page weight.
 
 ## Page sections (in order)
 
