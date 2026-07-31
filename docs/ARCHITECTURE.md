@@ -127,7 +127,9 @@ locks the logo**; the mark in the SVG sprite is a placeholder pending a new iden
 
 ## Page sections (in order)
 
-`#home` (hero: left-aligned copy + decorative arch SVG) → `#ventures` (two-card
+`#home` (hero: left-aligned copy + decorative SVG — the brand mark under a canopy,
+which replaced the arch on 2026-07-30; its vessel, liquid and root tendrils are
+extracted from `brand/mark.svg` upstream rather than drawn here) → `#ventures` (two-card
 grid) → `#contact` (Formspree form). Footer follows. `privacy.html` is a separate
 page. Sections are separated by a `--line` hairline (`section + section`).
 

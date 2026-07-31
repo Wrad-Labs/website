@@ -239,10 +239,13 @@ section + section { border-top: 1px solid var(--line); }
 }
 .hero-actions { display: flex; gap: 26px; align-items: center; flex-wrap: wrap; }
 
-/* Decorative arch + botanical, bleeding off the right edge */
+/* Decorative hero art — the brand mark under a canopy.
+   Unlike the arch it replaced, this is a recognisable object, so it is NOT bled
+   off the right edge: `.hero` clips its overflow, and half a flask reads as a
+   mistake where half an arch read as a crop. */
 .hero-art {
   position: absolute;
-  right: -60px;
+  right: 0;
   top: 50%;
   transform: translateY(-50%);
   width: 460px;
@@ -250,9 +253,18 @@ section + section { border-top: 1px solid var(--line); }
   z-index: 0;
   pointer-events: none;
 }
-.hero-art .arch { fill: none; stroke: var(--arch); stroke-width: 74; }
-.hero-art .stem { fill: none; stroke: var(--botanical); stroke-width: 2.5; stroke-linecap: round; }
-.hero-art .leaf { fill: var(--botanical); }
+/* Two tones only, same pair the arch used: the mass in --arch, the details that
+   need to separate from it in --botanical. */
+.hero-art .canopy,
+.hero-art .vessel,
+.hero-art .roots { fill: var(--arch); }
+.hero-art .liquid { fill: var(--botanical); }
+.hero-art .trunk {
+  fill: none;
+  stroke: var(--botanical);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
 
 /* ============ CARDS ============ */
 .card-grid {
@@ -351,7 +363,8 @@ section + section { border-top: 1px solid var(--line); }
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1080px) {
-  .hero-art { width: 380px; right: -110px; opacity: 0.9; }
+  /* Narrower, but still whole — the shape is an object now, not a backdrop. */
+  .hero-art { width: 340px; right: -20px; opacity: 0.9; }
 }
 @media (max-width: 900px) {
   .nav-links { display: none; }

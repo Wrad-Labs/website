@@ -19,7 +19,8 @@ Last updated: **2026-07-30**
 (GitHub's CDN), `max-age=600`. **HTTPS enforced and HSTS live** since 2026-07-29:
 `max-age=15552000` (6 months) on apex and `www`, no `includeSubDomains`, no preload.
 
-- **Page:** `#home` (hero + decorative arch SVG) → `#ventures` (2 cards, the first
+- **Page:** `#home` (hero + decorative SVG — the brand mark under a canopy, replacing
+  the arch 2026-07-30) → `#ventures` (2 cards, the first
   naming **Optants**) → `#contact`. Plus `privacy.html`, `404.html`, `robots.txt`,
   `sitemap.xml`.
 - **Contact form:** live, posting to Formspree (`mvzjloro` → support@wradlabs.com)
@@ -59,7 +60,15 @@ Last updated: **2026-07-30**
   truth about what a visitor receives.** Verify rendering against the live domain, not
   just locally.
 
-**In flight.** Nothing. The small-mark favicon set and the lockup share card shipped
+**In flight.** The **hero art** — branch `feat/hero-flask-tree`, PR open, **not yet
+merged**. Replaces the decorative arch with the brand mark under an abstract canopy, in
+the same two decorative tokens (`--arch` / `--botanical`). The vessel, liquid and the
+**mark's own five root tendrils** are lifted from `brand/mark.svg` by script, not
+redrawn (upstream **C11**). One behavioural change: the art is no longer bled off the
+right edge, because a half-cropped flask reads as a mistake where a half-cropped arch
+read as a crop.
+
+Previously: the small-mark favicon set and the lockup share card shipped
 2026-07-30 ([#12](https://github.com/Wrad-Labs/website/pull/12)) and are **verified live**:
 every icon, `mark.svg` and `og.png` return 200, `logo.png` returns 404, and each served file
 is **byte-identical** to its source in `company/brand/` (the two SVGs differ only by CRLF in
