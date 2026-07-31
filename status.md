@@ -75,9 +75,12 @@ Last updated: **2026-07-30**
   truth about what a visitor receives.** Verify rendering against the live domain, not
   just locally.
 
-**In flight.** The **nine-change site pass** — branch `feat/full-page-sections`, PR open,
-**not yet merged**. Full-viewport sections, new positioning copy, the Optants tile as a live
-link, contact hierarchy, and the stacked footer lockup.
+**In flight.** Nothing. The nine-change site pass shipped 2026-07-30
+([#14](https://github.com/Wrad-Labs/website/pull/14)) and is **verified live**: all three
+pages 200, each linking `style.css?v=2`, the versioned CSS serving the new selectors, and
+the new copy and Optants link in place. **AQ-14 proved itself on the way in** — this
+browser held the previous stylesheet and rendered correctly on an ordinary load, where the
+last release had needed a hard refresh.
 
 **Not here.** Accounting, company funding, corporate filings, and product
 development live in the private `company` repo (D8/R-012).
