@@ -43,8 +43,10 @@ python -m http.server 8000
 
 ## Notes
 
-- The contact form is live, posting to Formspree (client-side, no backend) →
-  support@wradlabs.com. See the handler at the bottom of `assets/js/script.js`
-  and the privacy disclosure in `privacy.html`.
+- The published contact address is hello@wradlabs.com.
+- The contact form is live, posting to Formspree (client-side, no backend). Its
+  recipient is set in Formspree's dashboard, not in this repo — the `mailto:` links
+  here do not route it. See the handler at the bottom of `assets/js/script.js` and
+  the privacy disclosure in `privacy.html`.
 - Email on `@wradlabs.com` runs on Google Workspace and is configured off-repo;
   nothing in this repository affects it.

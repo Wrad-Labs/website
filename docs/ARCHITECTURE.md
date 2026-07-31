@@ -147,9 +147,17 @@ it on 2026-07-30, and there is no SVG sprite any more — see § Brand assets ab
 `#home` (hero: left-aligned copy + decorative SVG — the brand mark under a canopy,
 which replaced the arch on 2026-07-30; its vessel, liquid and root tendrils are
 extracted from `brand/mark.svg` upstream rather than drawn here) → `#ventures` (two-card
-grid; the Optants tile is a whole-card link to optants.com) → `#contact` (Formspree
-form). Footer follows. `privacy.html` is a separate page. Sections are separated by a
+grid; the Optants tile is a whole-card link to optants.com) → `#contact` (invitation,
+with the direct address as its closing line, then the Formspree form). Footer follows —
+lockup and copyright only. `privacy.html` is a separate page. Sections are separated by a
 `--line` hairline (`section + section`).
+
+**The hero art is centred in the whitespace beside the text column** (D21), not pinned to
+the container edge: `left: var(--hero-col); right: 0; margin-inline: auto`. An absolutely
+positioned replaced element resolves its width from the aspect ratio first, then the two
+auto margins split what is left. **The two offsets are a pair** — overriding one at a
+breakpoint and leaving the other re-pins the art to an edge, which is what the old
+`right: -20px` in the 1080px query did.
 
 **Each section is a full-viewport page** (D19 / **R-021**): `min-height: 100svh`, content
 centred in the space below the fixed nav, which is reserved by `--nav-h`.
