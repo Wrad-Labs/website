@@ -791,3 +791,100 @@ shipping a font whose licence is not carried in `assets/fonts/`; changing the fo
 delivery path without updating `privacy.html`'s processor list in the same commit.
 
 **Compiled rules:** R-023.
+
+---
+
+## D24 — Cloudflare Web Analytics is kept, and disclosed
+
+- **Date:** 2026-07-31
+- **Status:** locked
+- **Owner-directed**, choosing to keep it over switching it off.
+- **Closes OB-7** (whether to add privacy-respecting analytics) — by decision now, having
+  briefly been settled by accident.
+
+**Context.** Verifying the D23 deploy **in a real browser on the live domain** found an
+off-origin request to `static.cloudflareinsights.com`: Cloudflare Web Analytics, injected
+at the edge, on every page. Nothing in this repo referenced it, and no decision had chosen
+it. `privacy.html` meanwhile stated *"We do not use analytics, advertising, or
+social-media tracking services of any kind"* — **the policy page loaded the beacon while
+denying it.** That is the failure OB-9 already taught once: a published claim checked
+against the previous draft rather than against what the site actually does.
+
+**Decision.** Keep it, and say so. `privacy.html` now names **Cloudflare Web Analytics** as
+a processor, describes what the beacon reports, and replaces the blanket no-analytics
+sentence with an accurate one — no *advertising, marketing or social-media* tracking, and
+page-view counting that is deliberately cookie-free.
+
+**What was verified rather than assumed.** The disclosure is written from Cloudflare's own
+documentation plus direct observation, not from memory:
+
+- **No cookies.** `document.cookie` is empty on the live site; Cloudflare documents no
+  cookies and no `localStorage`.
+- **No fingerprinting** by IP or User-Agent to produce the statistics — Cloudflare's
+  documented position, attributed to them in the policy rather than asserted as our own
+  measurement, because we cannot verify their backend.
+- **The beacon POSTs to `/cdn-cgi/rum`, same-origin** — captured by intercepting
+  `navigator.sendBeacon`. This is why `connect-src` needed nothing added (D25). The
+  documented guess would have been `cloudflareinsights.com`, and it would have been wrong.
+
+**Consequences.** The site is no longer "no third-party requests" — D23's claim holds for
+this repo's markup and not for the served page. Corrected in `status.md` and `SECURITY.md`
+rather than by editing D23 (R-013). Any future CSP must allow the beacon origin, and
+turning the feature off in Cloudflare would make `privacy.html` wrong in the other
+direction — the disclosure and the setting move together.
+
+**Rules out.** Removing the analytics disclosure while the beacon still loads; disabling
+Web Analytics without updating `privacy.html` in the same change; adding any further
+analytics, advertising or marketing service without a new decision and a policy update;
+describing the site as tracking-free.
+
+**Compiled rules:** R-024.
+
+---
+
+## D25 — Every page carries an identical Content-Security-Policy
+
+- **Date:** 2026-07-31
+- **Status:** locked
+- **Owner-approved** (AQ-3).
+
+**Context.** The site had no CSP. D1 forecloses response headers — GitHub Pages will not
+set them — so the only available mechanism is `<meta http-equiv>`, which is weaker: it
+cannot express `frame-ancestors`, `report-uri` or `sandbox`, and it only governs what the
+parser reaches after it.
+
+**Decision.** All three pages carry the **same** policy string, placed first in `<head>`:
+
+    default-src 'self'; script-src 'self' 'sha256-…' https://static.cloudflareinsights.com;
+    style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self';
+    connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io;
+    base-uri 'self'; object-src 'none'
+
+**The three judgement calls, and why.**
+
+1. **`script-src` uses a hash, not `'unsafe-inline'`.** This is the directive doing the
+   real work. It covers exactly the one inline line that sets the `js` class — **edit that
+   line without recomputing the hash and the page silently loses the class.** The recompute
+   command is in the markup comment.
+2. **`style-src` keeps `'unsafe-inline'` deliberately.** `privacy.html` and `404.html`
+   carry inline `<style>` blocks; hashing them means a **silently unstyled page on every
+   edit**, which this site has already shipped once through a stale cache. There are no
+   inline `style=` attributes anywhere, so this is the only reason it is needed, and
+   injected CSS is a far smaller risk than injected script. Revisit if those blocks ever
+   move into `style.css`.
+3. **One string, not three tailored ones.** `privacy.html` and `404.html` need neither the
+   script hash nor Formspree. Carrying them costs nothing, and this repo has already been
+   bitten by "must be updated in all three pages" drift with the stylesheet cache-buster.
+
+**The part that cannot be tested from the repo.** `static.cloudflareinsights.com` is in the
+policy because Cloudflare injects that script at the edge (D24). **A CSP that validates
+locally can still break the live site**, because the repo does not contain everything the
+visitor receives — three times over now (D17, D22, D24). Any change to this policy is
+verified in a real browser on the live domain.
+
+**Rules out.** Diverging the policy between pages; adding `'unsafe-inline'` or
+`'unsafe-eval'` to `script-src`; adding an origin without checking whether the request is
+actually cross-origin first; editing the inline script without recomputing its hash;
+treating a local pass as sufficient verification.
+
+**Compiled rules:** R-025.

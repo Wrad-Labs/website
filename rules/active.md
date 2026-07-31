@@ -35,12 +35,28 @@ Current state only. No rationale, no history — follow the backlink for either.
 | R-019 | `hello@wradlabs.com` is published as plain readable text in both link text and `href`. No JS-dependent obfuscation — every `mailto:` is wrapped in `<!--email_off-->` to opt out of Cloudflare's edge rewrite. | D17 · D20 |
 | R-020 | The brand mark's source of truth is `brand/` in the private `company` repo. Everything under `assets/images/` is a derived copy — never edit the artwork here. The mark is taller than it is wide: always size it by height. | D18 |
 | R-021 | Sections are full-viewport pages via **`min-height`**, never `height` — a section must always be able to grow past the viewport when its content does not fit. Reserve the fixed nav with `--nav-h`. | D19 |
+| R-025 | All three pages carry an **identical** `<meta>` CSP, placed first in `<head>`. `script-src` uses a hash, never `'unsafe-inline'` — editing the inline script means recomputing it. Any origin added must be shown to be genuinely cross-origin first, and every change is verified in a real browser on the live domain, because the repo does not contain everything a visitor receives. | D25 |
+| R-024 | The site runs **Cloudflare Web Analytics**, injected at the edge and present in no commit. `privacy.html` must disclose it, and any CSP must allow `static.cloudflareinsights.com`. Disabling it and updating the policy happen together — the disclosure and the setting move as one. | D24 |
 | R-023 | Fonts are **self-hosted from this origin** — no third-party font service, stylesheet or `preconnect`. Files in `assets/fonts/` are derived copies under SIL OFL, with the licences carried beside them; never hand-edit the binaries. Any change to the font delivery path updates `privacy.html`'s processor list in the same commit. | D23 |
 | R-022 | `robots.txt` in this repo is the **only** source of this site's crawler policy — no edge-managed or dashboard-injected alternative. AI crawlers are allowed here; do not publish `ai-train=no` without a new decision. Does **not** generalize to properties carrying user-contributed content. | D22 |
 
 ## Compile log
 
-Regenerated **2026-07-31** from `decisions.md` at D1–D23.
+Regenerated **2026-07-31** from `decisions.md` at D1–D25.
+
+- **D24 (new):** compiles **R-024**. The rule exists because the *thing being ruled on is
+  not in the repo* — an edge-injected beacon that `curl` cannot see. Without a written
+  rule, the next agent reads a repo containing no analytics, believes the site has none,
+  and either writes a CSP that kills it or a privacy claim that is false. Both had already
+  happened by the time it was found. Its move-together clause mirrors R-018's: a published
+  claim and the mechanism behind it change in one step or the claim rots.
+- **D25 (new):** compiles **R-025**. The identical-across-pages clause is the same
+  failure mode as the `?v=` cache-buster — a thing that must be updated in three files at
+  once. The verify-in-a-real-browser clause is the third restatement of the D17 lesson,
+  and it is in the rules this time rather than only in `SECURITY.md`, because it has now
+  been re-learned once per quarter of this file's existence.
+
+Previous regeneration, **2026-07-31** from `decisions.md` at D1–D23.
 
 - **D23 (new):** compiles **R-023**. Two clauses do real work beyond "we self-host now."
   The **derived-copy** clause makes the fonts the same kind of thing as `assets/images/`

@@ -48,6 +48,13 @@ days for a response. Do not open public issues for security reports.
   (verified against Google's robots.txt spec, not assumed). **Security consequence:** the
   earlier lesson generalizes — it is not "Cloudflare can rewrite the HTML," it is
   **Cloudflare can change any file it serves, including ones with no markup in them.**
+  **And a third time, 2026-07-31, worse than both:** an injected Web Analytics beacon that
+  **`curl` cannot see even with a browser User-Agent** — it appears only in a real
+  browser's DOM on the live domain. Each occurrence has evaded the check that caught the
+  last one, so the standing instruction is now specific: **"verify against the live domain"
+  means loading it in a real browser, not fetching it.** A `curl` diff proves only that the
+  origin is serving what the repo contains, which is no longer the interesting question.
+  It also means **any CSP must account for edge-injected scripts** (AQ-3/OB-13).
   **Resolved the same day (D22 / R-022):** both AI Crawl Control settings are off and the
   live file is verified identical to the committed one. The standing lesson is the point,
   not the fix — and note the diagnosis, because the two cases look alike and have opposite
@@ -57,9 +64,11 @@ days for a response. Do not open public issues for security reports.
   in server logs.
 - **Third-party surface:** Cloudflare (edge/TLS) and **Formspree** (the contact form
   posts submissions to it client-side). Email runs on Google Workspace, off-repo.
-  **Google Fonts was removed 2026-07-31 (D23/R-023)** — the typefaces are served from
-  this origin, so **loading a page now makes no third-party request at all**; the only
-  cross-origin traffic is a form submission, which the visitor initiates. Any further
+  **Google Fonts was removed 2026-07-31 (D23/R-023)** — the typefaces are served from this
+  origin, so **this repo's markup requests nothing third-party**. The **served page still
+  does**: Cloudflare injects a Web Analytics beacon (`static.cloudflareinsights.com`) into
+  every page at the edge. Undisclosed in `privacy.html`, which denies analytics outright —
+  **OB-13**. Any further
   service (analytics, embeds, a CDN-hosted font or icon set) is a new exposure, reviewed
   as a Tier-2 change (see [`CLAUDE.md`](CLAUDE.md) §3) and reflected in `privacy.html` in
   the same commit.

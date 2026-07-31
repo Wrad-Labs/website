@@ -3,6 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Content-Security-Policy (D25/R-025). Must come BEFORE anything it governs — it applies
+     from the point the parser reaches it, so it sits above the preloads, the JSON-LD and
+     the inline script.
+
+     THE SAME STRING IS IN ALL THREE PAGES. Keep them identical; three tailored policies
+     drift, and this is already the second thing that has to be updated in three files at
+     once (see the ?v= note below).
+
+     script-src uses a HASH, not 'unsafe-inline' — that is the directive doing real work.
+     The hash covers exactly `document.documentElement.classList.add('js');` below.
+     **Edit that line and the page silently loses its `js` class**; recompute with:
+       printf '%s' "<the script's exact bytes>" | openssl dgst -sha256 -binary | openssl base64
+
+     style-src keeps 'unsafe-inline' on purpose. privacy.html and 404.html carry inline
+     <style> blocks, and hashing them would mean a silent unstyled page on every edit —
+     the exact failure this site already shipped once via a stale cache. There are no
+     inline style= attributes anywhere, so this is the only reason it is needed, and
+     injected CSS is a far smaller risk than injected script.
+
+     What a <meta> CSP cannot express: frame-ancestors, report-uri, sandbox. Clickjacking
+     protection would need a real response header, which GitHub Pages does not let us set.
+
+     static.cloudflareinsights.com is Cloudflare's Web Analytics beacon (D24), injected at
+     the edge and in no commit. Without it here the CSP silently kills analytics. Its
+     measurements POST to /cdn-cgi/rum, which is SAME-ORIGIN — verified by intercepting
+     sendBeacon, not assumed — so connect-src needs no addition. Guessing would have
+     widened it to cloudflareinsights.com for nothing.
+
+     Verified ENFORCING, not merely present: a fetch to a disallowed origin raises a
+     connect-src violation. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw=' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'">
 <!-- Send the full URL only to same-origin destinations; the one cross-origin
      request left (Formspree, on submit) gets the bare origin, and downgrades get
      nothing. This page has no secrets in its URL, but the default varies by
