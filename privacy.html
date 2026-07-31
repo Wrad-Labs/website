@@ -6,7 +6,7 @@
 <!-- Identical to index.html's, deliberately — see the note there. One string in three
      files beats three tailored strings that drift; this page needs neither the script
      hash nor Formspree, and carrying them costs nothing. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw='; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw=' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; base-uri 'self'; object-src 'none'">
 <!-- See the note in index.html. All three pages carry this. -->
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Privacy Policy — Wrad Labs Inc.</title>
@@ -53,7 +53,8 @@
 
     <p>This policy covers www.wradlabs.com, operated by Wrad Labs Inc. The site is a
       static marketing page with one interactive feature &mdash; the contact form. It has no
-      accounts, no logins, and no tracking.</p>
+      accounts and no logins, sets no cookies, and does not identify or profile you. It
+      does count page views, using a privacy-first analytics service described below.</p>
 
     <h2>What we collect</h2>
     <p>Only what you type into the contact form:</p>
@@ -87,15 +88,25 @@
       <li><strong>GitHub Pages</strong> and its content delivery network, <strong>Fastly</strong> &mdash;
         host and serve the pages behind Cloudflare. Like any web host, they process
         technical connection data such as your IP address in order to deliver the page.</li>
+      <li><strong>Cloudflare Web Analytics</strong> &mdash; counts page views so we can see which
+        pages people read. Your browser loads a small measurement script from
+        <code>static.cloudflareinsights.com</code>, which reports the page address, the
+        referring page if there is one, and basic details such as browser, operating system
+        and country. Cloudflare states that it sets no cookies, stores nothing in your
+        browser, and does not fingerprint you by IP address or User-Agent to produce these
+        statistics. We see counts and trends, never individual people.</li>
     </ul>
     <p>Our typefaces are served from this site itself. Loading a page here makes no request
       to Google Fonts or any other font service, so no third party learns your IP address
       that way.</p>
-    <p>These providers process data in the United States. We do not use analytics,
-      advertising, or social-media tracking services of any kind.</p>
+    <p>These providers process data in the United States. Apart from the page-view counting
+      described above, we use no advertising, marketing, or social-media tracking services
+      of any kind, and we do not sell or share data with any of them.</p>
 
     <h2>Cookies</h2>
-    <p>This site sets no cookies and stores nothing in your browser.</p>
+    <p>This site sets no cookies and stores nothing in your browser &mdash; including the
+      analytics described above, which is deliberately cookie-free. There is nothing to
+      consent to and no cookie banner, because there are no cookies.</p>
 
     <h2>How long we keep it</h2>
     <p>Your inquiry reaches us as email and stays in our contact mailbox, along with any

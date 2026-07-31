@@ -79,26 +79,38 @@ Last updated: **2026-07-31**
   deliberate — a 16px PNG gets 16 pixels, where the vector at 30px gets 60 on a 2× display.
   **`og.png` now carries the company name:** the horizontal lockup, mark plus "WRAD LABS"
   outlined from Inter 700, above a terracotta rule.
-- **Third-party surface:** Cloudflare (edge/TLS), Formspree, GitHub Pages/Fastly, Google
-  Workspace (email, off-repo) — **plus Cloudflare Web Analytics, which is undisclosed and
-  is OB-13.** **Google Fonts is gone** (D23/R-023, 2026-07-31), so the *repo* now requests
-  nothing third-party. **The served page still does**, and the difference is the point:
-  see the beacon bullet below. The four named processors are in `privacy.html`, dated
-  **July 31, 2026**.
-- **⚠️ `privacy.html` currently states something false, and it is not a repo bug.** It says
-  *"We do not use analytics, advertising, or social-media tracking services of any kind."*
-  **Cloudflare Web Analytics is live on every page** — a `<script data-cf-beacon>` loading
-  `static.cloudflareinsights.com`, injected at the edge. The policy page loads the beacon
-  while denying analytics. No cookies are set and the repo contains no trace of it. **OB-13
-  is the fix and only the owner can apply it.** Found 2026-07-31 while verifying the D23
-  deploy — which is also a correction to what D23 claims: *"no third-party request on
-  load"* was true of this repo's markup and false of the live site.
-- **Third time the edge has changed what ships, and each time it evaded the previous
-  check.** D17 was markup rewriting (caught by reading the live HTML). D22 was `robots.txt`
-  injection (caught by `curl`). This beacon is **invisible to `curl` even with a browser
-  User-Agent** — it appeared only in a real browser's DOM on the live domain. The standing
-  rule that follows: **"verify against the live domain" now means a real browser, not a
-  fetch.**
+- **Third-party surface, five processors:** Cloudflare (edge/TLS), **Cloudflare Web
+  Analytics**, Formspree, GitHub Pages/Fastly, Google Workspace (email, off-repo). All five
+  are named in `privacy.html`, dated **July 31, 2026**. **Google Fonts is gone**
+  (D23/R-023), so this repo's markup requests nothing third-party — **the served page still
+  loads the analytics beacon**, and that gap is the standing lesson, not a bug.
+- **Analytics is on, and disclosed** (D24 / `R-024`, 2026-07-31). Cloudflare Web Analytics
+  injects `<script data-cf-beacon>` from `static.cloudflareinsights.com` at the edge, on
+  every page; it is in no commit. Found while verifying the D23 deploy, at which point
+  `privacy.html` still said *"We do not use analytics… of any kind"* — **the policy page
+  was loading the beacon while denying it.** The owner chose to keep it, so the policy now
+  names it, describes what it reports, and claims only what is true: no advertising or
+  social-media tracking, and **no cookies** (verified — `document.cookie` is empty live).
+  **Closed OB-13, and closed OB-7** — which had been sitting open asking whether to *add*
+  analytics that turned out to be already running. **The disclosure and the Cloudflare
+  toggle move together** (R-024): switching it off without editing the policy makes the
+  page wrong in the other direction.
+- **D23's "no third-party request" claim is corrected here**, not by editing D23 — it holds
+  for this repo's markup and not for the served page (R-013 is append-only).
+- **Third time the edge changed what ships, and each time it evaded the check that caught
+  the last one.** D17 was markup rewriting (caught by reading the live HTML). D22 was
+  `robots.txt` injection (caught by `curl`). The D24 beacon is **invisible to `curl` even
+  with a browser User-Agent** — it appeared only in a real browser's DOM on the live domain.
+  Now compiled into **R-025** rather than left as prose: **"verify against the live domain"
+  means a real browser, not a fetch.**
+- **A CSP is live on all three pages** (D25 / `R-025`), one identical string, `script-src`
+  hash-based with no `'unsafe-inline'`. `style-src` keeps `'unsafe-inline'` on purpose —
+  `privacy.html` and `404.html` have inline `<style>` blocks, and hashing them means a
+  silently unstyled page on every edit. **Editing the inline `js`-class script requires
+  recomputing its hash**; the command is in the markup comment. The beacon origin is
+  allowed in `script-src`, but **`connect-src` needed nothing**: the beacon POSTs to
+  `/cdn-cgi/rum`, which is same-origin — captured by intercepting `sendBeacon` rather than
+  guessed, and the guess would have been `cloudflareinsights.com`.
 - **CSS is cache-busted — `style.css?v=N`, and N must be bumped in all three pages when
   selectors change.** The HTML is `max-age=600` but the CSS is `max-age=14400`, so a
   returning visitor could otherwise hold new markup against four-hour-old styles, and any
@@ -183,16 +195,13 @@ development live in the private `company` repo (D8/R-012).
 | OB-2 | **Legal review of `privacy.html` wording.** Published and plain-English; it deliberately claims no specific regulatory framework (no GDPR/CCPA rights language) — confirm that matches the company's actual obligations. Now dated July 30, 2026 and naming all five processors. | 🔴 3 |
 | OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, `decisions.md` and `status.md` all return 200 at the live domain. **The available mitigation has now shipped** (AQ-10, 2026-07-31): `robots.txt` disallows `/*.md$`, so compliant crawlers stop fetching them. It does **not** make them private and never could — full suppression needs a Jekyll build, which D1 rules out, and a `.md` file can carry neither a robots meta tag nor an `X-Robots-Tag` on Pages. So this is now purely the owner's question: **accept that these files are reachable to anyone with the URL, or reopen D1/D2.** Nothing further an agent can do. Carried from WORKPLAN P0. | 🔴 3 |
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
-| OB-7 | **Decide whether to add privacy-respecting analytics** (e.g. Plausible). Requires a privacy-policy disclosure. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-8 | **Annual inquiry sweep — delete contact-mailbox mail older than 24 months (R-018).** **One mailbox**, reached by both `hello@` and `support@` as aliases (owner-confirmed 2026-07-31), so the sweep scope is settled. First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
-| OB-13 | **⚠️ Decide on Cloudflare Web Analytics — `privacy.html` is false until you do.** The policy says *"We do not use analytics… of any kind."* Every live page, including the policy page itself, loads a `<script data-cf-beacon>` from `static.cloudflareinsights.com`. Injected at the edge; nothing in this repo. No cookies observed. **Two ways out. (A) Turn it off — recommended:** Cloudflare dashboard → `wradlabs.com` zone → **Analytics & Logs → Web Analytics** (or **Manage Web Analytics**) → disable it for this site. The published policy becomes true again with **no edit**, and D23's "no third-party request" claim becomes true of the live site too. **(B) Keep it:** then `privacy.html` must name Cloudflare Web Analytics as a processor and drop the no-analytics sentence — a Tier-3 legal-text change — and this also settles **OB-7** by default rather than by decision. **Verify either way in a real browser on the live domain, not `curl`** — the beacon is invisible to `curl` even with a browser UA. **Blocks AQ-3**, whose CSP would silently break the beacon. | 🔴 3 |
 | OB-10 | **Force the social platforms to re-scrape the share card.** The new `og.png` is live and correct, but each platform caches the *old* image against the URL and will keep serving it — nothing in this repo can clear those caches, and they need a signed-in account. **LinkedIn:** open `https://www.linkedin.com/post-inspector/`, paste `https://www.wradlabs.com/`, click **Inspect** — it refetches on every run. **Facebook/Meta:** `https://developers.facebook.com/tools/debug/`, paste the URL, click **Scrape Again**. **X/Twitter:** no public validator remains; it refreshes on its own within about a week. **Verify:** each tool previews the card it now holds — you want the flask on off-white with a terracotta rule, not the old tree glyph. **Reverse:** nothing to undo; re-scraping only re-reads what the site already serves. | 🔴 3 |
 
 ### Agent queue — ready to pick up
 
 | # | Item | Tier |
 |---|---|---|
-| AQ-3 | **BLOCKED on OB-13.** Policy is written, tested and on `feat/csp` ([#20](https://github.com/Wrad-Labs/website/pull/20)) — verified enforcing, all three pages render, script hash correct. It cannot merge as written because `script-src 'self' 'sha256-…'` **would block Cloudflare's analytics beacon**, silently. Resolve OB-13 first: turn the beacon off and this merges unchanged; keep it and the policy must allow `static.cloudflareinsights.com` in `script-src` *and* `connect-src`. **AQ-9 shrank it**: the page now makes no third-party request, so the policy is `self` plus Formspree on submit — no font origins. The hard part is what the repo cannot see: Cloudflare injects `/cdn-cgi/` scripts at the edge (D17), so a policy that validates locally can still break live. Test both breakpoints **and** the live domain. Carried from WORKPLAN P2. | 🟡 2 |
 
 Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
 [`CLAUDE.md`](CLAUDE.md) §3.
@@ -205,8 +214,32 @@ Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
 
+- **2026-07-31** — **Found undisclosed analytics; kept it and disclosed it (D24 → R-024),
+  and shipped the CSP (D25 → R-025).** Verifying the D23 deploy **in a real browser** — not
+  `curl` — surfaced an off-origin request to `static.cloudflareinsights.com`: **Cloudflare
+  Web Analytics, live on every page, injected at the edge, in no commit.** `privacy.html`
+  at that moment said *"We do not use analytics… of any kind."* **The policy page was
+  loading the beacon while denying it.** That is OB-9's failure a second time — a published
+  claim checked against the last draft instead of against what the site does — and it also
+  falsified my own claim, made an hour earlier, that D23 had left the site with zero
+  third-party requests. **The owner chose to keep it**, so the policy now names it,
+  describes what it reports, and asserts only what holds: no advertising or social-media
+  tracking, no cookies (`document.cookie` empty, verified live). Closes OB-13 **and OB-7**,
+  which had been sitting in the backlog asking whether to *add* analytics that was already
+  running. **AQ-3 shipped on the back of it.** One identical CSP on all three pages,
+  `script-src` hash-based with no `'unsafe-inline'`; `style-src` keeps it deliberately,
+  because hashing the inline `<style>` blocks in `privacy.html`/`404.html` means a silently
+  unstyled page on every edit. **The detail worth keeping:** the beacon POSTs to
+  `/cdn-cgi/rum`, which is **same-origin** — captured by intercepting `navigator.sendBeacon`
+  rather than assumed. The documented guess, `cloudflareinsights.com` in `connect-src`,
+  would have been wrong and would have widened the policy for nothing. **Third edge
+  surprise, each evading the previous check** (D17 caught by reading HTML, D22 by `curl`,
+  this one only by a real browser) — so it is now **compiled as R-025** instead of living
+  as prose in `SECURITY.md`.
+
 - **2026-07-31** — **AQ-9: fonts self-hosted (D23 → R-023); the page now makes zero
-  third-party requests.** Four `woff2` (latin + latin-ext per family, ~348 kB) into
+  third-party requests** *(true of this repo's markup; the served page loads the analytics
+  beacon — see the entry above).* Four `woff2` (latin + latin-ext per family, ~348 kB) into
   `assets/fonts/` with both SIL OFL licences, `@font-face` at the top of `style.css`, and
   every `fonts.googleapis.com` link and `preconnect` removed. Verified the way that
   matters: **`offOriginRequests: []`** on all three pages — the only cross-origin traffic
@@ -316,27 +349,9 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   the stylesheet only protects a deploy if the new HTML points at the new CSS URL, and this
   was the largest class rename the site has had.
 
-- **2026-07-30** — **Replaced the placeholder mark with the real one (D18/R-020) — merged and live.** The
-  owner signed off the flask-and-roots artwork; it was vectorised and built out in the
-  private `company` repo (**C10**), which is now the source of truth — a mark is company IP
-  and outlives any surface, so this repo holds **derived copies only**, and that repo's
-  build script deliberately stops at the boundary rather than syncing here (**OOM D-005**:
-  an asset that arrives without review is an asset that ships without review). This
-  **partially closes D11** — the *mark* is locked, the *palette* stays a draft, so R-004 is
-  untouched and R-005 stays retired. Delivery changed with it: the placeholder was a
-  stroked `<symbol>` duplicated into each page's sprite, but the new mark is a single
-  **10.6 kB** path, so inlining it three times would have roughly doubled an 11 kB
-  `index.html` for a capability a one-colour mark does not need. It is now one cached
-  `assets/images/mark.svg` referenced by `<img>`. The new mark is also **taller than wide**
-  where the old one was near-square — hence R-020's size-by-height clause and the intrinsic
-  `width`/`height` on every `<img>`. **Closes AQ-8**: each icon slot now has an asset built
-  for it — theme-adaptive SVG favicon, 48 px PNG, a real multi-size `/favicon.ico`,
-  apple-touch, a 1200×630 `og.png` (so `twitter:card` becomes `summary_large_image`), and a
-  square `icon-512.png` for the JSON-LD `logo` — replacing the one 317 kB `logo.png` that
-  had been doing all four jobs, now deleted. Found in passing and **not** touched, to keep
-  the diff to one subject: `tree-backdrop.png`, 2 MB and referenced by nothing (**AQ-13**).
-
-*(Older entries evicted by the cap — see `git log`. Two went from here: the 2026-07-30
+*(Older entries evicted by the cap — see `git log`. Three went from here: the 2026-07-30
 rule-centralization entry, whose durable content is Golden rule 6 in `CLAUDE.md` and the
-D-008/D-009 table in `rules/active.md`; and the 2026-07-30 OB-9 / email-obfuscation entry,
-whose lesson lives in `SECURITY.md` and whose rule is R-019. Both still current.)*
+D-008/D-009 table in `rules/active.md`; the 2026-07-30 OB-9 / email-obfuscation entry, whose
+lesson lives in `SECURITY.md` and whose rule is R-019; and the 2026-07-30 brand-mark entry
+(D18/R-020), whose durable content is the mark bullet in **Now** and D18 itself. All still
+current.)*
