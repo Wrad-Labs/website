@@ -338,10 +338,15 @@ html { scroll-padding-top: var(--nav-h); }
    since there is no underlined text to signal it: the border and shadow lift on
    hover, the arrow nudges, and the focus ring is the same one the form fields
    use so keyboard users get a consistent signal. */
-.card-link {
-  cursor: pointer;
-  transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease),
-              transform 0.25s var(--ease);
+.card-link { cursor: pointer; }
+/* `.js .reveal` (0,2,0) outranks `.card-link` (0,1,0), and `transition` is a
+   shorthand — so the reveal rule was REPLACING the card's transition list, not
+   merging with it, and the hover border/shadow snapped instead of easing. Restated
+   here at matching specificity with both sets of properties. */
+.card-link,
+.js .reveal.card-link {
+  transition: opacity 0.7s var(--ease), transform 0.25s var(--ease),
+              border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
 }
 .card-link:hover {
   border-color: var(--line-strong);

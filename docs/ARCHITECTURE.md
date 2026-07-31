@@ -24,6 +24,21 @@ if it disagrees with the source, the doc is wrong.
 **No build step. No package manager. No backend.** What is in the repo is what
 ships. Edit files directly; refresh the browser.
 
+### Stylesheet versioning
+
+Every page links the CSS as **`style.css?v=N`**. That query is a cache-buster, and it has
+to be **bumped in all three pages whenever selectors change**.
+
+The reason is a lifetime mismatch, hit in production on 2026-07-30: the HTML is
+`max-age=600` but the CSS is `max-age=14400` (Cloudflare's default for static assets), so
+for up to four hours a returning visitor holds **new markup against old styles**. Any
+release that renames a class then renders unstyled — that day it showed the new hero art
+as a solid black shape. Changing the query changes the URL, so the browser fetches the new
+CSS immediately instead of waiting out its TTL.
+
+`script.js` is deliberately **not** versioned: under R-008 the page must work with no
+JavaScript at all, so a stale copy degrades rather than breaks.
+
 ## File structure
 
 ```
