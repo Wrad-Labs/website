@@ -694,3 +694,49 @@ consent line from the button by a form row.
 
 **Compiled rules:** none — presentation, inside the existing token system and R-021.
 Recorded because each part has a specific way of going wrong quietly.
+
+---
+
+## D22 — Crawler policy is owned by this repo; AI crawlers are allowed
+
+- **Date:** 2026-07-31
+- **Status:** locked
+- **Owner-directed**, after the injected policy was found on deploy.
+
+**Context.** Verifying the AQ-10 deploy showed the live `robots.txt` was **not** the
+committed one. Cloudflare's **AI Crawl Control** was prepending a managed block: a
+`Content-Signal: search=yes,ai-train=no,use=reference` line and `Disallow: /` for roughly
+ten named AI crawlers (ClaudeBot, GPTBot, CCBot, Bytespider, Amazonbot,
+Applebot-Extended, Google-Extended, meta-externalagent…), with the repo's own directives
+served after it. No decision here chose that, and the owner had not knowingly enabled it.
+
+Two things were wrong with it beyond authorship. **One file had two sources of record** —
+this repo and a dashboard — which is the bug D-009 names. And it was **costing the site
+the exact channel it wants**: the owner observed that other AI assistants could not reach
+wradlabs.com. Testing showed **nothing was ever blocked at the network level** — nine user
+agents including ClaudeBot, GPTBot, Googlebot and a plain browser all returned **200**. The
+suppression was entirely advisory: the door was open and the sign said stay out. Worth
+recording because the two failure modes look identical from the outside and have opposite
+fixes.
+
+**Decision.** `robots.txt` is owned by this repo. Cloudflare's **"Manage your robots.txt"
+is disabled** and **"Block AI training bots" is set to do-not-block**. AI crawlers are
+allowed — training and retrieval alike — alongside search engines.
+
+**Why allowing is right *here*.** The content is marketing copy that exists to be
+repeated. There is no paywall, no advertising revenue, no proprietary research and **no
+user-contributed content** — none of the reasons to publish `ai-train=no` apply. An
+assistant that can read this site can recommend the company, which is the point of having
+one.
+
+**Explicitly does not generalize to sibling properties.** Optants serves
+**opinion contributed by real people**, where "may be used for training" is a promise
+about someone else's words and has to match what that product's terms and privacy policy
+already say. Same company, different content, different answer — and that decision belongs
+in the `optants` repo, next to the policy it must agree with (D8/R-012).
+
+**Rules out.** Managing crawler policy from a dashboard; any second source of record for
+`robots.txt`; publishing `ai-train=no` here without a new decision; reading this entry as
+guidance for Optants or any property carrying user content.
+
+**Compiled rules:** R-022.
