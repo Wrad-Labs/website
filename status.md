@@ -79,13 +79,26 @@ Last updated: **2026-07-31**
   deliberate — a 16px PNG gets 16 pixels, where the vector at 30px gets 60 on a 2× display.
   **`og.png` now carries the company name:** the horizontal lockup, mark plus "WRAD LABS"
   outlined from Inter 700, above a terracotta rule.
-- **Third-party surface, now four:** Cloudflare (edge/TLS), Formspree, GitHub
-  Pages/Fastly, Google Workspace (email, off-repo). **Google Fonts is gone** (D23/R-023,
-  2026-07-31) — fonts are served from this origin, so **loading a page makes no
-  third-party request whatsoever**; the only cross-origin traffic left is a form
-  submission the visitor initiates. All four are named in `privacy.html`, now dated
-  **July 31, 2026** — R-007 is met, and it cuts both ways: the policy no longer lists a
-  processor that receives nothing.
+- **Third-party surface:** Cloudflare (edge/TLS), Formspree, GitHub Pages/Fastly, Google
+  Workspace (email, off-repo) — **plus Cloudflare Web Analytics, which is undisclosed and
+  is OB-13.** **Google Fonts is gone** (D23/R-023, 2026-07-31), so the *repo* now requests
+  nothing third-party. **The served page still does**, and the difference is the point:
+  see the beacon bullet below. The four named processors are in `privacy.html`, dated
+  **July 31, 2026**.
+- **⚠️ `privacy.html` currently states something false, and it is not a repo bug.** It says
+  *"We do not use analytics, advertising, or social-media tracking services of any kind."*
+  **Cloudflare Web Analytics is live on every page** — a `<script data-cf-beacon>` loading
+  `static.cloudflareinsights.com`, injected at the edge. The policy page loads the beacon
+  while denying analytics. No cookies are set and the repo contains no trace of it. **OB-13
+  is the fix and only the owner can apply it.** Found 2026-07-31 while verifying the D23
+  deploy — which is also a correction to what D23 claims: *"no third-party request on
+  load"* was true of this repo's markup and false of the live site.
+- **Third time the edge has changed what ships, and each time it evaded the previous
+  check.** D17 was markup rewriting (caught by reading the live HTML). D22 was `robots.txt`
+  injection (caught by `curl`). This beacon is **invisible to `curl` even with a browser
+  User-Agent** — it appeared only in a real browser's DOM on the live domain. The standing
+  rule that follows: **"verify against the live domain" now means a real browser, not a
+  fetch.**
 - **CSS is cache-busted — `style.css?v=N`, and N must be bumped in all three pages when
   selectors change.** The HTML is `max-age=600` but the CSS is `max-age=14400`, so a
   returning visitor could otherwise hold new markup against four-hour-old styles, and any
@@ -172,13 +185,14 @@ development live in the private `company` repo (D8/R-012).
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-7 | **Decide whether to add privacy-respecting analytics** (e.g. Plausible). Requires a privacy-policy disclosure. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-8 | **Annual inquiry sweep — delete contact-mailbox mail older than 24 months (R-018).** **One mailbox**, reached by both `hello@` and `support@` as aliases (owner-confirmed 2026-07-31), so the sweep scope is settled. First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
+| OB-13 | **⚠️ Decide on Cloudflare Web Analytics — `privacy.html` is false until you do.** The policy says *"We do not use analytics… of any kind."* Every live page, including the policy page itself, loads a `<script data-cf-beacon>` from `static.cloudflareinsights.com`. Injected at the edge; nothing in this repo. No cookies observed. **Two ways out. (A) Turn it off — recommended:** Cloudflare dashboard → `wradlabs.com` zone → **Analytics & Logs → Web Analytics** (or **Manage Web Analytics**) → disable it for this site. The published policy becomes true again with **no edit**, and D23's "no third-party request" claim becomes true of the live site too. **(B) Keep it:** then `privacy.html` must name Cloudflare Web Analytics as a processor and drop the no-analytics sentence — a Tier-3 legal-text change — and this also settles **OB-7** by default rather than by decision. **Verify either way in a real browser on the live domain, not `curl`** — the beacon is invisible to `curl` even with a browser UA. **Blocks AQ-3**, whose CSP would silently break the beacon. | 🔴 3 |
 | OB-10 | **Force the social platforms to re-scrape the share card.** The new `og.png` is live and correct, but each platform caches the *old* image against the URL and will keep serving it — nothing in this repo can clear those caches, and they need a signed-in account. **LinkedIn:** open `https://www.linkedin.com/post-inspector/`, paste `https://www.wradlabs.com/`, click **Inspect** — it refetches on every run. **Facebook/Meta:** `https://developers.facebook.com/tools/debug/`, paste the URL, click **Scrape Again**. **X/Twitter:** no public validator remains; it refreshes on its own within about a week. **Verify:** each tool previews the card it now holds — you want the flask on off-white with a terracotta rule, not the old tree glyph. **Reverse:** nothing to undo; re-scraping only re-reads what the site already serves. | 🔴 3 |
 
 ### Agent queue — ready to pick up
 
 | # | Item | Tier |
 |---|---|---|
-| AQ-3 | Add a `<meta http-equiv="Content-Security-Policy">`. **AQ-9 shrank it**: the page now makes no third-party request, so the policy is `self` plus Formspree on submit — no font origins. The hard part is what the repo cannot see: Cloudflare injects `/cdn-cgi/` scripts at the edge (D17), so a policy that validates locally can still break live. Test both breakpoints **and** the live domain. Carried from WORKPLAN P2. | 🟡 2 |
+| AQ-3 | **BLOCKED on OB-13.** Policy is written, tested and on `feat/csp` ([#20](https://github.com/Wrad-Labs/website/pull/20)) — verified enforcing, all three pages render, script hash correct. It cannot merge as written because `script-src 'self' 'sha256-…'` **would block Cloudflare's analytics beacon**, silently. Resolve OB-13 first: turn the beacon off and this merges unchanged; keep it and the policy must allow `static.cloudflareinsights.com` in `script-src` *and* `connect-src`. **AQ-9 shrank it**: the page now makes no third-party request, so the policy is `self` plus Formspree on submit — no font origins. The hard part is what the repo cannot see: Cloudflare injects `/cdn-cgi/` scripts at the edge (D17), so a policy that validates locally can still break live. Test both breakpoints **and** the live domain. Carried from WORKPLAN P2. | 🟡 2 |
 
 Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
 [`CLAUDE.md`](CLAUDE.md) §3.
