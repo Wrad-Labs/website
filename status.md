@@ -37,10 +37,20 @@ Last updated: **2026-07-31**
   *"…worth leaving behind."* now appears once, as the contact heading.
 - **The published address is `hello@wradlabs.com`** (D20, 2026-07-30), everywhere in
   markup, docs and metadata. `support@` appears in no tracked file except superseded
-  decision entries. **The contact form is not routed by that markup:** it posts to
-  Formspree endpoint `mvzjloro`, whose recipient is dashboard config — so until the owner
-  moves it (**OB-11**) the page and the form disagree. Honeypot and native-POST fallback
-  unchanged; Formspree delivery **confirmed by the owner 2026-07-27**.
+  decision entries. Honeypot and native-POST fallback unchanged; Formspree delivery
+  **confirmed by the owner 2026-07-27**.
+- **Formspree still targets `support@`, deliberately — and that is not a mismatch.**
+  Owner-confirmed 2026-07-31: **`hello@` and `support@` are aliases into the same Google
+  Workspace mailbox**, so form mail already arrives where it is read, and the target
+  string is invisible to visitors. Left alone because Formspree's free plan caps the
+  account at **2 linked emails** (both used), and re-pointing would mean re-targeting the
+  form, deleting an address and verifying a new one to change nothing a visitor sees.
+  **The one way this breaks: if `support@` is ever retired as an alias, form delivery
+  stops silently** — re-point Formspree *first* (Workflow → Actions → Email → 3-dot →
+  Settings). Closed OB-11.
+- **One mailbox receives everything**, which is what R-018's 24-month sweep (OB-8) is
+  scoped to. Had they been separate mailboxes, the published retention figure would have
+  needed the sweep widened or the figure changed (D20).
 - **Ventures section.** The **Optants** tile is now a live **whole-card link** to
   **optants.com** (verified 200), labelled *Near launch*, carrying Optants' **own logo**
   copied from its repo — a second upstream brand, under the same derived-copy rule as the
@@ -91,9 +101,10 @@ live bytes, and — the D17 check that only the live domain can answer — **all
 `mailto:` links render plain, with no `/cdn-cgi/` decoder**: the `<!--email_off-->`
 wrappers held through the address change.
 
-**But the release is not finished outside the repo.** Form mail still delivers wherever
-Formspree `mvzjloro` is pointed, which no commit here can change — **OB-11**, and the page
-and the form disagree until it is done.
+**And it is finished outside the repo too.** OB-11 closed 2026-07-31 with no dashboard
+change needed: the two addresses are aliases into one mailbox, so form mail was never
+mis-delivered — see the Formspree note above for why the target is deliberately left on
+`support@`, and the one condition that would break it.
 
 **Not here.** Accounting, company funding, corporate filings, and product
 development live in the private `company` repo (D8/R-012).
@@ -110,8 +121,7 @@ development live in the private `company` repo (D8/R-012).
 | OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, and now `decisions.md` / `status.md` all return 200 at the live domain. Full suppression needs a Jekyll build, which D1 rules out — but AQ-10 can stop them being *indexed*, which shrinks this to "accept that they are reachable." Carried from WORKPLAN P0. | 🔴 3 |
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-7 | **Decide whether to add privacy-respecting analytics** (e.g. Plausible). Requires a privacy-policy disclosure. Carried from WORKPLAN P4. | 🟡 2 |
-| OB-8 | **Annual inquiry sweep — delete contact-mailbox mail older than 24 months (R-018).** Which mailbox that is depends on OB-11. First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
-| OB-11 | **Point Formspree at `hello@wradlabs.com`, and say whether it is an alias or its own mailbox.** The site now shows `hello@`, but form submissions still deliver wherever endpoint `mvzjloro` is configured — that lives in Formspree's dashboard, not this repo (D20). **Do it — the recipient is under Workflow, NOT Settings** (an earlier draft of this entry said Settings and sent the owner to the wrong tab; Formspree calls that the legacy path and this account does not have it). The address must be a **verified Linked Email on the account before the form will offer it**, so the order matters: (1) `https://formspree.io/account` → add `hello@wradlabs.com` → **open the verification email and click the link**; (2) open the form **contact us form** (endpoint hash `mvzjloro`) → **Workflow** tab → under **Actions**, the **Email** step → its **3-dot menu → Settings** → set the target to `hello@wradlabs.com` → save. If no Email action is listed, **+ Add New → Email** instead. **Verify:** submit the live form at `https://www.wradlabs.com/#contact` with a throwaway message; it should reach the `hello@` inbox and appear under the form's **Submissions** tab. **Reverse:** same Workflow → Email → Settings path, restore the previous address. **Second, one-line answer needed:** is `hello@` an *alias* delivering into the existing Google Workspace mailbox, or a *separate* mailbox? R-018's 24-month sweep (OB-8) covers one mailbox — if it is separate, the sweep must cover it too or the retention figure published in `privacy.html` stops being true. | 🔴 3 |
+| OB-8 | **Annual inquiry sweep — delete contact-mailbox mail older than 24 months (R-018).** **One mailbox**, reached by both `hello@` and `support@` as aliases (owner-confirmed 2026-07-31), so the sweep scope is settled. First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
 | OB-10 | **Force the social platforms to re-scrape the share card.** The new `og.png` is live and correct, but each platform caches the *old* image against the URL and will keep serving it — nothing in this repo can clear those caches, and they need a signed-in account. **LinkedIn:** open `https://www.linkedin.com/post-inspector/`, paste `https://www.wradlabs.com/`, click **Inspect** — it refetches on every run. **Facebook/Meta:** `https://developers.facebook.com/tools/debug/`, paste the URL, click **Scrape Again**. **X/Twitter:** no public validator remains; it refreshes on its own within about a week. **Verify:** each tool previews the card it now holds — you want the flask on off-white with a terracotta rule, not the old tree glyph. **Reverse:** nothing to undo; re-scraping only re-reads what the site already serves. | 🔴 3 |
 
 ### Agent queue — ready to pick up
@@ -151,7 +161,9 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   with the click-path, and the second question inside it: if `hello@` is a separate mailbox
   rather than an alias, R-018's 24-month sweep no longer covers what receives, and a
   published retention figure with no mechanism behind it is exactly what the owner model
-  forbids — so the answer is asked for, not assumed (**OOM D-007**). The rest is D21:
+  forbids — so the answer is asked for, not assumed (**OOM D-007**). **Answered and closed
+  2026-07-31: aliases into one mailbox**, so nothing was mis-delivered, the sweep scope
+  holds, and Formspree keeps its `support@` target on purpose. The rest is D21:
   contact drops from three tiers to two (the "Email us directly" label and its rules are
   gone; the address is the invitation's last line), the footer loses its tagline *and*
   address — *"…worth leaving behind."* had been on the page twice and is now only the
