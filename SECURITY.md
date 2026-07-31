@@ -55,11 +55,14 @@ days for a response. Do not open public issues for security reports.
   ClaudeBot, GPTBot and Googlebot all returned 200. A crawler declining because
   `robots.txt` told it to is not a crawler being denied, and only one of those is visible
   in server logs.
-- **Third-party surface:** Cloudflare (edge/TLS), Google Fonts (CSS/font requests),
-  and **Formspree** (the contact form posts submissions to it client-side). Email
-  runs on Google Workspace, off-repo. Any further service (analytics, embeds) is a
-  new exposure, reviewed as a Tier-2 change (see [`CLAUDE.md`](CLAUDE.md) §3) and
-  reflected in `privacy.html`.
+- **Third-party surface:** Cloudflare (edge/TLS) and **Formspree** (the contact form
+  posts submissions to it client-side). Email runs on Google Workspace, off-repo.
+  **Google Fonts was removed 2026-07-31 (D23/R-023)** — the typefaces are served from
+  this origin, so **loading a page now makes no third-party request at all**; the only
+  cross-origin traffic is a form submission, which the visitor initiates. Any further
+  service (analytics, embeds, a CDN-hosted font or icon set) is a new exposure, reviewed
+  as a Tier-2 change (see [`CLAUDE.md`](CLAUDE.md) §3) and reflected in `privacy.html` in
+  the same commit.
 
 ## Known limitations (GitHub Pages)
 

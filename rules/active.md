@@ -35,11 +35,23 @@ Current state only. No rationale, no history — follow the backlink for either.
 | R-019 | `hello@wradlabs.com` is published as plain readable text in both link text and `href`. No JS-dependent obfuscation — every `mailto:` is wrapped in `<!--email_off-->` to opt out of Cloudflare's edge rewrite. | D17 · D20 |
 | R-020 | The brand mark's source of truth is `brand/` in the private `company` repo. Everything under `assets/images/` is a derived copy — never edit the artwork here. The mark is taller than it is wide: always size it by height. | D18 |
 | R-021 | Sections are full-viewport pages via **`min-height`**, never `height` — a section must always be able to grow past the viewport when its content does not fit. Reserve the fixed nav with `--nav-h`. | D19 |
+| R-023 | Fonts are **self-hosted from this origin** — no third-party font service, stylesheet or `preconnect`. Files in `assets/fonts/` are derived copies under SIL OFL, with the licences carried beside them; never hand-edit the binaries. Any change to the font delivery path updates `privacy.html`'s processor list in the same commit. | D23 |
 | R-022 | `robots.txt` in this repo is the **only** source of this site's crawler policy — no edge-managed or dashboard-injected alternative. AI crawlers are allowed here; do not publish `ai-train=no` without a new decision. Does **not** generalize to properties carrying user-contributed content. | D22 |
 
 ## Compile log
 
-Regenerated **2026-07-31** from `decisions.md` at D1–D22.
+Regenerated **2026-07-31** from `decisions.md` at D1–D23.
+
+- **D23 (new):** compiles **R-023**. Two clauses do real work beyond "we self-host now."
+  The **derived-copy** clause makes the fonts the same kind of thing as `assets/images/`
+  (R-020, different upstream) — the repo holds copies, and the way to update one is to
+  re-fetch, never to edit. The **same-commit** clause exists because the failure is
+  delayed and silent: re-adding a Google Fonts link would restore a processor that
+  `privacy.html` no longer discloses, breaching R-007 without any visible symptom. That is
+  the same shape as OB-9, where the policy claimed to name every processor while omitting
+  Cloudflare.
+
+Previous regeneration, **2026-07-31** from `decisions.md` at D1–D22.
 
 - **D22 (new):** compiles **R-022**. It is a rule rather than a status note because the
   thing it guards against leaves no trace in the repo: a dashboard toggle re-injected a

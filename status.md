@@ -79,9 +79,13 @@ Last updated: **2026-07-31**
   deliberate — a 16px PNG gets 16 pixels, where the vector at 30px gets 60 on a 2× display.
   **`og.png` now carries the company name:** the horizontal lockup, mark plus "WRAD LABS"
   outlined from Inter 700, above a terracotta rule.
-- **Third-party surface:** Cloudflare (edge/TLS), Google Fonts, Formspree, GitHub
-  Pages/Fastly, Google Workspace (email, off-repo). All five are named in `privacy.html`
-  as of 2026-07-30 — R-007 is met on the live site.
+- **Third-party surface, now four:** Cloudflare (edge/TLS), Formspree, GitHub
+  Pages/Fastly, Google Workspace (email, off-repo). **Google Fonts is gone** (D23/R-023,
+  2026-07-31) — fonts are served from this origin, so **loading a page makes no
+  third-party request whatsoever**; the only cross-origin traffic left is a form
+  submission the visitor initiates. All four are named in `privacy.html`, now dated
+  **July 31, 2026** — R-007 is met, and it cuts both ways: the policy no longer lists a
+  processor that receives nothing.
 - **CSS is cache-busted — `style.css?v=N`, and N must be bumped in all three pages when
   selectors change.** The HTML is `max-age=600` but the CSS is `max-age=14400`, so a
   returning visitor could otherwise hold new markup against four-hour-old styles, and any
@@ -97,10 +101,17 @@ Last updated: **2026-07-31**
   back into the nav. Both were caught in testing, not by reading.
 - **Measured CLS is 0**, and there is **no hero image** — the hero art is an inline `<svg>`,
   every `<img>` carries intrinsic `width`/`height`. Closed AQ-7, which asked to preload a
-  `tree-backdrop.png` that no longer exists. The only remaining shift source is **font
-  swap**, which is AQ-9's to fix.
-- **`referrer` = `strict-origin-when-cross-origin`** on all three pages: Google Fonts and
-  Formspree receive the origin, never the path.
+  `tree-backdrop.png` that no longer exists. Font swap was the last theoretical source and
+  AQ-9 removed it: the two **latin** files are preloaded from this origin, latin-ext is not
+  (its `unicode-range` means most readers never fetch it).
+- **Fonts are self-hosted** (D23 / `R-023`, 2026-07-31). Four `woff2` in `assets/fonts/`,
+  ~348 kB, **derived copies** under SIL OFL with the licences beside them. One **variable**
+  file per subset declaring `font-weight: 400 700`, not one file per weight — upstream's
+  four blocks all pointed at the same URL. Verified interpolating rather than synthesizing:
+  Inter 400/500/600/700 render at 520.4/528.6/536.6/544.8px. To update, re-fetch the `css2`
+  URL in the CSS comment; never hand-edit the binaries.
+- **`referrer` = `strict-origin-when-cross-origin`** on all three pages. Since D23 there is
+  only one cross-origin destination left to protect: Formspree, on submit.
 - **Crawl surface, as of 2026-07-31.** `sitemap.xml` lists **two** URLs — `/` and
   `/privacy.html`, which had been absent despite carrying a canonical URL and
   `index, follow`. `robots.txt` **disallows `/*.md$`**, so compliant crawlers stop fetching
@@ -167,8 +178,7 @@ development live in the private `company` repo (D8/R-012).
 
 | # | Item | Tier |
 |---|---|---|
-| AQ-3 | Add a `<meta http-equiv="Content-Security-Policy">` scoped to Google Fonts + Formspree. Can break rendering — test both breakpoints. **Sequence after AQ-9**, which removes two origins from the policy; writing it first means writing it twice. Must also allow Cloudflare's `/cdn-cgi/` injections (D17), which are not in the repo. Carried from WORKPLAN P2. | 🟡 2 |
-| AQ-9 | **Self-host the fonts** to drop the Google Fonts request. Three things ride on it, which is why it is worth doing before AQ-3: it removes a **named processor from `privacy.html`** (R-007), it removes the **last measurable CLS source** — font swap, the only one left now that AQ-7 is closed — and it shrinks AQ-3's CSP to `self` + Formspree. Needs the owner's go-ahead: committing font binaries means **downloading files from Google**, and the licence (SIL OFL for both families) should be confirmed and carried in-repo. | 🟡 2 |
+| AQ-3 | Add a `<meta http-equiv="Content-Security-Policy">`. **AQ-9 shrank it**: the page now makes no third-party request, so the policy is `self` plus Formspree on submit — no font origins. The hard part is what the repo cannot see: Cloudflare injects `/cdn-cgi/` scripts at the edge (D17), so a policy that validates locally can still break live. Test both breakpoints **and** the live domain. Carried from WORKPLAN P2. | 🟡 2 |
 
 Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
 [`CLAUDE.md`](CLAUDE.md) §3.
@@ -180,6 +190,24 @@ Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
 Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
+
+- **2026-07-31** — **AQ-9: fonts self-hosted (D23 → R-023); the page now makes zero
+  third-party requests.** Four `woff2` (latin + latin-ext per family, ~348 kB) into
+  `assets/fonts/` with both SIL OFL licences, `@font-face` at the top of `style.css`, and
+  every `fonts.googleapis.com` link and `preconnect` removed. Verified the way that
+  matters: **`offOriginRequests: []`** on all three pages — the only cross-origin traffic
+  left on this site is a form submission the visitor initiates. **`privacy.html` changed in
+  the same commit** and is dated July 31: Google Fonts is no longer a listed processor,
+  because R-007 cuts both ways — naming a processor that receives nothing is as wrong as
+  omitting one that does. Four processors remain. **The interesting technical bit:** all
+  four Inter weights resolved to the *same* upstream URL, i.e. Google serves a variable
+  font behind four `@font-face` blocks. Collapsed to one block per subset with
+  `font-weight: 400 700` — and then *checked*, because a wrong guess here degrades to
+  synthesized fake-bold that looks almost right: rendered widths climb 520.4 → 528.6 →
+  536.6 → 544.8px across 400/500/600/700, so the axis is genuinely interpolating. Also
+  closed the CLS residue AQ-7 handed over (the two latin files are preloaded; latin-ext
+  deliberately is not, since `unicode-range` means most readers never fetch it), and
+  shrank AQ-3 to `self` + Formspree.
 
 - **2026-07-31** — **Swept the agent queue: five of seven closed, two escalated.** AQ-1
   (dead `YOUR_FORM_ID` guard), AQ-2 (`referrer` meta on all three pages), AQ-5 (skip link),
@@ -294,19 +322,7 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   had been doing all four jobs, now deleted. Found in passing and **not** touched, to keep
   the diff to one subject: `tree-backdrop.png`, 2 MB and referenced by nothing (**AQ-13**).
 
-- **2026-07-30** — **Closed OB-9** and fixed a live rendering defect the owner reported.
-  `privacy.html` now names **Cloudflare** as a processor (it terminates TLS and sees every
-  visitor IP), so R-007 is met on the live site. Investigating why production didn't match
-  the design found the cause: **Cloudflare's Email Address Obfuscation was rewriting every
-  `mailto:` at the edge** into "[email protected]" behind a JS-only `/cdn-cgi/` decoder.
-  Invisible in the repo, because it happens after it. That broke the two main CTAs *and*
-  R-008 — on `privacy.html` all four addresses were obfuscated with **zero** plain-text
-  addresses left, so the policy's own access/deletion route displayed no address and
-  required JS. Opted out per-link with `<!--email_off-->` (Cloudflare's documented
-  mechanism, checked against their docs rather than memory). Locked **D17 → R-019**, which
-  also **closes AQ-4** as not-satisfiable: any obfuscation hiding the address from a
-  scraper hides it from a no-JS reader, and R-008 is locked. Standing lesson recorded in
-  `SECURITY.md` — a zone-level toggle can alter served markup without a commit.
-*(Older entries evicted by the cap — see `git log`. The 2026-07-30 rule-centralization entry
-went here; its durable content is Golden rule 6 in `CLAUDE.md` and the D-008/D-009 table in
-`rules/active.md`, both still current.)*
+*(Older entries evicted by the cap — see `git log`. Two went from here: the 2026-07-30
+rule-centralization entry, whose durable content is Golden rule 6 in `CLAUDE.md` and the
+D-008/D-009 table in `rules/active.md`; and the 2026-07-30 OB-9 / email-obfuscation entry,
+whose lesson lives in `SECURITY.md` and whose rule is R-019. Both still current.)*
