@@ -120,10 +120,10 @@ else uses the master itself. That is why the favicons and `mark.svg` below are n
 | File | Slot | Notes |
 | --- | --- | --- |
 | `mark.svg` | nav, footer, `privacy.html`, `404.html` | The **master** mark. Referenced by `<img>`, not an inline `<symbol>` — one cached file instead of a 10.6 kB path duplicated into three pages. **512×939: size it by height, never width.** The `<img>` carries the intrinsic `width`/`height` so `width: auto` resolves without layout shift. Vector, so 30px in the nav is 60 device pixels on a 2× display and stays crisp. |
-| `favicon.svg` | `<link rel="icon" type="image/svg+xml">` | The **small** mark, theme-adaptive: ink, flipping to paper under `prefers-color-scheme: dark`, so it survives a dark browser chrome. Used **only** here — an asset that changes colour on its own is a liability anywhere else. |
+| `favicon.svg` | `<link rel="icon" type="image/svg+xml">` | The **small mark on its own ground** — an ink glyph on a paper tile, 512² with a 96 corner radius (upstream `mark-small-tile.svg`, company **C12**). It replaced a theme-adaptive glyph that flipped ink↔paper on `prefers-color-scheme`, **which is not the colour of the tab strip**: under a custom browser theme the two disagree and the icon vanishes. A tile does not need to contrast with the strip — the glyph contrasts with the tile, and that never changes. |
 | `favicon-48.png` | PNG favicon fallback | Small mark. For browsers that ignore the SVG icon. |
 | `apple-touch-icon.png` | `<link rel="apple-touch-icon">` | Small mark, 180², opaque; iOS applies its own corner mask. |
-| `og.png` | `og:image`, `twitter:image` | 1200×630, which is why `twitter:card` is `summary_large_image`. Carries the **horizontal lockup** — mark plus "WRAD LABS" — above a terracotta rule. The wordmark is outlined, so the card needs no font. |
+| `og.png` | `og:image`, `twitter:image` | 1200×630, which is why `twitter:card` is `summary_large_image`. Carries the **horizontal lockup** — mark plus "WRAD LABS" — above a leaf-green rule. The wordmark is outlined, so the card needs no font. |
 | `icon-512.png` | JSON-LD `Organization.logo` | Small mark, square and opaque, which is what consumers of that field expect. |
 | `logo-stacked.svg` | footer lockup | Mark above wordmark as ONE asset, from `company/brand/`. Sized by height; `alt` carries the name. |
 | `optants-logo.svg` | the Optants venture tile | **A different upstream:** Optants' own brand, from `Wrad-Labs/optants/brand/`. Same derived-copy rule (R-020) — never edit it here. |
