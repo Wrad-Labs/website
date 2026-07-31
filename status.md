@@ -44,7 +44,8 @@ Last updated: **2026-07-30**
   `summary_large_image`), and `icon-512.png` for the JSON-LD `logo`. The old 317 kB
   `logo.png` did all of those jobs at once and is deleted.
 - **Two drawings of the mark, and the medium picks (upstream C11 / `R-003`).** Every
-  **square raster icon** here is the simplified solid **small mark**; `mark.svg` in the
+  **square raster icon** here is the **small mark** — the master's own vial filled solid
+  with the tendrils clipped off, derived from the master rather than redrawn; `mark.svg` in the
   nav, footer, legal and 404 is the **master**. They are not the same drawing and that is
   deliberate — a 16px PNG gets 16 pixels, where the vector at 30px gets 60 on a 2× display.
   **`og.png` now carries the company name:** the horizontal lockup, mark plus "WRAD LABS"
