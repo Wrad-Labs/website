@@ -34,10 +34,19 @@ Current state only. No rationale, no history — follow the backlink for either.
 | R-018 | Inquiries and their reply threads are deleted from the support mailbox at 24 months, by manual annual sweep. The figure published in `privacy.html` and the sweep that enforces it must change together. | D15 |
 | R-019 | `support@wradlabs.com` is published as plain readable text in both link text and `href`. No JS-dependent obfuscation — every `mailto:` is wrapped in `<!--email_off-->` to opt out of Cloudflare's edge rewrite. | D17 |
 | R-020 | The brand mark's source of truth is `brand/` in the private `company` repo. Everything under `assets/images/` is a derived copy — never edit the artwork here. The mark is taller than it is wide: always size it by height. | D18 |
+| R-021 | Sections are full-viewport pages via **`min-height`**, never `height` — a section must always be able to grow past the viewport when its content does not fit. Reserve the fixed nav with `--nav-h`. | D19 |
 
 ## Compile log
 
-Regenerated **2026-07-30** from `decisions.md` at D1–D18.
+Regenerated **2026-07-30** from `decisions.md` at D1–D19.
+
+- **D19 (new):** compiles **R-021**. It is a rule and not a style note because the
+  failure is invisible until it bites someone else: `height: 100vh` looks identical to
+  `min-height: 100vh` on the laptop it was written on, and silently clips the contact
+  form on a shorter screen. D19 also adds a second upstream brand — Optants' own logo —
+  under the same derived-copy principle R-020 already states.
+
+Previous regeneration, **2026-07-30** from `decisions.md` at D1–D18.
 
 - **D18 (new):** compiles **R-020**, and **partially closes D11** — the *mark* is signed
   off and locked; the *palette* stays a working draft, so R-004 is untouched and R-005
