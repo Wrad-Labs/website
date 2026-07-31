@@ -894,7 +894,10 @@ treating a local pass as sufficient verification.
 ## D26 — Cool Stone: the palette is locked, and it is deliberately not warm
 
 - **Date:** 2026-07-31
-- **Status:** locked
+- **Status:** **superseded by [D28](#d28--canopy-a-warm-ground-a-leaf-green-accent-and-a-heavier-hero)**
+  (2026-07-31, same day). Its **diagnosis is carried forward intact** — the ground, not the
+  accent, was what made the two sites read alike. Its **answer** was wrong: cool neutrals
+  and oxblood read austere and vinous, which is the opposite of what this company is.
 - **Owner-directed**, chosen from four rendered options.
 - **Closes D11.** D18 locked its mark half on 2026-07-30; this locks the palette half.
   D11 is now fully closed and `R-005`'s ID stays retired.
@@ -981,3 +984,60 @@ below y=228; setting branch widths with presentation attributes.
 
 **Compiled rules:** none — presentation inside the token system. Recorded for the
 attribute-vs-CSS trap, which will cost the next person the same hour.
+
+---
+
+## D28 — Canopy: a warm ground, a leaf-green accent, and a heavier hero
+
+- **Date:** 2026-07-31
+- **Status:** locked
+- **Owner-directed**, chosen from five rendered options.
+- **Supersedes D26** the same day it was locked.
+
+**Context.** D26 solved the right problem with the wrong colours. Its finding holds and is
+carried forward: wradlabs.com and optants.com read as one site because their *grounds* were
+one step apart and they share a body typeface — the accents were never the cause. But Cool
+Stone's answer, cool greys with an oxblood accent, was **off-brand in a way contrast
+measurement cannot detect.** The owner's words: it "feels cold," and the oxblood is "giving
+wine vibe." This company builds commercial products in order to fund public good. Austere
+and vinous is the opposite of generative.
+
+**The lesson worth keeping: a palette can pass every check and still be wrong.** D26 was
+verified to 15 measured contrast pairs and shipped clean. Nothing in that process asks
+whether the colours mean the right thing.
+
+**Decision.** **Canopy.** A warm paper ground `#F6F3EA`, ink `#1E2318`, and a **leaf-green
+accent `#3F5E18`**.
+
+**Why this differentiates where "warm" alone would not.** The naive reading of "go back to
+warm" walks straight into D26's problem, because Optants is also warm. Measured on
+red-minus-blue: **Optants sits at +2** (effectively neutral), Cool Stone at **−4** (there
+is the coldness), and Canopy at **+12**. It is warm where Optants is *neutral*, rather than
+warm where Optants is warm. The accent is olive at **hue 87°**, well clear of Optants' teal
+at **174°** — adjacent green families were explicitly avoided, since neighbouring the thing
+you are differentiating from reintroduces the problem.
+
+**A green accent inverts D26's status-token problem, and that is worth stating.** Under
+oxblood, `--danger` was the token that clashed and had to become a vermillion. Here red
+sits **87° from the accent** — the widest gap available — so `--danger` returns to an
+ordinary dark red `#B91C1C`. It is now **`--success`** that needs care: it must stay green
+without reading as accent text. `#116B4A` is blue-green at hue 158°, a **71° gap**, the
+widest separation that still reads as "success". **Keep that gap if either token moves.**
+
+**The hero carries real weight now.** The homepage was left-loaded — a text column beside a
+shape so pale it barely registered. Three changes together, because none works alone:
+
+- Art tones go from **1.25 / 1.43** against the ground (every previous palette) to
+  **1.34 / 1.73**. They are sage rather than neutral, because the art *is* the canopy.
+- Art height **600 → 700px**, reserved padding 140 → 110.
+- **`--hero-col` narrows 560 → 520.** This is the part that makes the rest possible: art
+  width follows height from the viewBox, so growing the art alone would have pushed it into
+  the copy. The 40px comes off the text column and goes to the whitespace the art centres
+  in. Measured at 1400px: art 537 wide, centred with 20px each side, **74px clear of the
+  widest text**. It also fixed a pre-existing 16px overlap at 960px, now 55px clear.
+
+**Rules out.** Cooling the neutrals; an accent in the blue-green family; a `--success` and
+`--accent` closer than roughly 70° of hue; growing the hero art without giving it the room
+first; treating measured contrast as sufficient evidence that a palette is right.
+
+**Compiled rules:** R-026 (retied D26 → D28, text updated).
