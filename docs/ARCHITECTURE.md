@@ -142,38 +142,50 @@ palette change means editing the `:root` block and nothing else.
 
 | Token | Value | Use |
 |---|---|---|
-| `--bg` | `#F1F3F5` | Page background (cool stone — deliberately not warm; see D26) |
+| `--bg` | `#F6F3EA` | Page background (warm paper; +12 on red-minus-blue where Optants is +2) |
 | `--surface` | `#FFFFFF` | Cards, form inputs |
-| `--surface-sunk` | `#E4E8EB` | Optional recessed band |
-| `--ink` | `#131A21` | Headings — 15.77:1 on `--bg` |
-| `--ink-body` | `#39434C` | Body copy — 9.07:1 |
-| `--ink-muted` | `#56616B` | Labels, meta — 5.69:1 |
-| `--stone` | `#7C8791` | **Decorative only** — 3.29:1, clears 3:1 for shapes, not 4.5:1 for text |
-| `--line` / `--line-strong` | `#D5DBDF` / `#C3CBD1` | Hairlines, input borders |
-| `--accent` / `--accent-hover` | `#8C2F39` / `#6E232B` | Oxblood — 7.32:1 as text |
-| `--accent-soft` | `#F6E8EA` | Focus ring |
-| `--on-accent` | `#FFFFFF` | Text on accent — 8.14:1 |
-| `--success` / `--danger` | `#14713A` / `#CC3311` | Form feedback only. `--danger` is a **vermillion**: a dark red cannot be told from an oxblood accent by lightness (1.2–1.6:1), so hue does the work |
-| `--nav-scrim` | `rgba(241,243,245,.88)` | Scrolled nav backdrop; keep in step with `--bg` |
-| `--arch` / `--botanical` | `#DAE1E7` / `#C5CFD6` | Hero decorative SVG. Chosen to hold the same weight on the new ground as the warm pair held on the old |
+| `--surface-sunk` | `#EBE7DA` | Optional recessed band |
+| `--ink` | `#1E2318` | Headings — 14.46:1 on `--bg` |
+| `--ink-body` | `#3F4634` | Body copy — 8.86:1 |
+| `--ink-muted` | `#5D6450` | Labels, meta — 5.56:1 |
+| `--stone` | `#8A9078` | **Decorative only** — clears 3:1 for shapes, not 4.5:1 for text |
+| `--line` / `--line-strong` | `#DCD7C7` / `#CCC6B2` | Hairlines, input borders |
+| `--accent` / `--accent-hover` | `#3F5E18` / `#334C12` | Leaf green, **hue 87°** — 6.7:1 as text |
+| `--accent-soft` | `#EAEFDD` | Focus ring |
+| `--on-accent` | `#FFFFFF` | Text on accent — 7.43:1 |
+| `--success` / `--danger` | `#116B4A` / `#B91C1C` | Form feedback only. `--success` is a **blue-green at hue 158°**, a 71° gap from the accent, so it does not read as accent text; `--danger` sits 87° away and needs no special handling |
+| `--nav-scrim` | `rgba(246,243,234,.88)` | Scrolled nav backdrop; keep in step with `--bg` |
+| `--arch` / `--botanical` | `#CFD8B8` / `#B3C191` | Hero art. **1.34 / 1.73** against the ground — heavier than the 1.25/1.43 every earlier palette used, so the art holds the right side |
 | `--nav-h` | `72px` | Height of the fixed nav. Sections reserve it; also drives `scroll-padding-top` |
 | `--font-display` | Source Serif 4 | Headings |
 | `--font-body` | Inter | Body, nav, buttons, wordmark |
 | `--container` | `1160px` | Max content width |
+| `--hero-col` | `520px` | Hero text column. Caps `.hero-content` AND sets where `.hero-art` starts, so it controls the balance between copy and art |
 | `--radius` / `--radius-lg` | `6px` / `14px` | Controls / cards |
 | `--ease` | `cubic-bezier(0.16,1,0.3,1)` | Standard easing |
 
 Every ink/accent pair above was measured against its background and passes WCAG AA
 for normal text. `--stone` is deliberately **not** an ink token for that reason.
 
-The **palette is LOCKED** as of 2026-07-31 (D26 / **R-026**) — it is no longer the draft
-D11 left open, and **D11 is now fully closed**, its mark half having been locked by D18 a
-day earlier. Changing it means superseding D26, not proposing a variation.
+The **palette is LOCKED** — **Canopy**, D28 / **R-026**, superseding D26 the same day D26
+was set. **D11 stays fully closed**, its mark half locked by D18. Changing it means
+superseding D28, not proposing a variation.
 
-**It is cool on purpose.** Optants ships a `#FAFAF8` ground and the same body typeface, so
-the two sites read as one company's single site. The *ground* was the cause; the accents
-never were — terracotta against Optants' teal `#115E59` was already a clean split. Do not
-warm the neutrals back up.
+**Warm ground, leaf-green accent — and the reasoning is the useful part.** D26 correctly
+found that the *ground*, not the accent, is what made this site read like Optants (which
+ships `#FAFAF8` and the same body typeface). It then answered with cool greys and oxblood,
+which measured perfectly across 15 contrast pairs and was still off-brand — austere and
+vinous for a company that builds products to fund public good.
+
+Canopy keeps the finding and changes the answer. It is **warm at +12 on red-minus-blue
+where Optants sits at +2** — warm where Optants is *neutral*, rather than warm the same way
+Optants is warm, which is the trap the naive "go back to warm" would fall into. The accent
+is olive at **hue 87°**, deliberately clear of Optants' teal at **174°**; neighbouring
+green families were avoided because bordering the thing you differentiate from recreates
+the problem.
+
+**A palette can pass every contrast check and still be wrong.** Nothing in a measurement
+pass asks whether the colours mean the right thing.
 
 **A palette change does not stop at this file.** The mark's ink is restated inside the
 SVGs, because a file cannot read a CSS token — so `assets/images/*.svg` still carry the

@@ -58,17 +58,21 @@ Last updated: **2026-07-31**
   copied from its repo — a second upstream brand, under the same derived-copy rule as the
   Wrad mark. Plus a "Future Ventures" card. Product/build detail lives in the private
   `optants` repo; the corporate view lives in `company`.
-- **The palette is COOL STONE and LOCKED** (D26 / `R-026`, 2026-07-31) — ground `#F1F3F5`,
-  sunk `#E4E8EB`, ink `#131A21`, accent **oxblood `#8C2F39`**. It is deliberately cool:
-  Optants ships `#FAFAF8` and the same body typeface, so the two sites read as one, and
-  **the ground was the cause — the accents never were** (terracotta vs Optants' teal
-  `#115E59` was already a clean split). Wrad moved rather than Optants: the product has
-  equity to protect, this page had a draft palette. **Two traps recorded in D26:**
-  `--danger` is a vermillion `#CC3311` because a dark red is indistinguishable from an
-  oxblood accent by lightness (1.2–1.6:1 across every candidate) — hue has to do the work;
-  and `--success` moved to `#14713A` because the old value measured **4.51:1** on the new
-  ground, which is not a pass. **D11 is now fully closed**, its mark half by D18 a day
-  earlier.
+- **The palette is CANOPY and LOCKED** (D28 / `R-026`, 2026-07-31, superseding D26 the same
+  day) — warm ground `#F6F3EA`, sunk `#EBE7DA`, ink `#1E2318`, accent **leaf green
+  `#3F5E18`**. **D26's diagnosis holds and is carried forward** — the *ground*, not the
+  accent, is what made this site read like Optants — but its answer, cool greys and
+  oxblood, was off-brand: austere and vinous for a company that builds products to fund
+  public good. **A palette can pass every contrast check and still be wrong**; D26 shipped
+  clean on 15 measured pairs.
+- **Warm, but not warm the way Optants is warm.** On red-minus-blue: Optants `+2`
+  (neutral), Cool Stone `−4`, Canopy `+12`. The accent is olive at **hue 87°**, clear of
+  Optants' teal at **174°** — neighbouring green families were avoided deliberately.
+- **The green accent inverted the status-token problem.** Under oxblood, `--danger` was the
+  clash and became a vermillion. Now red sits 87° away and returns to `#B91C1C`; it is
+  **`--success`** that needs the gap, at `#116B4A` (hue 158°, **71°** from the accent).
+  `R-026` now names *whichever status token is nearest the accent*, so it survives the next
+  palette change. **D11 remains fully closed**, its mark half by D18.
 - **The mark is LOCKED (D18/R-020).** The
   flask-and-roots mark replaced the placeholder tree/node glyph on 2026-07-30 and is
   signed off. It is **`assets/images/mark.svg`, referenced by `<img>`** from nav, footer,
@@ -77,6 +81,14 @@ Last updated: **2026-07-31**
   in the private `company` repo (C10) — **the copies here are derived; never edit the
   artwork in this repo.** Type is unchanged — Source Serif 4 / Inter. The token *system*
   (declare once, never hardcode — R-004) stays.
+- **The hero carries the right side now** (D28). The page was left-loaded — a text column
+  beside a shape too pale to register. Three changes, none of which works alone: art tones
+  from **1.25/1.43 to 1.34/1.73** against the ground (and sage, because the art *is* the
+  canopy); height **600 → 700px**; and **`--hero-col` narrowed 560 → 520**, which is the
+  enabling one — art width follows height from the viewBox, so growing it alone would have
+  pushed it into the copy. At 1400px the art is 537 wide, centred with 20px each side and
+  **74px clear of the widest text**. It also closed a pre-existing 16px overlap at 960px,
+  now 55px clear.
 - **Hero art: tapered trunk, three asymmetric branches** (D27, 2026-07-31). The trunk is a
   **filled** path, ~28 units at the base narrowing to 6, because a uniform stroke read as a
   drawn line beside the vessel, which is a solid. Branches thin outward (12/9/7) and **all
@@ -213,7 +225,7 @@ development live in the private `company` repo (D8/R-012).
 | OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, `decisions.md` and `status.md` all return 200 at the live domain. **The available mitigation has now shipped** (AQ-10, 2026-07-31): `robots.txt` disallows `/*.md$`, so compliant crawlers stop fetching them. It does **not** make them private and never could — full suppression needs a Jekyll build, which D1 rules out, and a `.md` file can carry neither a robots meta tag nor an `X-Robots-Tag` on Pages. So this is now purely the owner's question: **accept that these files are reachable to anyone with the URL, or reopen D1/D2.** Nothing further an agent can do. Carried from WORKPLAN P0. | 🔴 3 |
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-8 | **Annual inquiry sweep — delete contact-mailbox mail older than 24 months (R-018).** **One mailbox**, reached by both `hello@` and `support@` as aliases (owner-confirmed 2026-07-31), so the sweep scope is settled. First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
-| OB-14 | **Re-sync the brand assets to Cool Stone, and ship the grounded favicon — both upstream in `company/brand/`.** Two things, one root cause. **(a) Palette drift:** every derived SVG here bakes the *old* ink `#1F2937` and paper `#F9F7F3` (`mark.svg`, `logo-stacked.svg`, `favicon.svg`), and `og.png` bakes terracotta `#C2410C`. After D26 the nav mark renders `#1F2937` beside `#131A21` headings — breaking `brand/README.md`'s own stated promise that the mark "sits in the same ink as the headings beside it." **(b) Favicon ground:** the adaptive favicon follows `prefers-color-scheme`, which does **not** track the tab-strip colour — under a custom browser theme it paints the paper glyph onto a light strip and vanishes (owner screenshot, 2026-07-31). Fix is a filled tile so it is legible on any chrome. **Both changes must originate in `company/brand/` (R-020) — never edit the artwork here** — then `tools/build.mjs` regenerates `exports/`, and the copies land here through review. | 🔴 3 |
+| OB-14 | **Re-sync the brand assets to Canopy, and ship the grounded favicon — both upstream in `company/brand/`.** Two things, one root cause. **(a) Palette drift:** every derived SVG here bakes the *old* ink `#1F2937` and paper `#F9F7F3` (`mark.svg`, `logo-stacked.svg`, `favicon.svg`), and `og.png` bakes terracotta `#C2410C`. After D28 the nav mark renders `#1F2937` beside `#1E2318` headings — breaking `brand/README.md`’s own stated promise that the mark sits in the same ink as the headings beside it. It is 14 SVGs plus `build.mjs` plus the README, then a rerun of the export script. **Deliberately not started until the palette settled** — it moved twice on 2026-07-31 (D26 → D28), and re-cutting every raster against a value that then changes is the waste this entry exists to avoid. **(b) Favicon ground:** the adaptive favicon follows `prefers-color-scheme`, which does **not** track the tab-strip colour — under a custom browser theme it paints the paper glyph onto a light strip and vanishes (owner screenshot, 2026-07-31). **Already built upstream** as `mark-small-tile.svg` (paper tile, ink glyph) and `mark-small-tile-dark.svg`, merged in [company#5](https://github.com/Wrad-Labs/company/pull/5) — the owner still picks which ships. **Both must originate in `company/brand/` (R-020) — never edit the artwork here** — then `tools/build.mjs` regenerates `exports/`, and the copies land here through review. **Do this before OB-10:** `og.png` still carries the terracotta rule, so re-scraping the social caches now would publish a stale card and need doing twice. | 🔴 3 |
 | OB-10 | **Force the social platforms to re-scrape the share card.** The new `og.png` is live and correct, but each platform caches the *old* image against the URL and will keep serving it — nothing in this repo can clear those caches, and they need a signed-in account. **LinkedIn:** open `https://www.linkedin.com/post-inspector/`, paste `https://www.wradlabs.com/`, click **Inspect** — it refetches on every run. **Facebook/Meta:** `https://developers.facebook.com/tools/debug/`, paste the URL, click **Scrape Again**. **X/Twitter:** no public validator remains; it refreshes on its own within about a week. **Verify:** each tool previews the card it now holds — you want the flask on off-white with a terracotta rule, not the old tree glyph. **Reverse:** nothing to undo; re-scraping only re-reads what the site already serves. | 🔴 3 |
 
 ### Agent queue — ready to pick up
@@ -232,8 +244,29 @@ Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
 
-- **2026-07-31** — **Cool Stone: the palette is locked (D26 → R-026), and the hero trunk
-  is redrawn (D27).** The owner noticed that wradlabs.com and optants.com "almost feel like
+- **2026-07-31** — **Canopy replaces Cool Stone within hours (D28 supersedes D26); the hero
+  now carries the right side.** D26 shipped a palette that passed **15 measured contrast
+  pairs** and was still wrong: the owner's read was "feels cold" and the oxblood "giving
+  wine vibe" — austere and vinous for a company whose whole line is *build cool products,
+  fund public good*. **The lesson is the entry: a palette can pass every check and still be
+  off-brand, because nothing in a measurement pass asks what the colours mean.** D26's
+  *diagnosis* was right and carries forward untouched — the ground, not the accent, is what
+  made this site read like Optants — so only the answer changed. **Canopy** is warm paper
+  with a leaf-green accent, and the trap it avoids is worth naming: "go back to warm" walks
+  straight into Optants, which is also warm. Measured on red-minus-blue, Optants is **+2**,
+  Cool Stone **−4**, Canopy **+12** — warm where Optants is *neutral*. Accent olive at hue
+  **87°** against Optants' teal at **174°**. **The green accent inverted the status-token
+  problem:** under oxblood it was `--danger` that clashed and became a vermillion; now red
+  sits 87° clear and goes back to normal, while `--success` is the one needing a gap
+  (`#116B4A`, 71°). R-026 was rewritten to name *whichever status token is nearest the
+  accent*, so it survives the next palette instead of encoding this one's accident. **The
+  hero also got its weight:** tones 1.25/1.43 → **1.34/1.73**, height 600 → **700px**, and
+  `--hero-col` narrowed 560 → **520** — the enabling change, since art width follows height
+  and growing it alone would have pushed it into the copy. 537 wide at 1400px, centred, 74px
+  clear of text; a pre-existing 16px overlap at 960px is now 55px clear. **`?v=7`.**
+
+- **2026-07-31** — **Cool Stone: the palette was locked (D26 → R-026), and the hero trunk
+  redrawn (D27).** The owner noticed that wradlabs.com and optants.com "almost feel like
   the same site." They do, measurably: grounds one step apart (`#F9F7F3` vs `#FAFAF8`),
   sunk surfaces two apart, and the **same body typeface**. **The accents were never the
   problem** — and a first pass nearly acted on that mistake, having read Optants' stylesheet
@@ -311,57 +344,12 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   stay open and are now sequenced: AQ-9 first, because self-hosting removes two origins
   from the CSP AQ-3 has to write, and writing it first means writing it twice.
 
-- **2026-07-31** — **Seven owner-directed changes; D20 supersedes D12, D21 recorded.** The
-  one with teeth: **the published address moved from `support@` to `hello@`** — markup,
-  four places in `privacy.html`, the JSON-LD `email`, both form-failure strings in
-  `script.js`, `SECURITY.md`'s disclosure route and `README.md`. That contradicted a
-  *locked* decision (D12 named `support@` as the only permitted address), so it went in as
-  D20 rather than as a find-and-replace, and R-003/R-018/R-019 recompiled around it. **The
-  trap worth remembering: the markup is not the delivery path.** The contact form posts to
-  Formspree `mvzjloro`, whose recipient is dashboard config — editing every `mailto:` in
-  the repo moves what the page *says* and nothing about where mail *goes*. Hence **OB-11**,
-  with the click-path, and the second question inside it: if `hello@` is a separate mailbox
-  rather than an alias, R-018's 24-month sweep no longer covers what receives, and a
-  published retention figure with no mechanism behind it is exactly what the owner model
-  forbids — so the answer is asked for, not assumed (**OOM D-007**). **Answered and closed
-  2026-07-31: aliases into one mailbox**, so nothing was mis-delivered and the sweep scope
-  holds; the owner re-pointed Formspree at `hello@` anyway, so both now agree. The
-  playbook needed correcting twice on the way — the recipient is under **Workflow**, not
-  Settings, and the address must be a verified Linked Email *first* — because it was
-  written from memory instead of from the vendor's docs. **The owner then submitted the
-  live form and confirmed arrival at `hello@`**, so the contact path is proven rather than
-  configured; nothing in it now rests on a dashboard field being right. The rest is D21:
-  contact drops from three tiers to two (the "Email us directly" label and its rules are
-  gone; the address is the invitation's last line), the footer loses its tagline *and*
-  address — *"…worth leaving behind."* had been on the page twice and is now only the
-  contact heading — the consent line moves from ~50px below the Send button to 10px by
-  grouping the two, and the hero art **centres in the whitespace** beside the text instead
-  of sitting against the container edge. That last one is a `left`/`right` **pair** with
-  `margin-inline: auto`; the old `right: -20px` override in the 1080px query had to go,
-  because overriding one offset alone silently re-pins the art. Measured at 1400px: 38px of
-  gap on each side of the art. `?v=3` in all three pages — `.contact-email-label`,
-  `.footer-tagline` and `.footer-email` were deleted, which is exactly the rename case
-  AQ-14 exists for. **Merged and verified live the same day** ([#15](https://github.com/Wrad-Labs/website/pull/15)),
-  including the check only the live domain can make: no `/cdn-cgi/` email decoder on
-  either page, so R-019 survived the address change. **Then AQ-10 and AQ-11**
-  ([#16](https://github.com/Wrad-Labs/website/pull/16)): `robots.txt` disallows `/*.md$`
-  and `privacy.html` joins the sitemap. AQ-10 was carried as OB-5's mitigation, and
-  shipping it **does not close OB-5** — it lowers the ceiling to "reachable but not
-  crawled" and hands the remaining question back to the owner, which the backlog entry now
-  says outright instead of implying a fix is pending. **Verifying that deploy found
-  something bigger than the change:** the live `robots.txt` is not the committed file —
-  Cloudflare prepends an AI-crawler block-list and a `Content-Signal` line to it. **D17
-  generalizes: the edge alters any file it serves, not just markup.** Our directive still
-  binds (groups matching a user-agent are combined — checked against the spec), but the
-  site was publishing a policy that exists in no commit. **Resolved same day as D22 /
-  R-022:** both controls off, live file verified identical to the repo's. The diagnosis is
-  the durable part — **nothing was ever blocked**, nine user agents all got 200, so the
-  assistants that "couldn't reach" the site were *obeying* a sign, not hitting a wall.
-
-*(Older entries evicted by the cap — see `git log`. Four went from here: the 2026-07-30
+*(Older entries evicted by the cap — see `git log`. Five went from here: the 2026-07-30
 rule-centralization entry, whose durable content is Golden rule 6 in `CLAUDE.md` and the
 D-008/D-009 table in `rules/active.md`; the 2026-07-30 OB-9 / email-obfuscation entry, whose
 lesson lives in `SECURITY.md` and whose rule is R-019; the 2026-07-30 brand-mark entry
-(D18/R-020), whose durable content is the mark bullet in **Now** and D18 itself; and the
+(D18/R-020), whose durable content is the mark bullet in **Now** and D18 itself; the
 2026-07-30 nine-change site pass (D19/R-021), whose structural half is the full-viewport
-bullet in **Now**. All still current.)*
+bullet in **Now**; and the 2026-07-31 seven-change contact/copy pass (D20/D21), whose
+outcomes are the address, contact-section and footer bullets in **Now**. All still
+current.)*

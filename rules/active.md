@@ -35,7 +35,7 @@ Current state only. No rationale, no history — follow the backlink for either.
 | R-019 | `hello@wradlabs.com` is published as plain readable text in both link text and `href`. No JS-dependent obfuscation — every `mailto:` is wrapped in `<!--email_off-->` to opt out of Cloudflare's edge rewrite. | D17 · D20 |
 | R-020 | The brand mark's source of truth is `brand/` in the private `company` repo. Everything under `assets/images/` is a derived copy — never edit the artwork here. The mark is taller than it is wide: always size it by height. | D18 |
 | R-021 | Sections are full-viewport pages via **`min-height`**, never `height` — a section must always be able to grow past the viewport when its content does not fit. Reserve the fixed nav with `--nav-h`. | D19 |
-| R-026 | The palette is **Cool Stone and LOCKED** (D26) — neutrals are deliberately cool, accent is oxblood. Do not warm them back up, and do not reintroduce terracotta as `--accent`, without superseding D26. `--danger` must stay in a different **hue** family from `--accent`; luminance alone cannot separate them. Every new colour is measured against the ground it will sit on before it ships. | D26 |
+| R-026 | The palette is **Canopy and LOCKED** (D28) — a warm ground with a leaf-green accent at hue 87°. Do not cool the neutrals, and do not take `--accent` into the blue-green family Optants occupies. **`--success` and `--accent` must stay ~70° of hue apart**, and `--danger` likewise — whichever token is nearest the accent is the one that has to move. Every new colour is measured against the ground it will actually sit on before it ships. | D28 |
 | R-025 | All three pages carry an **identical** `<meta>` CSP, placed first in `<head>`. `script-src` uses a hash, never `'unsafe-inline'` — editing the inline script means recomputing it. Any origin added must be shown to be genuinely cross-origin first, and every change is verified in a real browser on the live domain, because the repo does not contain everything a visitor receives. | D25 |
 | R-024 | The site runs **Cloudflare Web Analytics**, injected at the edge and present in no commit. `privacy.html` must disclose it, and any CSP must allow `static.cloudflareinsights.com`. Disabling it and updating the policy happen together — the disclosure and the setting move as one. | D24 |
 | R-023 | Fonts are **self-hosted from this origin** — no third-party font service, stylesheet or `preconnect`. Files in `assets/fonts/` are derived copies under SIL OFL, with the licences carried beside them; never hand-edit the binaries. Any change to the font delivery path updates `privacy.html`'s processor list in the same commit. | D23 |
@@ -43,7 +43,20 @@ Current state only. No rationale, no history — follow the backlink for either.
 
 ## Compile log
 
-Regenerated **2026-07-31** from `decisions.md` at D1–D27.
+Regenerated **2026-07-31** from `decisions.md` at D1–D28.
+
+- **D28 (new): supersedes D26**, the same day D26 was locked. **R-026 is retied D26 → D28**
+  and rewritten; no new rule ID, because the *constraint* is unchanged — the palette is
+  locked and colours are measured before shipping — only its values moved. D26's
+  **diagnosis survives**: the ground, not the accent, is what made this site read like
+  Optants. Its answer did not.
+- The hue clause is now **symmetric and general**: it used to name `--danger` as the token
+  that must differ from `--accent`, because oxblood clashed with red. A green accent
+  inverts that — red is 87° away and fine, while `--success` is the one at risk. The rule
+  names *whichever status token is nearest the accent*, so it survives the next palette
+  change instead of encoding one palette's accident.
+
+Previous regeneration, **2026-07-31** from `decisions.md` at D1–D27.
 
 - **D26 (new): closes D11.** Compiles **R-026** and finally locks the palette — D18 locked
   D11's mark half on 2026-07-30, this locks its colour half, and D11 is now fully closed.
