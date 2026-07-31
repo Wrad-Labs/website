@@ -117,6 +117,37 @@ section + section { border-top: 1px solid var(--line); }
 /* Anchor jumps land below the nav rather than under it. */
 html { scroll-padding-top: var(--nav-h); }
 
+/* ============ SKIP LINK ============
+   The first tab stop on every page. Parked off-screen rather than
+   `display: none` — a hidden element cannot receive focus, so it would never
+   come back. On focus it lands in the top-left corner, above the fixed nav.
+   `left`, not `transform`, so it is unaffected by prefers-reduced-motion.
+
+   `fixed`, NOT `absolute`. Absolute positions it against the page, so at
+   `top: 10px` it sits above the viewport the moment anyone has scrolled — and
+   re-entering a scrolled page from the browser chrome is exactly when a
+   keyboard user reaches for it. Caught at scrollY 151, where it rendered at
+   viewport top -141. The nav is fixed for the same reason; this sits over it. */
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: -9999px;
+  z-index: 200;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+}
+.skip-link:focus { left: 10px; outline: 2px solid var(--ink); outline-offset: 2px; }
+/* The target carries `tabindex="-1"` so focus can actually land in it — without
+   that, `<main>` is not focusable, the browser moves the scroll but leaves focus
+   at the top of the document, and the next Tab goes straight back into the nav.
+   `-1` keeps it out of the tab order; only the skip link puts focus here. It must
+   never show a focus ring, since nobody chose to focus a whole page region. */
+#main:focus { outline: none; }
+
 .eyebrow {
   font-family: var(--font-body);
   text-transform: uppercase;

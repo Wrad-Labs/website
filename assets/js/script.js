@@ -44,13 +44,6 @@ const submitBtn = document.getElementById('contactSubmit');
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  // Guard: don't pretend to send while the endpoint is still a placeholder.
-  if (form.action.includes('YOUR_FORM_ID')) {
-    formNote.textContent = 'Form not connected yet — add the Formspree endpoint to enable sending.';
-    formNote.className = 'form-note error';
-    return;
-  }
-
   const originalLabel = submitBtn.textContent;
   submitBtn.disabled = true;
   submitBtn.textContent = 'Sending…';
