@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Send the full URL only to same-origin destinations; cross-origin requests
+     (Google Fonts, Formspree) get the bare origin, and downgrades get nothing.
+     This page has no secrets in its URL, but the default varies by browser and
+     an explicit floor costs nothing. -->
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Wrad Labs Inc. — Building technology ventures with purpose</title>
 <meta name="description" content="Wrad Labs is an independent venture studio. We build commercial technology with the long-term goal of creating public good.">
 <link rel="canonical" href="https://www.wradlabs.com/">
@@ -41,13 +46,18 @@
      styles — and any release that renames a class then renders unstyled. Changing
      this query changes the URL, so the browser fetches the new CSS immediately.
      BUMP IT WHENEVER SELECTORS CHANGE, in all three pages. (AQ-14) -->
-<link rel="stylesheet" href="assets/css/style.css?v=3">
+<link rel="stylesheet" href="assets/css/style.css?v=4">
 <!-- Marks JS as available so the scroll-reveal animation can hide elements before
      revealing them. Without JS this never runs, the .reveal defaults stay visible,
      and the page reads normally (R-008). Runs in <head> to avoid a content flash. -->
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
+
+<!-- First tab stop on the page: lets a keyboard or screen-reader user jump the
+     nav instead of tabbing through it on every page. Visually hidden until it
+     takes focus, then it appears over the nav (R-010). -->
+<a class="skip-link" href="#main">Skip to content</a>
 
 <!-- NAV -->
 <header class="nav" id="nav">
@@ -72,7 +82,7 @@
   </nav>
 </header>
 
-<main>
+<main id="main" tabindex="-1">
 
   <!-- SECTION 1: HERO -->
   <section id="home" class="hero">
