@@ -558,3 +558,48 @@ width; pointing multiple icon slots at one oversized image again; restating the 
 provenance or build here instead of citing `company` C10.
 
 **Compiled rules:** R-020.
+
+---
+
+## D19 — Sections are full-viewport pages; the Optants tile is a live outbound link
+
+- **Date:** 2026-07-30
+- **Status:** locked
+- **Owner-directed.** A batch of nine site changes, of which two are structural enough
+  to need recording; the rest — copy, the removed hero eyebrow, spacing — are content
+  and need no decision.
+
+**Context.** The single page read as a continuous scroll with arbitrary section heights:
+110px of vertical padding, a 190px top pad on the hero left over from clearing the fixed
+nav, and no relationship between a section and the viewport. The owner asked for each
+section to read as its own page. Separately, Optants now has a public destination
+(optants.com resolves, 200), which the ventures card had been explicitly waiting for —
+its markup carried a comment reserving the space for exactly this.
+
+**Decision.** Two parts:
+
+1. **Every `<section>` is a full-viewport page.** `min-height: 100svh` with content
+   centred in the space below the fixed nav, which is reserved by a `--nav-h` token that
+   also drives `scroll-padding-top` so anchor jumps don't land under the bar.
+
+   **`min-height`, never `height`** — this is the part that matters. A section has to be
+   able to grow past the viewport when its content does not fit: on a short viewport,
+   with text scaled up, or in the contact form's case simply because a four-field form is
+   taller than some laptops. Fixing the height would clip it. A `max-height: 620px`
+   query drops the full-viewport rule entirely below roughly a landscape phone, where
+   forcing a viewport height only guarantees an overflow.
+
+2. **The Optants tile is one `<a>` to `https://optants.com`.** The whole card is the link
+   — a single tab stop and a single hit target, not a card with a link buried in it.
+   Because there is no underlined text to signal it, the affordance is carried by the
+   border and shadow lift, a nudging arrow, and a focus ring matching the form fields.
+   Its logo is **Optants' own**, copied from `Wrad-Labs/optants/brand/` — a second
+   venture brand now lives in `assets/images/`, derived there exactly as the Wrad mark is
+   derived from `company/brand/` (R-020's principle, a different upstream).
+
+**Rules out.** `height: 100vh` on a section, or any rule that prevents a section growing
+to its content; using `100vh` alone on mobile, where the collapsing browser bar makes it
+jump; nesting interactive elements inside the card link; editing either logo in this
+repo; a card-as-link with no visible hover *and* focus affordance.
+
+**Compiled rules:** R-021.

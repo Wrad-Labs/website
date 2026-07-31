@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wrad Labs Inc. — Building Businesses That Fund a Better Future</title>
-<meta name="description" content="Wrad Labs Inc. creates commercially successful technology products that generate sustainable revenue to support ethical enterprise and long-term impact.">
+<title>Wrad Labs Inc. — Building technology ventures with purpose</title>
+<meta name="description" content="Wrad Labs is an independent venture studio. We build commercial technology with the long-term goal of creating public good.">
 <link rel="canonical" href="https://www.wradlabs.com/">
 <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
 <link rel="icon" type="image/png" sizes="48x48" href="assets/images/favicon-48.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Wrad Labs Inc.">
-<meta property="og:title" content="Wrad Labs Inc. — Building Businesses That Fund a Better Future">
-<meta property="og:description" content="Wrad Labs Inc. creates commercially successful technology products that generate sustainable revenue to support ethical enterprise and long-term impact.">
+<meta property="og:title" content="Wrad Labs Inc. — Building technology ventures with purpose">
+<meta property="og:description" content="Wrad Labs is an independent venture studio. We build commercial technology with the long-term goal of creating public good.">
 <meta property="og:url" content="https://www.wradlabs.com/">
 <meta property="og:image" content="https://www.wradlabs.com/assets/images/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="The Wrad Labs mark — a flask whose base opens into roots.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Wrad Labs Inc. — Building Businesses That Fund a Better Future">
-<meta name="twitter:description" content="Wrad Labs Inc. creates commercially successful technology products that generate sustainable revenue to support ethical enterprise and long-term impact.">
+<meta name="twitter:title" content="Wrad Labs Inc. — Building technology ventures with purpose">
+<meta name="twitter:description" content="Wrad Labs is an independent venture studio. We build commercial technology with the long-term goal of creating public good.">
 <meta name="twitter:image" content="https://www.wradlabs.com/assets/images/og.png">
 <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
 <script type="application/ld+json">
@@ -30,7 +30,7 @@
   "url": "https://www.wradlabs.com/",
   "logo": "https://www.wradlabs.com/assets/images/icon-512.png",
   "email": "support@wradlabs.com",
-  "description": "Wrad Labs Inc. creates commercially successful technology products that generate sustainable revenue to support ethical enterprise and long-term impact."
+  "description": "Wrad Labs is an independent venture studio. We build commercial technology with the long-term goal of creating public good."
 }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -84,9 +84,8 @@
       </svg>
 
       <div class="hero-content">
-        <p class="eyebrow reveal">Wrad Labs Inc.</p>
-        <h1 class="hero-headline reveal">Building businesses that fund a better future.</h1>
-        <p class="hero-sub reveal">We build commercially successful technology, then reinvest the profit into ethical enterprise and long-term impact.</p>
+        <h1 class="hero-headline reveal">Building technology ventures with purpose.</h1>
+        <p class="hero-sub reveal">Wrad Labs is an independent venture studio. We build commercial technology with the long-term goal of creating public good.</p>
         <div class="hero-actions reveal">
           <a href="#ventures" class="btn btn-primary">Explore our ventures</a>
           <a href="#contact" class="link-arrow">Get in touch <span aria-hidden="true">&rarr;</span></a>
@@ -101,18 +100,21 @@
       <p class="eyebrow reveal center">What we're building</p>
       <h2 class="reveal center">Our ventures.</h2>
       <div class="card-grid">
-        <article class="card reveal">
-          <svg class="card-icon" viewBox="0 0 52 52" aria-hidden="true" focusable="false">
-            <circle class="ring-track" cx="26" cy="26" r="20"/>
-            <circle class="ring-arc" cx="26" cy="26" r="20" stroke-dasharray="34 92" transform="rotate(-40 26 26)"/>
-          </svg>
-          <h3>Optants</h3>
-          <p>The home of popular opinion.</p>
-          <!-- No "View product" link yet: Optants has no public destination. Add
-               <a class="link-arrow" href="URL">View product <span aria-hidden="true">&rarr;</span></a>
-               here once one exists — the card layout already reserves the space. -->
-          <p class="card-stage">In development</p>
-        </article>
+        <!-- The whole Optants tile is the link. One <a>, so there is a single tab
+             stop and a single hit target; the arrow is the affordance and the
+             hover/focus states are on the card itself. The logo is Optants' own,
+             copied from its repo — see docs/ARCHITECTURE.md § Brand assets. -->
+        <a class="card card-link reveal" href="https://optants.com">
+          <h3 class="card-brand">
+            <img src="assets/images/optants-logo.svg" width="1054" height="248" alt="Optants">
+          </h3>
+          <p class="card-lead">Understand what people actually think.</p>
+          <p>A platform for structured public opinion designed around transparent participation instead of engagement algorithms.</p>
+          <span class="card-foot">
+            <span class="card-stage">Near launch</span>
+            <span class="link-arrow" aria-hidden="true">Visit optants.com <span>&rarr;</span></span>
+          </span>
+        </a>
         <article class="card reveal">
           <svg class="card-icon" viewBox="0 0 52 52" aria-hidden="true" focusable="false">
             <circle class="disc" cx="26" cy="26" r="20"/>
@@ -128,14 +130,22 @@
   <!-- SECTION 3: CONTACT -->
   <section id="contact" class="contact">
     <div class="container narrow">
-      <p class="eyebrow reveal">Contact</p>
-      <h2 class="reveal">Let's build something that lasts.</h2>
-      <p class="body-lg reveal">Whether you're interested in collaboration, partnerships, or learning more about Wrad Labs, we'd love to hear from you.</p>
+      <!-- Three tiers, spaced apart rather than stacked: the intro, the direct
+           address as its own quiet row, then the form. -->
+      <div class="contact-head reveal">
+        <p class="eyebrow">Contact</p>
+        <h2>Let's build something that lasts.</h2>
+        <p class="body-lg">Whether you're interested in collaboration, partnerships, or learning more about Wrad Labs, we'd love to hear from you.</p>
+      </div>
+
       <!-- email_off: Cloudflare's Email Address Obfuscation rewrites mailto links at the
            edge into "[email protected]" behind a JS-only /cdn-cgi/ decoder. That breaks
            R-008 (the page must read and function with JS off) and is not what the design
            shows. See D17. -->
-      <p class="contact-email reveal"><!--email_off--><a href="mailto:support@wradlabs.com">support@wradlabs.com</a><!--/email_off--></p>
+      <p class="contact-email reveal">
+        <span class="contact-email-label">Email us directly</span>
+        <!--email_off--><a href="mailto:support@wradlabs.com">support@wradlabs.com</a><!--/email_off-->
+      </p>
 
       <!-- Submits to Formspree (endpoint mvzjloro → support@wradlabs.com). -->
       <form class="contact-form reveal" id="contactForm" action="https://formspree.io/f/mvzjloro" method="POST">
@@ -155,7 +165,7 @@
         </div>
         <div class="form-field">
           <label for="message">Message</label>
-          <textarea id="message" name="message" rows="5" required></textarea>
+          <textarea id="message" name="message" rows="4" required></textarea>
         </div>
         <!-- Honeypot: hidden from humans; bots that fill it are silently dropped by Formspree. -->
         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp-field">
@@ -172,11 +182,10 @@
 
 <footer class="footer">
   <div class="container footer-inner">
-    <div class="footer-brand">
-      <img class="logo-mark logo-mark-footer" src="assets/images/mark.svg" width="512" height="939" alt="">
-      <span class="logo-word logo-word-footer">Wrad Labs</span>
-    </div>
-    <p class="footer-tagline">Building Businesses That Fund a Better Future.</p>
+    <!-- The stacked lockup, one file — mark and wordmark are a single asset here,
+         derived from company/brand/logo-stacked.svg. `alt` carries the name. -->
+    <img class="footer-lockup" src="assets/images/logo-stacked.svg" width="1493" height="1519" alt="Wrad Labs">
+    <p class="footer-tagline">Building things worth leaving behind.</p>
     <!--email_off--><a class="footer-email" href="mailto:support@wradlabs.com">support@wradlabs.com</a><!--/email_off-->
     <p class="footer-copy">&copy; 2026 Wrad Labs Inc. All rights reserved. &middot; <a href="privacy.html" class="footer-link">Privacy Policy</a></p>
   </div>
