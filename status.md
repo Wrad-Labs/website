@@ -60,21 +60,15 @@ Last updated: **2026-07-30**
   truth about what a visitor receives.** Verify rendering against the live domain, not
   just locally.
 
-**In flight.** The **hero art** — branch `feat/hero-flask-tree`, PR open, **not yet
-merged**. Replaces the decorative arch with the brand mark under an abstract canopy, in
-the same two decorative tokens (`--arch` / `--botanical`). The vessel, liquid and the
-**mark's own five root tendrils** are lifted from `brand/mark.svg` by script, not
-redrawn (upstream **C11**). One behavioural change: the art is no longer bled off the
-right edge, because a half-cropped flask reads as a mistake where a half-cropped arch
-read as a crop. **Closes AQ-13** in the same PR: `tree-backdrop.png` (2 MB) was the old
-design's hero image, and replacing the hero is what made it certainly dead — deleted.
+**In flight.** Nothing. The hero art shipped 2026-07-30 ([#13](https://github.com/Wrad-Labs/website/pull/13))
+and is **verified live** after a hard refresh. It also **closed AQ-13** — `tree-backdrop.png`
+(2 MB) was the old design's hero image and is gone; the path now 404s.
 
-Previously: the small-mark favicon set and the lockup share card shipped
-2026-07-30 ([#12](https://github.com/Wrad-Labs/website/pull/12)) and are **verified live**:
-every icon, `mark.svg` and `og.png` return 200, `logo.png` returns 404, and each served file
-is **byte-identical** to its source in `company/brand/` (the two SVGs differ only by CRLF in
-a Windows working copy, not in what is served). **The share card changed twice today**, so
-the re-scrape in OB-10 is worth running once, now, rather than after each change.
+> **Watch the cache skew after any CSS class rename.** The HTML is `max-age=600` but the
+> CSS is `max-age=14400` (Cloudflare's default for static assets), so for up to **4 hours**
+> a returning visitor can hold **new HTML with old CSS**. This deploy renamed the hero art's
+> classes, so during that window the art renders **unstyled — solid black** instead of muted.
+> It was observed in a real browser here, and it self-heals. **AQ-14** carries the fix.
 
 **Not here.** Accounting, company funding, corporate filings, and product
 development live in the private `company` repo (D8/R-012).
@@ -106,6 +100,7 @@ development live in the private `company` repo (D8/R-012).
 | AQ-9 | Self-host the fonts to drop the Google Fonts request (privacy + performance). Interacts with OB-1 and AQ-3. Carried from WORKPLAN P3. | 🟡 2 |
 | AQ-10 | Add `Disallow: /*.md$` to `robots.txt` so the tracked docs stop being *indexed*. They stay reachable — no build step, so D1 is untouched — but this is the only mitigation available for OB-5 and it costs nothing. | 🟢 1 |
 | AQ-11 | Add `privacy.html` to `sitemap.xml`. It carries a canonical URL and `index, follow` but is absent from the single-URL sitemap. | 🟢 1 |
+| AQ-14 | **Cache-bust `style.css` so an HTML/CSS skew can't ship broken styling.** The HTML is `max-age=600`, the CSS `max-age=14400`, so for up to 4 hours a returning visitor holds new HTML with old CSS — and any deploy that renames a class renders it unstyled. Seen live on 2026-07-30: the new hero art showed solid black instead of muted. Fix is a version query on the three `<link rel="stylesheet">` tags (`style.css?v=2`), bumped whenever selectors change; a new URL makes the browser fetch fresh CSS immediately. Adopting it is a small convention change, hence 🟡. | 🟡 2 |
 | AQ-12 | **Document the SEO/metadata surface in `docs/ARCHITECTURE.md`** — the JSON-LD `Organization` schema, Twitter/OG meta, and `apple-touch-icon` are 11 lines of `index.html` that no reference doc describes. Surfaced when the R-017 cap evicted the only session entry that recorded them. | 🟢 1 |
 
 Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
