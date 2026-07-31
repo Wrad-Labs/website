@@ -59,19 +59,12 @@ Last updated: **2026-07-30**
   truth about what a visitor receives.** Verify rendering against the live domain, not
   just locally.
 
-**In flight.** The **small-mark favicon set and the lockup share card** — branch
-`brand/small-mark-and-wordmark`, PR open, **not yet merged**. Assets only: no HTML or CSS
-changes, because every slot already points at the right filename. The wordmark did **not**
-replace the site's live `.logo-word` text — real text stays selectable, translatable and
-readable to a screen reader, and the CSS already sets it in the same Inter 700 the
-wordmark was outlined from.
-
-Previously: the mark shipped 2026-07-30 ([#11](https://github.com/Wrad-Labs/website/pull/11))
-and is **verified live**: every icon, `mark.svg` and `og.png` return 200 from the live
-domain, `logo.png` returns 404, and the served `mark.svg` and `og.png` are **byte-identical**
-to their sources in `company/brand/` — which is what R-020's one-source claim looks like when
-it is actually checked. One thing outlives the deploy: **social platforms cache `og:image`**,
-so shares created before today keep showing the old card until each scraper refetches (OB-10).
+**In flight.** Nothing. The small-mark favicon set and the lockup share card shipped
+2026-07-30 ([#12](https://github.com/Wrad-Labs/website/pull/12)) and are **verified live**:
+every icon, `mark.svg` and `og.png` return 200, `logo.png` returns 404, and each served file
+is **byte-identical** to its source in `company/brand/` (the two SVGs differ only by CRLF in
+a Windows working copy, not in what is served). **The share card changed twice today**, so
+the re-scrape in OB-10 is worth running once, now, rather than after each change.
 
 **Not here.** Accounting, company funding, corporate filings, and product
 development live in the private `company` repo (D8/R-012).
