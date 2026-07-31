@@ -1,3 +1,72 @@
+/* ============ FONTS (self-hosted — D23 / R-023) ============
+   These files used to come from fonts.gstatic.com. They are served from this
+   origin now, which removes Google as a processor from the request path — that
+   is why `privacy.html` no longer names Google Fonts (R-007), and why re-adding
+   a `fonts.googleapis.com` link would silently reintroduce a processor the
+   published policy does not disclose. Don't.
+
+   DERIVED COPIES, like everything in assets/images/. Upstream is Google Fonts;
+   both families are SIL OFL and the licences ship beside the files in
+   assets/fonts/. To update: re-fetch the css2 URL recorded below with a modern
+   browser UA, re-download the latin and latin-ext woff2 files, and keep these
+   blocks in step. Do not hand-edit the binaries.
+
+     https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700
+       &family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap
+
+   Each family is ONE VARIABLE FILE per subset. Upstream this was four @font-face
+   blocks per subset — one per weight — all resolving to the SAME URL, which is
+   how Google serves a variable font to browsers that support it. Collapsed here
+   into a single block declaring `font-weight: 400 700`, the range the file
+   actually carries: same file, same result, four fewer blocks to keep in step.
+   The weight axis is verified rendering four distinct weights, not assumed —
+   if a weight ever looks synthesized rather than drawn, this collapse is the
+   first thing to suspect.
+
+   `unicode-range` is load-bearing: a reader who never types a Central European
+   character never downloads the latin-ext files at all. That is why carrying
+   both subsets costs repo size but not page weight.
+
+   `font-display: swap` matches the old `&display=swap` — text paints in the
+   fallback first and re-renders. Preloading the two latin files in <head> is
+   what shrinks that window; see the note there. */
+
+/* --- Inter (body) --- */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* --- Source Serif 4 (display) --- */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/source-serif-4-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/source-serif-4-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /* ============ TOKENS ============
    Declared once, referenced everywhere (R-004 — never hardcode these values).
    The PALETTE is still a working draft (D11) — the colors below stay open to
