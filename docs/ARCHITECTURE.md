@@ -5,7 +5,7 @@ to stay true against the source.** Companion to [`../CLAUDE.md`](../CLAUDE.md)
 (governance), [`INDEX.md`](INDEX.md) (the doc map), and
 [`../status.md`](../status.md) (current state + backlog).
 
-**Verified against source: 2026-07-30** — tokens, page sections, JS blocks, and the
+**Verified against source: 2026-07-31** — tokens, page sections, JS blocks, and the
 file tree were checked line-by-line against `style.css`, `index.html`, and
 `script.js` on this date. Re-verify and bump this line whenever you edit the doc;
 if it disagrees with the source, the doc is wrong.
@@ -135,28 +135,27 @@ these; never hardcode** (R-004) — this discipline is locked and independent of
 *which* values are chosen. The **palette below is still a working draft** (D11):
 provisional pending owner sign-off, so treat this table as "what ships today," not a
 fixed identity. The **mark is not** — it was signed off 2026-07-30 and locked by D18.
-The mark's ink is `--ink` `#1F2937`, restated inside the SVG because a file cannot read
-a CSS token; a palette change means changing it in the `company` repo too.
+The mark's ink is restated inside each SVG, because a file cannot read a CSS token — so after D26 they still carry the OLD `#1F2937` against a `#131A21` `--ink`. Correcting that belongs upstream in `company/brand/` (R-020), tracked as OB-14.
 
 Token **names are semantic, not literal** (`--ink`, not `--black`), so a future
 palette change means editing the `:root` block and nothing else.
 
 | Token | Value | Use |
 |---|---|---|
-| `--bg` | `#F9F7F3` | Page background (warm off-white) |
+| `--bg` | `#F1F3F5` | Page background (cool stone — deliberately not warm; see D26) |
 | `--surface` | `#FFFFFF` | Cards, form inputs |
-| `--surface-sunk` | `#F3F1EC` | Optional recessed band |
-| `--ink` | `#1F2937` | Headings — 13.7:1 on `--bg` |
-| `--ink-body` | `#44403C` | Body copy — 9.6:1 |
-| `--ink-muted` | `#57534E` | Labels, meta — 7.1:1 |
-| `--stone` | `#78716C` | **Decorative only** — 4.5:1, borderline for small text |
-| `--line` / `--line-strong` | `#E7E5E4` / `#D6D3D1` | Hairlines, input borders |
-| `--accent` / `--accent-hover` | `#C2410C` / `#9A3412` | Terracotta — 4.8:1 as text |
-| `--accent-soft` | `#FBEDE7` | Focus ring |
-| `--on-accent` | `#FFFFFF` | Text on accent — 5.2:1 |
-| `--success` / `--danger` | `#15803D` / `#B91C1C` | Form feedback only |
-| `--nav-scrim` | `rgba(249,247,243,.88)` | Scrolled nav backdrop; keep in step with `--bg` |
-| `--arch` / `--botanical` | `#E5DED2` / `#D8D0C2` | Hero decorative SVG |
+| `--surface-sunk` | `#E4E8EB` | Optional recessed band |
+| `--ink` | `#131A21` | Headings — 15.77:1 on `--bg` |
+| `--ink-body` | `#39434C` | Body copy — 9.07:1 |
+| `--ink-muted` | `#56616B` | Labels, meta — 5.69:1 |
+| `--stone` | `#7C8791` | **Decorative only** — 3.29:1, clears 3:1 for shapes, not 4.5:1 for text |
+| `--line` / `--line-strong` | `#D5DBDF` / `#C3CBD1` | Hairlines, input borders |
+| `--accent` / `--accent-hover` | `#8C2F39` / `#6E232B` | Oxblood — 7.32:1 as text |
+| `--accent-soft` | `#F6E8EA` | Focus ring |
+| `--on-accent` | `#FFFFFF` | Text on accent — 8.14:1 |
+| `--success` / `--danger` | `#14713A` / `#CC3311` | Form feedback only. `--danger` is a **vermillion**: a dark red cannot be told from an oxblood accent by lightness (1.2–1.6:1), so hue does the work |
+| `--nav-scrim` | `rgba(241,243,245,.88)` | Scrolled nav backdrop; keep in step with `--bg` |
+| `--arch` / `--botanical` | `#DAE1E7` / `#C5CFD6` | Hero decorative SVG. Chosen to hold the same weight on the new ground as the warm pair held on the old |
 | `--nav-h` | `72px` | Height of the fixed nav. Sections reserve it; also drives `scroll-padding-top` |
 | `--font-display` | Source Serif 4 | Headings |
 | `--font-body` | Inter | Body, nav, buttons, wordmark |
@@ -167,10 +166,18 @@ palette change means editing the `:root` block and nothing else.
 Every ink/accent pair above was measured against its background and passes WCAG AA
 for normal text. `--stone` is deliberately **not** an ink token for that reason.
 
-The **palette** remains an explicit **draft** (D11), not a locked rule — the current
-warm-neutral/terracotta direction is what ships today, and a further change is a normal
-Tier-2 proposal, not a decision violation. The **mark is no longer a draft**: D18 locked
-it on 2026-07-30, and there is no SVG sprite any more — see § Brand assets above.
+The **palette is LOCKED** as of 2026-07-31 (D26 / **R-026**) — it is no longer the draft
+D11 left open, and **D11 is now fully closed**, its mark half having been locked by D18 a
+day earlier. Changing it means superseding D26, not proposing a variation.
+
+**It is cool on purpose.** Optants ships a `#FAFAF8` ground and the same body typeface, so
+the two sites read as one company's single site. The *ground* was the cause; the accents
+never were — terracotta against Optants' teal `#115E59` was already a clean split. Do not
+warm the neutrals back up.
+
+**A palette change does not stop at this file.** The mark's ink is restated inside the
+SVGs, because a file cannot read a CSS token — so `assets/images/*.svg` still carry the
+*old* `#1F2937`. Fixing that belongs in `company/brand/` (R-020), tracked as **OB-14**.
 
 ## Metadata surface (`index.html` `<head>`)
 
