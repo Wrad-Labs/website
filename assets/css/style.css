@@ -48,6 +48,10 @@
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* Layout */
+  /* Height of the fixed nav. Sections reserve it so full-viewport content centres
+     in the space BELOW the bar, and anchor jumps don't land under it. */
+  --nav-h: 72px;
+
   --container: 1160px;
   --radius: 6px;
   --radius-lg: 14px;
@@ -81,11 +85,33 @@ h3 { font-size: 1.25rem; }
 p { color: var(--ink-body); margin: 0 0 16px; }
 a { color: inherit; text-decoration: none; }
 
-.container { max-width: var(--container); margin: 0 auto; padding: 0 32px; }
+/* `width: 100%` matters now that sections are flex containers: an `auto` cross-axis
+   margin on a flex item cancels the default `stretch`, so without it these collapse
+   to their content width and stop being centred page containers. */
+.container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 32px; }
 .container.narrow { max-width: 720px; }
 
-section { position: relative; padding: 110px 0; }
+/* ============ SECTIONS AS PAGES ============
+   Every section fills the viewport and centres its content in the space below the
+   fixed nav, so each one reads as its own page.
+
+   `min-height`, never `height`: on a short viewport, or with text scaled up, the
+   content has to be able to push the section taller instead of being clipped.
+   `100svh` is the *small* viewport height — on mobile it excludes the collapsible
+   browser chrome, so a section doesn't jump as that bar hides and shows. `100vh`
+   stays first as the fallback for browsers without the newer units. */
+section {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: calc(var(--nav-h) + 32px) 0 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 section + section { border-top: 1px solid var(--line); }
+/* Anchor jumps land below the nav rather than under it. */
+html { scroll-padding-top: var(--nav-h); }
 
 .eyebrow {
   font-family: var(--font-body);
@@ -170,7 +196,6 @@ section + section { border-top: 1px solid var(--line); }
   text-transform: uppercase;
   color: var(--ink);
 }
-.logo-word-footer { font-size: 0.95rem; letter-spacing: 0.2em; }
 .nav-links { display: flex; gap: 32px; }
 .nav-links a {
   font-size: 0.9rem;
@@ -213,14 +238,15 @@ section + section { border-top: 1px solid var(--line); }
   width: auto;
   display: block;
 }
-.logo-mark-footer { height: 52px; }
 
-/* ============ HERO ============ */
-.hero {
-  padding: 190px 0 130px;
-  overflow: hidden;
-}
+/* ============ HERO ============
+   Inherits the full-viewport section rule above. The old 190px top padding was
+   there to clear the fixed nav on a page that then scrolled normally; centring in
+   the space below the nav does that job now, so the gap it left at the top of the
+   page is gone. */
+.hero { overflow: hidden; }
 .hero-inner {
+  width: 100%;               /* see the note on .container */
   max-width: var(--container);
   margin: 0 auto;
   padding: 0 32px;
@@ -242,14 +268,19 @@ section + section { border-top: 1px solid var(--line); }
 /* Decorative hero art — the brand mark under a canopy.
    Unlike the arch it replaced, this is a recognisable object, so it is NOT bled
    off the right edge: `.hero` clips its overflow, and half a flask reads as a
-   mistake where half an arch read as a crop. */
+   mistake where half an arch read as a crop.
+
+   Sized by HEIGHT, not width, so it always fits the page: the section is one
+   viewport tall, and `min()` keeps the art inside the space left over after the
+   nav and the section padding. Width follows from the viewBox. */
 .hero-art {
   position: absolute;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: 460px;
-  height: auto;
+  height: min(600px, calc(100vh - var(--nav-h) - 140px));
+  width: auto;
+  max-width: 42%;
   z-index: 0;
   pointer-events: none;
 }
@@ -271,13 +302,13 @@ section + section { border-top: 1px solid var(--line); }
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
-  margin-top: 44px;
+  margin-top: 36px;
 }
 .card {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  padding: 32px;
+  padding: 28px;
   transition: border-color 0.25s var(--ease);
   display: flex;
   flex-direction: column;
@@ -291,24 +322,97 @@ section + section { border-top: 1px solid var(--line); }
 .card-icon .ring-arc { fill: none; stroke: var(--accent); stroke-width: 7; stroke-linecap: butt; }
 .card-icon .disc { fill: var(--arch); }
 .card .link-arrow { margin-top: auto; padding-top: 14px; }
-/* Bottom-aligned status label, for a card with no destination to link to yet.
-   Occupies the same slot as .link-arrow so cards stay the same height. */
+/* Status label. Sits in the card's footer row beside the arrow. */
 .card-stage {
-  margin: auto 0 0;
-  padding-top: 14px;
   font-size: 0.78rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--ink-muted);
+  margin: 0;
 }
 
-/* ============ CONTACT ============ */
-.contact-email { font-size: 1.05rem; margin-bottom: 36px; }
+/* --- A whole card that is a link -----------------------------------------
+   One <a>, so it is a single tab stop and a single hit target rather than a
+   card with a link buried in it. The affordance has to carry its own weight,
+   since there is no underlined text to signal it: the border and shadow lift on
+   hover, the arrow nudges, and the focus ring is the same one the form fields
+   use so keyboard users get a consistent signal. */
+.card-link { cursor: pointer; }
+/* `.js .reveal` (0,2,0) outranks `.card-link` (0,1,0), and `transition` is a
+   shorthand — so the reveal rule was REPLACING the card's transition list, not
+   merging with it, and the hover border/shadow snapped instead of easing. Restated
+   here at matching specificity with both sets of properties. */
+.card-link,
+.js .reveal.card-link {
+  transition: opacity 0.7s var(--ease), transform 0.25s var(--ease),
+              border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+.card-link:hover {
+  border-color: var(--line-strong);
+  box-shadow: 0 6px 20px rgba(31, 41, 55, 0.07);
+  transform: translateY(-2px);
+}
+.card-link:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.card-link:hover .link-arrow span { transform: translateX(4px); }
+/* The venture's own logo stands in for the heading text. Sized by height so a
+   wide lockup can't blow out the card; `alt` carries the name. */
+.card-brand { margin: 0 0 14px; line-height: 0; }
+.card-brand img { height: 30px; width: auto; display: block; }
+/* The one line that has to land: bigger and in full ink, above the explanation. */
+.card-lead {
+  font-size: 1.05rem;
+  color: var(--ink);
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.card-foot {
+  margin-top: auto;
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* ============ CONTACT ============
+   Three tiers with real space between them — intro, direct address, form —
+   instead of one undifferentiated stack. */
+.contact-head { margin-bottom: 32px; }
+.contact-head h2 { margin-bottom: 18px; }
+.contact-head .body-lg { margin: 0; }
+
+/* The direct address is its own quiet row, set off by rules above and below so it
+   reads as an alternative to the form rather than part of the preamble. */
+.contact-email {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 1.05rem;
+  margin: 0 0 32px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.contact-email-label {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+}
 .contact-email a { color: var(--accent); border-bottom: 1px solid transparent; transition: border-color .2s; }
 .contact-email a:hover { border-color: var(--accent); }
 
-.contact-form { display: flex; flex-direction: column; gap: 20px; }
+.contact-form { display: flex; flex-direction: column; gap: 18px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .form-field { display: flex; flex-direction: column; gap: 8px; }
 .form-field label { font-size: 0.85rem; color: var(--ink-muted); font-weight: 500; }
@@ -338,10 +442,13 @@ section + section { border-top: 1px solid var(--line); }
 .form-consent { font-size: 0.8rem; color: var(--ink-muted); margin: 0; }
 .form-consent a { color: var(--accent); text-decoration: underline; }
 
-/* ============ FOOTER ============ */
+/* ============ FOOTER ============
+   Not a section, so it is deliberately NOT full-viewport: it trails the contact
+   page rather than becoming a fourth one. */
 .footer { border-top: 1px solid var(--line); padding: 56px 0 40px; }
 .footer-inner { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; }
-.footer-brand { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 6px; }
+/* The stacked lockup: one asset, sized by height. */
+.footer-lockup { height: 92px; width: auto; display: block; margin-bottom: 14px; }
 .footer-tagline { color: var(--ink-muted); font-size: 0.9rem; margin: 4px 0; }
 .footer-email { color: var(--accent); font-size: 0.9rem; margin-bottom: 10px; }
 .footer-copy { color: var(--ink-muted); font-size: 0.8rem; margin: 0; }
@@ -363,30 +470,44 @@ section + section { border-top: 1px solid var(--line); }
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1080px) {
-  /* Narrower, but still whole — the shape is an object now, not a backdrop. */
-  .hero-art { width: 340px; right: -20px; opacity: 0.9; }
+  /* Smaller, but still whole — the shape is an object now, not a backdrop.
+     Height-driven, to stay consistent with the base rule. */
+  .hero-art {
+    height: min(460px, calc(100vh - var(--nav-h) - 160px));
+    right: -20px;
+    opacity: 0.9;
+  }
 }
 @media (max-width: 900px) {
   .nav-links { display: none; }
   .nav-toggle { display: flex; }
   .nav-mobile.open { display: flex; }
   .form-row { grid-template-columns: 1fr; }
-  .hero { padding: 150px 0 110px; }
   .hero-art { display: none; }
   .hero-content { max-width: none; }
 }
 @media (max-width: 560px) {
-  section { padding: 80px 0; }
+  /* Still a full page, just with tighter gutters. */
+  section { padding: calc(var(--nav-h) + 24px) 0 48px; }
   .card-grid { grid-template-columns: 1fr; }
   .container, .hero-inner { padding: 0 20px; }
-  .hero { padding: 130px 0 90px; }
+  .card { padding: 26px; }
+  .contact-head { margin-bottom: 32px; }
+  .contact-email { margin-bottom: 32px; }
+}
+/* A section can only centre what fits. Below roughly a landscape phone, let the
+   sections size to their content instead of forcing a viewport height that the
+   copy immediately overflows. */
+@media (max-height: 620px) {
+  section { min-height: auto; padding: calc(var(--nav-h) + 32px) 0 56px; }
 }
 
 /* ============ REDUCED MOTION ============ */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .reveal, .js .reveal, .btn, .card, .link-arrow span[aria-hidden] {
+  .reveal, .js .reveal, .btn, .card, .card-link, .link-arrow span[aria-hidden] {
     transition: none !important;
   }
+  .card-link:hover { transform: none; }
   .js .reveal { opacity: 1; transform: none; }
 }

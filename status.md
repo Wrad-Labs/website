@@ -19,17 +19,26 @@ Last updated: **2026-07-30**
 (GitHub's CDN), `max-age=600`. **HTTPS enforced and HSTS live** since 2026-07-29:
 `max-age=15552000` (6 months) on apex and `www`, no `includeSubDomains`, no preload.
 
-- **Page:** `#home` (hero + decorative SVG — the brand mark under a canopy, replacing
-  the arch 2026-07-30) → `#ventures` (2 cards, the first
-  naming **Optants**) → `#contact`. Plus `privacy.html`, `404.html`, `robots.txt`,
+- **Page:** `#home` (hero + decorative SVG — the brand mark under a canopy) →
+  `#ventures` (2 cards) → `#contact`. Plus `privacy.html`, `404.html`, `robots.txt`,
   `sitemap.xml`.
+- **Every section is a full-viewport page** (D19 / `R-021`) — `min-height: 100svh`,
+  content centred below the fixed nav (`--nav-h`). **`min-height`, never `height`:** the
+  contact form is taller than a short laptop and has to be able to push its section past
+  the viewport rather than be clipped, so on shorter screens contact scrolls. Below
+  ~620px tall the full-viewport rule drops out entirely.
+- **Positioning copy, 2026-07-30:** headline *"Building technology ventures with
+  purpose."*, sub *"Wrad Labs is an independent venture studio…"*, footer tagline
+  *"Building things worth leaving behind."* `<title>`, description, OG/Twitter and the
+  JSON-LD description were updated to match — they had carried the retired line.
 - **Contact form:** live, posting to Formspree (`mvzjloro` → support@wradlabs.com)
   with honeypot and a native-POST fallback. Formspree activation **confirmed by the
   owner 2026-07-27** — submissions are being delivered.
-- **Ventures section** names **Optants** ("The home of popular opinion.") plus a
-  "Future Ventures" card. No product link yet — none exists to point at, so the card
-  carries an "In development" label instead of a dead link. Product/build detail lives
-  in the private `optants` repo; the corporate view lives in `company`.
+- **Ventures section.** The **Optants** tile is now a live **whole-card link** to
+  **optants.com** (verified 200), labelled *Near launch*, carrying Optants' **own logo**
+  copied from its repo — a second upstream brand, under the same derived-copy rule as the
+  Wrad mark. Plus a "Future Ventures" card. Product/build detail lives in the private
+  `optants` repo; the corporate view lives in `company`.
 - **The mark is LOCKED (D18/R-020); the palette is still a working DRAFT (D11).** The
   flask-and-roots mark replaced the placeholder tree/node glyph on 2026-07-30 and is
   signed off. It is **`assets/images/mark.svg`, referenced by `<img>`** from nav, footer,
@@ -54,21 +63,21 @@ Last updated: **2026-07-30**
 - **Third-party surface:** Cloudflare (edge/TLS), Google Fonts, Formspree, GitHub
   Pages/Fastly, Google Workspace (email, off-repo). All five are named in `privacy.html`
   as of 2026-07-30 — R-007 is met on the live site.
+- **CSS is cache-busted — `style.css?v=N`, and N must be bumped in all three pages when
+  selectors change.** The HTML is `max-age=600` but the CSS is `max-age=14400`, so a
+  returning visitor could otherwise hold new markup against four-hour-old styles, and any
+  release renaming a class rendered unstyled. Seen live 2026-07-30 (the new hero art
+  showed as a solid black shape). `script.js` is deliberately *not* versioned — under
+  R-008 a stale copy degrades rather than breaks.
 - **Cloudflare rewrites HTML at the edge.** Email Address Obfuscation was turning every
   `mailto:` into a JS-only decoder until 2026-07-30 (D17/R-019). Treat any zone-level
   Cloudflare feature as capable of changing what ships: **the repo is no longer the whole
   truth about what a visitor receives.** Verify rendering against the live domain, not
   just locally.
 
-**In flight.** Nothing. The hero art shipped 2026-07-30 ([#13](https://github.com/Wrad-Labs/website/pull/13))
-and is **verified live** after a hard refresh. It also **closed AQ-13** — `tree-backdrop.png`
-(2 MB) was the old design's hero image and is gone; the path now 404s.
-
-> **Watch the cache skew after any CSS class rename.** The HTML is `max-age=600` but the
-> CSS is `max-age=14400` (Cloudflare's default for static assets), so for up to **4 hours**
-> a returning visitor can hold **new HTML with old CSS**. This deploy renamed the hero art's
-> classes, so during that window the art renders **unstyled — solid black** instead of muted.
-> It was observed in a real browser here, and it self-heals. **AQ-14** carries the fix.
+**In flight.** The **nine-change site pass** — branch `feat/full-page-sections`, PR open,
+**not yet merged**. Full-viewport sections, new positioning copy, the Optants tile as a live
+link, contact hierarchy, and the stacked footer lockup.
 
 **Not here.** Accounting, company funding, corporate filings, and product
 development live in the private `company` repo (D8/R-012).
@@ -100,7 +109,6 @@ development live in the private `company` repo (D8/R-012).
 | AQ-9 | Self-host the fonts to drop the Google Fonts request (privacy + performance). Interacts with OB-1 and AQ-3. Carried from WORKPLAN P3. | 🟡 2 |
 | AQ-10 | Add `Disallow: /*.md$` to `robots.txt` so the tracked docs stop being *indexed*. They stay reachable — no build step, so D1 is untouched — but this is the only mitigation available for OB-5 and it costs nothing. | 🟢 1 |
 | AQ-11 | Add `privacy.html` to `sitemap.xml`. It carries a canonical URL and `index, follow` but is absent from the single-URL sitemap. | 🟢 1 |
-| AQ-14 | **Cache-bust `style.css` so an HTML/CSS skew can't ship broken styling.** The HTML is `max-age=600`, the CSS `max-age=14400`, so for up to 4 hours a returning visitor holds new HTML with old CSS — and any deploy that renames a class renders it unstyled. Seen live on 2026-07-30: the new hero art showed solid black instead of muted. Fix is a version query on the three `<link rel="stylesheet">` tags (`style.css?v=2`), bumped whenever selectors change; a new URL makes the browser fetch fresh CSS immediately. Adopting it is a small convention change, hence 🟡. | 🟡 2 |
 | AQ-12 | **Document the SEO/metadata surface in `docs/ARCHITECTURE.md`** — the JSON-LD `Organization` schema, Twitter/OG meta, and `apple-touch-icon` are 11 lines of `index.html` that no reference doc describes. Surfaced when the R-017 cap evicted the only session entry that recorded them. | 🟢 1 |
 
 Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
@@ -113,6 +121,34 @@ Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
 Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
+
+- **2026-07-30** — **Nine owner-directed site changes; D19 → R-021.** The structural one:
+  **every section is now a full-viewport page** — `min-height: 100svh`, content centred
+  below the fixed nav via a new `--nav-h` token that also drives `scroll-padding-top`. That
+  also removed the gap at the top of the homepage: the hero's 190px top padding existed to
+  clear the nav on a normally-scrolling page, and centring below the nav does that job now.
+  **R-021 is `min-height`, never `height`** — compiled rather than left as a style note
+  because the failure is invisible on the machine it is written on: the two look identical
+  until a shorter screen clips the contact form. A `max-height: 620px` query drops the rule
+  entirely below a landscape phone, where forcing a viewport height only guarantees an
+  overflow. One layout bug caught in the process: `margin: 0 auto` on a flex item **cancels
+  the default stretch**, so `.container` and `.hero-inner` collapsed to their content width
+  the moment sections became flex containers — `width: 100%` restores them. The hero art is
+  now sized by **height**, `min(600px, 100vh − nav − padding)`, so it fits the page by
+  construction rather than by luck. **Optants** got its real entry: its **own logo** from
+  its own repo (a second upstream brand here), the new copy, *Near launch*, and the whole
+  tile is one `<a>` to optants.com — verified 200 before linking, since the card had been
+  carrying an "In development" label precisely because there was nowhere to point. One tab
+  stop, one hit target, with the affordance carried by a border-and-shadow lift, a nudging
+  arrow and a focus ring matching the form fields, because there is no underlined text to
+  signal it. Contact gained real hierarchy: intro, then the direct address as its own row
+  set off by rules, then the form. Also: hero eyebrow removed, footer tagline is now
+  *"Building things worth leaving behind."*, and the footer's mark-plus-text pair is
+  replaced by the single stacked lockup. The retired tagline was also in `<title>`, the
+  meta description, OG/Twitter and the JSON-LD — all updated, since leaving them would have
+  contradicted the page. **AQ-14 shipped in the same release, deliberately:** cache-busting
+  the stylesheet only protects a deploy if the new HTML points at the new CSS URL, and this
+  was the largest class rename the site has had.
 
 - **2026-07-30** — **Replaced the placeholder mark with the real one (D18/R-020) — merged and live.** The
   owner signed off the flask-and-roots artwork; it was vectorised and built out in the
@@ -167,21 +203,4 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   orphan audit ([optants#87](https://github.com/Wrad-Labs/optants/pull/87)). Owner-model
   repo now carries D-001–D-006, a README index, and `adoption.md` tracking cross-project
   actions X-1–X-5.
-- **2026-07-29** — Wired the Owner Operating Model into this repo's loop, after a session
-  ran a redesign and three merged PRs without ever reading it. The root cause was local:
-  `docs/INDEX.md` said read three files "and stop," and no loop step triggered the model.
-  Added **D16** — owner model is step 0, upstream of the cold start; §7 step 4 expanded to
-  the three-part *Next steps* readout (immediate follow-through · backlog split · one
-  recommendation) that previously existed only in Optants's manual — and compiled
-  owner-model **D-001** (owner actions as step-by-step playbooks) into `CLAUDE.md`. Opened
-  [owner-operating-model PR #1](https://github.com/Wrad-Labs/owner-operating-model/pull/1)
-  proposing a canonical `decisions.md` (D-001 relocated out of Optants, plus **D-002** for
-  centralization monitoring), filled-in `owner.md` placeholders, and a per-project adoption
-  prompt. Chasing one owner handoff also corrected **OB-3** (Enforce HTTPS already on; HSTS
-  belongs at Cloudflare) and opened **OB-9** — Cloudflare fronts the site and is an
-  undisclosed processor, a live R-007 breach. The owner then enabled HSTS at
-  Cloudflare the same day; verified on apex and `www` (`max-age=15552000`, no
-  `includeSubDomains`, no preload), so **OB-3 is closed and retired**. Corrected the
-  edge path from "behind Fastly" to "Cloudflare in front of Fastly" here and in
-  `SECURITY.md`; OB-9 now covers only the policy text, which is Tier 3 to publish.
 *(Older entries evicted by the cap — see `git log`.)*
