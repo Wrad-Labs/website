@@ -39,6 +39,27 @@ CSS immediately instead of waiting out its TTL.
 `script.js` is deliberately **not** versioned: under R-008 the page must work with no
 JavaScript at all, so a stale copy degrades rather than breaks.
 
+### Crawl surface
+
+Two files, and the gap between them is the point.
+
+**`sitemap.xml` lists what we want found:** `/` and `/privacy.html`. The policy carries a
+canonical URL and `index, follow`, so omitting it was an oversight rather than a choice.
+
+**`robots.txt` disallows `/*.md$`.** Every tracked file is served at the live domain (D2)
+and there is no build step to hide one (D1), so `/CLAUDE.md`, `/status.md` and
+`/decisions.md` all return 200. The rule stops crawlers **fetching** them.
+
+**It does not make them private, and it is not a fix for OB-5.** They stay reachable to
+anyone with the URL. A disallowed URL can still be listed by Google if something external
+links to it — with no content, since the file is never fetched. That is the ceiling
+available here: a `.md` file cannot carry a `<meta name="robots">` tag, and `X-Robots-Tag`
+needs response headers we do not control on Pages. OB-5 is therefore a question for the
+owner (*accept that these are reachable*), not a task an agent can close.
+
+`*` and `$` are the Google/Bing wildcard extensions, not original robots.txt syntax.
+Crawlers that ignore them fall back to `Allow: /` and fetch as before.
+
 ## File structure
 
 ```
@@ -46,8 +67,8 @@ website/
 ├── index.html            # Entire page: nav, hero, ventures, contact, footer
 ├── privacy.html          # Privacy policy (indexable)
 ├── 404.html              # Custom GitHub Pages 404
-├── robots.txt            # Crawl directives → sitemap
-├── sitemap.xml           # Single-URL sitemap
+├── robots.txt            # Crawl directives → sitemap; disallows /*.md$ (see below)
+├── sitemap.xml           # Two URLs: / and /privacy.html
 ├── CNAME                 # GitHub Pages custom domain (www.wradlabs.com)
 ├── favicon.ico           # Multi-size (16/32/48) legacy tab icon, served from root
 ├── .nojekyll             # Serve files as-is (no Jekyll processing)

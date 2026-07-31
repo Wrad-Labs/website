@@ -87,6 +87,13 @@ Last updated: **2026-07-31**
   release renaming a class rendered unstyled. Seen live 2026-07-30 (the new hero art
   showed as a solid black shape). `script.js` is deliberately *not* versioned — under
   R-008 a stale copy degrades rather than breaks.
+- **Crawl surface, as of 2026-07-31.** `sitemap.xml` lists **two** URLs — `/` and
+  `/privacy.html`, which had been absent despite carrying a canonical URL and
+  `index, follow`. `robots.txt` **disallows `/*.md$`**, so compliant crawlers stop fetching
+  the tracked docs that D2 leaves served at the domain. **That is not privacy** — the files
+  stay reachable to anyone with the URL, and a disallowed URL can still be listed (without
+  content) if something external links to it. It is the ceiling available: no build step
+  (D1), and a `.md` carries neither a robots meta tag nor an `X-Robots-Tag` on Pages.
 - **Cloudflare rewrites HTML at the edge.** Email Address Obfuscation was turning every
   `mailto:` into a JS-only decoder until 2026-07-30 (D17/R-019). Treat any zone-level
   Cloudflare feature as capable of changing what ships: **the repo is no longer the whole
@@ -120,7 +127,7 @@ development live in the private `company` repo (D8/R-012).
 | # | Item | Tier |
 |---|---|---|
 | OB-2 | **Legal review of `privacy.html` wording.** Published and plain-English; it deliberately claims no specific regulatory framework (no GDPR/CCPA rights language) — confirm that matches the company's actual obligations. Now dated July 30, 2026 and naming all five processors. | 🔴 3 |
-| OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, and now `decisions.md` / `status.md` all return 200 at the live domain. Full suppression needs a Jekyll build, which D1 rules out — but AQ-10 can stop them being *indexed*, which shrinks this to "accept that they are reachable." Carried from WORKPLAN P0. | 🔴 3 |
+| OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, `decisions.md` and `status.md` all return 200 at the live domain. **The available mitigation has now shipped** (AQ-10, 2026-07-31): `robots.txt` disallows `/*.md$`, so compliant crawlers stop fetching them. It does **not** make them private and never could — full suppression needs a Jekyll build, which D1 rules out, and a `.md` file can carry neither a robots meta tag nor an `X-Robots-Tag` on Pages. So this is now purely the owner's question: **accept that these files are reachable to anyone with the URL, or reopen D1/D2.** Nothing further an agent can do. Carried from WORKPLAN P0. | 🔴 3 |
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-7 | **Decide whether to add privacy-respecting analytics** (e.g. Plausible). Requires a privacy-policy disclosure. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-8 | **Annual inquiry sweep — delete contact-mailbox mail older than 24 months (R-018).** **One mailbox**, reached by both `hello@` and `support@` as aliases (owner-confirmed 2026-07-31), so the sweep scope is settled. First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
@@ -136,8 +143,6 @@ development live in the private `company` repo (D8/R-012).
 | AQ-5 | Add a "skip to content" link. Carried from WORKPLAN P3. | 🟢 1 |
 | AQ-7 | Reduce layout shift — preload the hero/tree image. Carried from WORKPLAN P3. | 🟢 1 |
 | AQ-9 | Self-host the fonts to drop the Google Fonts request (privacy + performance). Interacts with OB-1 and AQ-3. Carried from WORKPLAN P3. | 🟡 2 |
-| AQ-10 | Add `Disallow: /*.md$` to `robots.txt` so the tracked docs stop being *indexed*. They stay reachable — no build step, so D1 is untouched — but this is the only mitigation available for OB-5 and it costs nothing. | 🟢 1 |
-| AQ-11 | Add `privacy.html` to `sitemap.xml`. It carries a canonical URL and `index, follow` but is absent from the single-URL sitemap. | 🟢 1 |
 | AQ-12 | **Document the SEO/metadata surface in `docs/ARCHITECTURE.md`** — the JSON-LD `Organization` schema, Twitter/OG meta, and `apple-touch-icon` are 11 lines of `index.html` that no reference doc describes. Surfaced when the R-017 cap evicted the only session entry that recorded them. | 🟢 1 |
 
 Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
@@ -181,7 +186,12 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   `.footer-tagline` and `.footer-email` were deleted, which is exactly the rename case
   AQ-14 exists for. **Merged and verified live the same day** ([#15](https://github.com/Wrad-Labs/website/pull/15)),
   including the check only the live domain can make: no `/cdn-cgi/` email decoder on
-  either page, so R-019 survived the address change.
+  either page, so R-019 survived the address change. **Then AQ-10 and AQ-11**
+  ([#16](https://github.com/Wrad-Labs/website/pull/16)): `robots.txt` disallows `/*.md$`
+  and `privacy.html` joins the sitemap. AQ-10 was carried as OB-5's mitigation, and
+  shipping it **does not close OB-5** — it lowers the ceiling to "reachable but not
+  crawled" and hands the remaining question back to the owner, which the backlog entry now
+  says outright instead of implying a fix is pending.
 
 - **2026-07-30** — **Nine owner-directed site changes; D19 → R-021.** The structural one:
   **every section is now a full-viewport page** — `min-height: 100svh`, content centred
