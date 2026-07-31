@@ -29,7 +29,7 @@
   "name": "Wrad Labs Inc.",
   "url": "https://www.wradlabs.com/",
   "logo": "https://www.wradlabs.com/assets/images/icon-512.png",
-  "email": "support@wradlabs.com",
+  "email": "hello@wradlabs.com",
   "description": "Wrad Labs is an independent venture studio. We build commercial technology with the long-term goal of creating public good."
 }
 </script>
@@ -41,7 +41,7 @@
      styles — and any release that renames a class then renders unstyled. Changing
      this query changes the URL, so the browser fetches the new CSS immediately.
      BUMP IT WHENEVER SELECTORS CHANGE, in all three pages. (AQ-14) -->
-<link rel="stylesheet" href="assets/css/style.css?v=2">
+<link rel="stylesheet" href="assets/css/style.css?v=3">
 <!-- Marks JS as available so the scroll-reveal animation can hide elements before
      revealing them. Without JS this never runs, the .reveal defaults stay visible,
      and the page reads normally (R-008). Runs in <head> to avoid a content flash. -->
@@ -113,7 +113,7 @@
           <h3 class="card-brand">
             <img src="assets/images/optants-logo.svg" width="1054" height="248" alt="Optants">
           </h3>
-          <p class="card-lead">Understand what people actually think.</p>
+          <p class="card-lead">Find out what people actually think.</p>
           <p>A platform for structured public opinion designed around transparent participation instead of engagement algorithms.</p>
           <span class="card-foot">
             <span class="card-stage">Near launch</span>
@@ -135,24 +135,22 @@
   <!-- SECTION 3: CONTACT -->
   <section id="contact" class="contact">
     <div class="container narrow">
-      <!-- Three tiers, spaced apart rather than stacked: the intro, the direct
-           address as its own quiet row, then the form. -->
-      <div class="contact-head reveal">
-        <p class="eyebrow">Contact</p>
-        <h2>Let's build something that lasts.</h2>
-        <p class="body-lg">Whether you're interested in collaboration, partnerships, or learning more about Wrad Labs, we'd love to hear from you.</p>
-      </div>
+      <!-- Two tiers: the intro, with the address reading straight on from it, then
+           the form. The address is deliberately NOT a labelled row set off by rules —
+           it is the last line of the invitation, not a second channel announced.
 
-      <!-- email_off: Cloudflare's Email Address Obfuscation rewrites mailto links at the
+           email_off: Cloudflare's Email Address Obfuscation rewrites mailto links at the
            edge into "[email protected]" behind a JS-only /cdn-cgi/ decoder. That breaks
            R-008 (the page must read and function with JS off) and is not what the design
            shows. See D17. -->
-      <p class="contact-email reveal">
-        <span class="contact-email-label">Email us directly</span>
-        <!--email_off--><a href="mailto:support@wradlabs.com">support@wradlabs.com</a><!--/email_off-->
-      </p>
+      <div class="contact-head reveal">
+        <p class="eyebrow">Contact</p>
+        <h2>Let's build something worth leaving behind.</h2>
+        <p class="body-lg">Whether you're interested in collaboration, partnerships, or learning more about Wrad Labs, we'd love to hear from you.</p>
+        <p class="contact-email"><!--email_off--><a href="mailto:hello@wradlabs.com">hello@wradlabs.com</a><!--/email_off--></p>
+      </div>
 
-      <!-- Submits to Formspree (endpoint mvzjloro → support@wradlabs.com). -->
+      <!-- Submits to Formspree (endpoint mvzjloro → the hello@ mailbox). -->
       <form class="contact-form reveal" id="contactForm" action="https://formspree.io/f/mvzjloro" method="POST">
         <div class="form-row">
           <div class="form-field">
@@ -176,9 +174,14 @@
         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp-field">
         <!-- Subject line of the notification email Formspree sends you. -->
         <input type="hidden" name="_subject" value="New contact from wradlabs.com">
-        <button type="submit" class="btn btn-primary" id="contactSubmit">Send</button>
+        <!-- Button and consent are one group so the consent line sits directly under
+             the button, inside the form's 18px row gap rather than a row below it.
+             The status note stays after them — it is feedback, not part of the CTA. -->
+        <div class="form-submit">
+          <button type="submit" class="btn btn-primary" id="contactSubmit">Send</button>
+          <p class="form-consent">By sending this message you agree to our <a href="privacy.html">Privacy Policy</a>.</p>
+        </div>
         <p class="form-note" id="formNote" role="status"></p>
-        <p class="form-consent">By sending this message you agree to our <a href="privacy.html">Privacy Policy</a>.</p>
       </form>
     </div>
   </section>
@@ -190,8 +193,6 @@
     <!-- The stacked lockup, one file — mark and wordmark are a single asset here,
          derived from company/brand/logo-stacked.svg. `alt` carries the name. -->
     <img class="footer-lockup" src="assets/images/logo-stacked.svg" width="1493" height="1519" alt="Wrad Labs">
-    <p class="footer-tagline">Building things worth leaving behind.</p>
-    <!--email_off--><a class="footer-email" href="mailto:support@wradlabs.com">support@wradlabs.com</a><!--/email_off-->
     <p class="footer-copy">&copy; 2026 Wrad Labs Inc. All rights reserved. &middot; <a href="privacy.html" class="footer-link">Privacy Policy</a></p>
   </div>
 </footer>

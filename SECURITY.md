@@ -5,7 +5,7 @@ on GitHub Pages.
 
 ## Reporting a vulnerability
 
-Email **support@wradlabs.com** with details and reproduction steps. This is a
+Email **hello@wradlabs.com** with details and reproduction steps. This is a
 static marketing site with a small attack surface; please allow a few business
 days for a response. Do not open public issues for security reports.
 
@@ -57,7 +57,7 @@ days for a response. Do not open public issues for security reports.
 
 The contact form **collects and transmits** the visitor's name, email, message,
 and optional organization, posting them client-side to Formspree
-(`mvzjloro` → support@wradlabs.com) with a honeypot field for spam. A privacy
+(`mvzjloro` → hello@wradlabs.com) with a honeypot field for spam. A privacy
 policy (`privacy.html`, indexable) and a consent line on the form are published.
 The policy names every processor in the chain — Formspree, Google Workspace,
 GitHub Pages/Fastly, and Google Fonts — and states a retention period, satisfying

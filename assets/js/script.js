@@ -71,11 +71,11 @@ form.addEventListener('submit', async (e) => {
       const data = await res.json().catch(() => ({}));
       formNote.textContent = data.errors
         ? data.errors.map(x => x.message).join(', ')
-        : 'Something went wrong. Please email support@wradlabs.com.';
+        : 'Something went wrong. Please email hello@wradlabs.com.';
       formNote.className = 'form-note error';
     }
   } catch (err) {
-    formNote.textContent = 'Network error — please try again, or email support@wradlabs.com.';
+    formNote.textContent = 'Network error — please try again, or email hello@wradlabs.com.';
     formNote.className = 'form-note error';
   } finally {
     submitBtn.disabled = false;
