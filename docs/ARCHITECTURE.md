@@ -67,8 +67,9 @@ there, re-run its build, re-copy. One asset per slot — the point of the set is
 single file is stretched across four jobs the way the old `logo.png` was.
 
 **Two drawings of the mark exist upstream, and the medium picks between them (C11 /
-R-003):** square *raster* icons use the simplified solid `mark-small`, everything else
-uses the master. That is why the favicons and `mark.svg` below are not the same drawing
+R-003):** square *raster* icons use `mark-small` — the master's own vial filled solid
+with the tendrils clipped, derived from the master rather than redrawn — and everything
+else uses the master itself. That is why the favicons and `mark.svg` below are not the same drawing
 — it is deliberate, not drift.
 
 | File | Slot | Notes |
