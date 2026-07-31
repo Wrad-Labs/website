@@ -48,8 +48,13 @@ days for a response. Do not open public issues for security reports.
   (verified against Google's robots.txt spec, not assumed). **Security consequence:** the
   earlier lesson generalizes — it is not "Cloudflare can rewrite the HTML," it is
   **Cloudflare can change any file it serves, including ones with no markup in them.**
-  The site is publishing a crawler policy that exists in no commit. Whether to keep it is
-  OB-12 in [`status.md`](status.md).
+  **Resolved the same day (D22 / R-022):** both AI Crawl Control settings are off and the
+  live file is verified identical to the committed one. The standing lesson is the point,
+  not the fix — and note the diagnosis, because the two cases look alike and have opposite
+  remedies: **nothing was blocked at the network level.** Nine user agents including
+  ClaudeBot, GPTBot and Googlebot all returned 200. A crawler declining because
+  `robots.txt` told it to is not a crawler being denied, and only one of those is visible
+  in server logs.
 - **Third-party surface:** Cloudflare (edge/TLS), Google Fonts (CSS/font requests),
   and **Formspree** (the contact form posts submissions to it client-side). Email
   runs on Google Workspace, off-repo. Any further service (analytics, embeds) is a
