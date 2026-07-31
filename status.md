@@ -37,8 +37,9 @@ Last updated: **2026-07-31**
   *"…worth leaving behind."* now appears once, as the contact heading.
 - **The published address is `hello@wradlabs.com`** (D20, 2026-07-30), everywhere in
   markup, docs and metadata. `support@` appears in no tracked file except superseded
-  decision entries. Honeypot and native-POST fallback unchanged; Formspree delivery
-  **confirmed by the owner 2026-07-27**.
+  decision entries. Honeypot and native-POST fallback unchanged. **The contact path is
+  verified end-to-end as of 2026-07-31** — a live submission reached `hello@`, so markup,
+  endpoint, recipient and mailbox are confirmed together rather than inferred.
 - **Formspree targets `hello@wradlabs.com` too**, as of 2026-07-31 — the owner re-pointed
   it in the dashboard, so the page and the form now name the same address. The setting
   lives at **Workflow → Actions → Email → 3-dot → Settings**, *not* Settings → Form
@@ -122,9 +123,14 @@ wrappers held through the address change.
 
 **And it is finished outside the repo too.** OB-11 closed 2026-07-31: the two addresses
 are aliases into one mailbox, so form mail was never mis-delivered, and the owner then
-re-pointed Formspree at `hello@` as well, so the page and the form now agree. **The live
-form has not been submitted end-to-end since the re-point** — the next real inquiry is the
-test, unless someone sends a throwaway one first.
+re-pointed Formspree at `hello@` as well, so the page and the form now agree.
+**End-to-end delivery is confirmed** — the owner submitted the live form 2026-07-31 and
+mail arrived at `hello@wradlabs.com`. That is the whole chain tested at once: markup →
+Formspree `mvzjloro` → the re-pointed recipient → the mailbox. Nothing about the contact
+path now rests on configuration alone, which matters because **its failure mode is
+silent**: a wrong recipient produces no bounce and no error on the page, just submissions
+that quietly never arrive. Re-test after any change to the endpoint, the recipient, or the
+form's field names.
 
 **Not here.** Accounting, company funding, corporate filings, and product
 development live in the private `company` repo (D8/R-012).
@@ -184,7 +190,9 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   holds; the owner re-pointed Formspree at `hello@` anyway, so both now agree. The
   playbook needed correcting twice on the way — the recipient is under **Workflow**, not
   Settings, and the address must be a verified Linked Email *first* — because it was
-  written from memory instead of from the vendor's docs. The rest is D21:
+  written from memory instead of from the vendor's docs. **The owner then submitted the
+  live form and confirmed arrival at `hello@`**, so the contact path is proven rather than
+  configured; nothing in it now rests on a dashboard field being right. The rest is D21:
   contact drops from three tiers to two (the "Email us directly" label and its rules are
   gone; the address is the invitation's last line), the footer loses its tagline *and*
   address — *"…worth leaving behind."* had been on the page twice and is now only the
