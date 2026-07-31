@@ -60,6 +60,14 @@ owner (*accept that these are reachable*), not a task an agent can close.
 `*` and `$` are the Google/Bing wildcard extensions, not original robots.txt syntax.
 Crawlers that ignore them fall back to `Allow: /` and fetch as before.
 
+**This file is the only source of the site's crawler policy** (D22 / **R-022**).
+Cloudflare's AI Crawl Control can *prepend* a managed policy to it — it did, until
+2026-07-31 — so a change here can be true in the repo and false on the domain. Both of its
+controls are now off. **If the live file ever disagrees with this one again, that is the
+cause**, and it is a rule violation rather than a mystery. AI crawlers are allowed here;
+the reasoning depends on this site having no user-contributed content, so do not carry it
+to a property that does.
+
 ## File structure
 
 ```
