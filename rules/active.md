@@ -16,7 +16,7 @@ Current state only. No rationale, no history — follow the backlink for either.
 |---|---|---|
 | R-001 | No build step, package manager, framework, or backend. What is committed is what ships. | D1 |
 | R-002 | Site behavior is vanilla ES6 with zero runtime dependencies. | D1 |
-| R-003 | Every tracked file is public and served at the live domain: no secrets, keys, tokens, personal data, financial figures, or DNS/registrar/email detail, and no contact address beyond support@wradlabs.com. Operational specifics live only in untracked `OPERATIONS.local.md`. | D2 · D12 |
+| R-003 | Every tracked file is public and served at the live domain: no secrets, keys, tokens, personal data, financial figures, or DNS/registrar/email detail, and no contact address beyond hello@wradlabs.com — except inside superseded `decisions.md` entries, which R-013 forbids rewriting. Operational specifics live only in untracked `OPERATIONS.local.md`. | D2 · D20 |
 | R-004 | Never hardcode colors or fonts; use the design tokens at the top of `assets/css/style.css`. | D11 |
 | ~~R-005~~ | *Retired 2026-07-24 (D11): the blue→green roots→canopy palette semantic is now a working draft, not a locked constraint.* | ~~D5~~ |
 | R-006 | The contact form posts to Formspree from the browser; no server-side handling and no credentials in the repo. | D4 |
@@ -31,14 +31,26 @@ Current state only. No rationale, no history — follow the backlink for either.
 | R-015 | The Owner Operating Model (`owner.md`) is canonical in the private `owner-operating-model` repo; reference it by URL in `CLAUDE.md`, never copy it here and never embed it as a submodule in this public repo. | D10 |
 | R-016 | The docs-as-memory *method* is defined once, in the private `company` repo; reference it by name and keep only a short operational summary here — never restate or copy it. | D13 |
 | R-017 | Session history in `status.md` is capped at 5 entries; adding one drops the oldest in the same edit. Evicted entries are deleted, not archived — git holds the history. | D14 |
-| R-018 | Inquiries and their reply threads are deleted from the support mailbox at 24 months, by manual annual sweep. The figure published in `privacy.html` and the sweep that enforces it must change together. | D15 |
-| R-019 | `support@wradlabs.com` is published as plain readable text in both link text and `href`. No JS-dependent obfuscation — every `mailto:` is wrapped in `<!--email_off-->` to opt out of Cloudflare's edge rewrite. | D17 |
+| R-018 | Inquiries and their reply threads are deleted from the contact mailbox at 24 months, by manual annual sweep. The figure published in `privacy.html` and the sweep that enforces it must change together — and the sweep must cover whichever mailbox actually receives (see OB-11). | D15 · D20 |
+| R-019 | `hello@wradlabs.com` is published as plain readable text in both link text and `href`. No JS-dependent obfuscation — every `mailto:` is wrapped in `<!--email_off-->` to opt out of Cloudflare's edge rewrite. | D17 · D20 |
 | R-020 | The brand mark's source of truth is `brand/` in the private `company` repo. Everything under `assets/images/` is a derived copy — never edit the artwork here. The mark is taller than it is wide: always size it by height. | D18 |
 | R-021 | Sections are full-viewport pages via **`min-height`**, never `height` — a section must always be able to grow past the viewport when its content does not fit. Reserve the fixed nav with `--nav-h`. | D19 |
 
 ## Compile log
 
-Regenerated **2026-07-30** from `decisions.md` at D1–D19.
+Regenerated **2026-07-30** from `decisions.md` at D1–D21.
+
+- **D20 (new): supersedes D12.** No new rule — it changes the *value* three existing
+  rules carry. **R-003**'s contact-address clause retied D12 → D20 and now names
+  `hello@wradlabs.com`; **R-019** names the same address; **R-018** stops saying
+  "support mailbox" and gains D20 as a joint source, because the mailbox the sweep must
+  cover is exactly what OB-11 has to confirm. The *constraints* are unchanged — one
+  published address, plain text, 24-month deletion. Only the address moved.
+- **D21 (new):** compiles **nothing**. Presentation inside the existing token system;
+  recorded because each of its three parts has a quiet failure mode, not because any of
+  them constrains future work hard enough to be a rule.
+
+Previous regeneration, **2026-07-30** from `decisions.md` at D1–D19.
 
 - **D19 (new):** compiles **R-021**. It is a rule and not a style note because the
   failure is invisible until it bites someone else: `height: 100vh` looks identical to

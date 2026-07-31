@@ -53,6 +53,10 @@
   --nav-h: 72px;
 
   --container: 1160px;
+  /* Width of the hero's text column. Declared here because two rules depend on
+     the SAME number: `.hero-content` is capped by it, and `.hero-art` starts at
+     it in order to centre itself in the whitespace beside the text. */
+  --hero-col: 560px;
   --radius: 6px;
   --radius-lg: 14px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -252,7 +256,7 @@ html { scroll-padding-top: var(--nav-h); }
   padding: 0 32px;
   position: relative;
 }
-.hero-content { position: relative; z-index: 1; max-width: 560px; }
+.hero-content { position: relative; z-index: 1; max-width: var(--hero-col); }
 .hero-headline {
   font-size: clamp(2.3rem, 5.2vw, 3.6rem);
   margin-bottom: 22px;
@@ -272,10 +276,19 @@ html { scroll-padding-top: var(--nav-h); }
 
    Sized by HEIGHT, not width, so it always fits the page: the section is one
    viewport tall, and `min()` keeps the art inside the space left over after the
-   nav and the section padding. Width follows from the viewBox. */
+   nav and the section padding. Width follows from the viewBox.
+
+   CENTRED IN THE WHITESPACE, not pinned to the right edge. `left: var(--hero-col)`
+   starts the box where the text column ends, `right: 0` ends it at the container
+   edge, and `margin-inline: auto` centres the art between them — for an absolutely
+   positioned replaced element the width resolves from the aspect ratio first, then
+   the two auto margins split what is left. Both offsets must move together: pinning
+   one and leaving the other is what put the art against the edge before. */
 .hero-art {
   position: absolute;
+  left: var(--hero-col);
   right: 0;
+  margin-inline: auto;
   top: 50%;
   transform: translateY(-50%);
   height: min(600px, calc(100vh - var(--nav-h) - 140px));
@@ -388,26 +401,13 @@ html { scroll-padding-top: var(--nav-h); }
 .contact-head h2 { margin-bottom: 18px; }
 .contact-head .body-lg { margin: 0; }
 
-/* The direct address is its own quiet row, set off by rules above and below so it
-   reads as an alternative to the form rather than part of the preamble. */
+/* The address reads on from the invitation above it — same size as that copy, no
+   label and no rules, just the next line. It used to be a bordered row with an
+   "Email us directly" eyebrow, which announced a second channel the page does not
+   need. Matches `.body-lg` so the two paragraphs read as one thought. */
 .contact-email {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-  flex-wrap: wrap;
   font-size: 1.05rem;
-  margin: 0 0 32px;
-  padding: 16px 0;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-.contact-email-label {
-  font-family: var(--font-body);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--ink-muted);
+  margin: 10px 0 0;
 }
 .contact-email a { color: var(--accent); border-bottom: 1px solid transparent; transition: border-color .2s; }
 .contact-email a:hover { border-color: var(--accent); }
@@ -432,6 +432,10 @@ html { scroll-padding-top: var(--nav-h); }
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
+/* Button + consent as one group. The form's own 18px row gap plus the status
+   note's reserved line used to put ~50px between the button and the consent
+   line; grouping them makes that gap 10px and keeps the note out of the middle. */
+.form-submit { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
 .contact-form .btn { align-self: flex-start; }
 .contact-form .btn:disabled { opacity: 0.6; cursor: default; }
 .form-note { font-size: 0.85rem; color: var(--ink-muted); min-height: 1em; }
@@ -449,8 +453,6 @@ html { scroll-padding-top: var(--nav-h); }
 .footer-inner { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; }
 /* The stacked lockup: one asset, sized by height. */
 .footer-lockup { height: 92px; width: auto; display: block; margin-bottom: 14px; }
-.footer-tagline { color: var(--ink-muted); font-size: 0.9rem; margin: 4px 0; }
-.footer-email { color: var(--accent); font-size: 0.9rem; margin-bottom: 10px; }
 .footer-copy { color: var(--ink-muted); font-size: 0.8rem; margin: 0; }
 .footer-link { color: var(--accent); }
 .footer-link:hover { color: var(--accent-hover); }
@@ -471,10 +473,10 @@ html { scroll-padding-top: var(--nav-h); }
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1080px) {
   /* Smaller, but still whole — the shape is an object now, not a backdrop.
-     Height-driven, to stay consistent with the base rule. */
+     Height-driven, to stay consistent with the base rule. `right` is left alone:
+     overriding one of the two offsets would break the centring above. */
   .hero-art {
     height: min(460px, calc(100vh - var(--nav-h) - 160px));
-    right: -20px;
     opacity: 0.9;
   }
 }
@@ -493,7 +495,6 @@ html { scroll-padding-top: var(--nav-h); }
   .container, .hero-inner { padding: 0 20px; }
   .card { padding: 26px; }
   .contact-head { margin-bottom: 32px; }
-  .contact-email { margin-bottom: 32px; }
 }
 /* A section can only centre what fits. Below roughly a landscape phone, let the
    sections size to their content instead of forcing a viewport height that the

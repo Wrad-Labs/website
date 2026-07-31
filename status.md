@@ -8,7 +8,7 @@ No rules (see [`rules/active.md`](rules/active.md)), no rationale (see
 an *index*: one line per item, tier tag, and a pointer to detail that lives
 elsewhere — never a second copy of the detail.
 
-Last updated: **2026-07-30**
+Last updated: **2026-07-31**
 
 ---
 
@@ -19,21 +19,28 @@ Last updated: **2026-07-30**
 (GitHub's CDN), `max-age=600`. **HTTPS enforced and HSTS live** since 2026-07-29:
 `max-age=15552000` (6 months) on apex and `www`, no `includeSubDomains`, no preload.
 
-- **Page:** `#home` (hero + decorative SVG — the brand mark under a canopy) →
-  `#ventures` (2 cards) → `#contact`. Plus `privacy.html`, `404.html`, `robots.txt`,
-  `sitemap.xml`.
+- **Page:** `#home` (hero + decorative SVG — the brand mark under a canopy, **centred in
+  the whitespace beside the text column**, not pinned to the container edge; `left` and
+  `right` on `.hero-art` are a pair, overriding one re-pins it) → `#ventures` (2 cards) →
+  `#contact` (invitation with the address reading straight on from it, then the form;
+  the consent line sits 10px under the Send button). Plus `privacy.html`, `404.html`,
+  `robots.txt`, `sitemap.xml`.
 - **Every section is a full-viewport page** (D19 / `R-021`) — `min-height: 100svh`,
   content centred below the fixed nav (`--nav-h`). **`min-height`, never `height`:** the
   contact form is taller than a short laptop and has to be able to push its section past
   the viewport rather than be clipped, so on shorter screens contact scrolls. Below
   ~620px tall the full-viewport rule drops out entirely.
-- **Positioning copy, 2026-07-30:** headline *"Building technology ventures with
-  purpose."*, sub *"Wrad Labs is an independent venture studio…"*, footer tagline
-  *"Building things worth leaving behind."* `<title>`, description, OG/Twitter and the
-  JSON-LD description were updated to match — they had carried the retired line.
-- **Contact form:** live, posting to Formspree (`mvzjloro` → support@wradlabs.com)
-  with honeypot and a native-POST fallback. Formspree activation **confirmed by the
-  owner 2026-07-27** — submissions are being delivered.
+- **Positioning copy:** headline *"Building technology ventures with purpose."*, sub
+  *"Wrad Labs is an independent venture studio…"* `<title>`, description, OG/Twitter and
+  the JSON-LD description match. **The footer carries the lockup and the copyright line
+  and nothing else** as of 2026-07-30 — the tagline and the address were removed (D21);
+  *"…worth leaving behind."* now appears once, as the contact heading.
+- **The published address is `hello@wradlabs.com`** (D20, 2026-07-30), everywhere in
+  markup, docs and metadata. `support@` appears in no tracked file except superseded
+  decision entries. **The contact form is not routed by that markup:** it posts to
+  Formspree endpoint `mvzjloro`, whose recipient is dashboard config — so until the owner
+  moves it (**OB-11**) the page and the form disagree. Honeypot and native-POST fallback
+  unchanged; Formspree delivery **confirmed by the owner 2026-07-27**.
 - **Ventures section.** The **Optants** tile is now a live **whole-card link** to
   **optants.com** (verified 200), labelled *Near launch*, carrying Optants' **own logo**
   copied from its repo — a second upstream brand, under the same derived-copy rule as the
@@ -75,12 +82,12 @@ Last updated: **2026-07-30**
   truth about what a visitor receives.** Verify rendering against the live domain, not
   just locally.
 
-**In flight.** Nothing. The nine-change site pass shipped 2026-07-30
-([#14](https://github.com/Wrad-Labs/website/pull/14)) and is **verified live**: all three
-pages 200, each linking `style.css?v=2`, the versioned CSS serving the new selectors, and
-the new copy and Optants link in place. **AQ-14 proved itself on the way in** — this
-browser held the previous stylesheet and rendered correctly on an ordinary load, where the
-last release had needed a hard refresh.
+**In flight.** The seven-change contact/copy pass (D20/D21) is on
+`feat/contact-and-copy-pass` and **open for review as
+[#15](https://github.com/Wrad-Labs/website/pull/15)** — CSS bumped to `?v=3` in all three
+pages. Verified locally at 1400 / 960 / 375px with no console errors; **not yet verified
+live.** It carries one owner action that the merge does not complete: **OB-11**, the
+Formspree recipient.
 
 **Not here.** Accounting, company funding, corporate filings, and product
 development live in the private `company` repo (D8/R-012).
@@ -97,7 +104,8 @@ development live in the private `company` repo (D8/R-012).
 | OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, and now `decisions.md` / `status.md` all return 200 at the live domain. Full suppression needs a Jekyll build, which D1 rules out — but AQ-10 can stop them being *indexed*, which shrinks this to "accept that they are reachable." Carried from WORKPLAN P0. | 🔴 3 |
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-7 | **Decide whether to add privacy-respecting analytics** (e.g. Plausible). Requires a privacy-policy disclosure. Carried from WORKPLAN P4. | 🟡 2 |
-| OB-8 | **Annual inquiry sweep — delete support-mailbox mail older than 24 months (R-018).** First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
+| OB-8 | **Annual inquiry sweep — delete contact-mailbox mail older than 24 months (R-018).** Which mailbox that is depends on OB-11. First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
+| OB-11 | **Point Formspree at `hello@wradlabs.com`, and say whether it is an alias or its own mailbox.** The site now shows `hello@`, but form submissions still deliver wherever endpoint `mvzjloro` is configured — that lives in Formspree's dashboard, not this repo (D20). **Do it:** sign in at `https://formspree.io/`, open the form whose endpoint hash is **`mvzjloro`**, go to its **Settings → Form settings**, and set the notification/recipient email to `hello@wradlabs.com`. Formspree emails that address a confirmation link — **click it**, or delivery silently stays on the old target. **Verify:** submit the live form at `https://www.wradlabs.com/#contact` with a throwaway message and confirm it arrives in the `hello@` inbox; the Formspree dashboard's **Submissions** tab should show the same entry. **Reverse:** set the recipient back to the previous address in the same field. **Second, one-line answer needed:** is `hello@` an *alias* delivering into the existing Google Workspace mailbox, or a *separate* mailbox? R-018's 24-month sweep (OB-8) covers one mailbox — if it is separate, the sweep must cover it too or the retention figure published in `privacy.html` stops being true. | 🔴 3 |
 | OB-10 | **Force the social platforms to re-scrape the share card.** The new `og.png` is live and correct, but each platform caches the *old* image against the URL and will keep serving it — nothing in this repo can clear those caches, and they need a signed-in account. **LinkedIn:** open `https://www.linkedin.com/post-inspector/`, paste `https://www.wradlabs.com/`, click **Inspect** — it refetches on every run. **Facebook/Meta:** `https://developers.facebook.com/tools/debug/`, paste the URL, click **Scrape Again**. **X/Twitter:** no public validator remains; it refreshes on its own within about a week. **Verify:** each tool previews the card it now holds — you want the flask on off-white with a terracotta rule, not the old tree glyph. **Reverse:** nothing to undo; re-scraping only re-reads what the site already serves. | 🔴 3 |
 
 ### Agent queue — ready to pick up
@@ -124,6 +132,31 @@ Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
 Dated one-liners, newest first. **Capped at 5 (R-017)** — adding one drops the
 oldest in the same edit. This is an orientation trail for a cold session, not a
 record: `git log` is the record, and evicted entries are deleted, not archived.
+
+- **2026-07-31** — **Seven owner-directed changes; D20 supersedes D12, D21 recorded.** The
+  one with teeth: **the published address moved from `support@` to `hello@`** — markup,
+  four places in `privacy.html`, the JSON-LD `email`, both form-failure strings in
+  `script.js`, `SECURITY.md`'s disclosure route and `README.md`. That contradicted a
+  *locked* decision (D12 named `support@` as the only permitted address), so it went in as
+  D20 rather than as a find-and-replace, and R-003/R-018/R-019 recompiled around it. **The
+  trap worth remembering: the markup is not the delivery path.** The contact form posts to
+  Formspree `mvzjloro`, whose recipient is dashboard config — editing every `mailto:` in
+  the repo moves what the page *says* and nothing about where mail *goes*. Hence **OB-11**,
+  with the click-path, and the second question inside it: if `hello@` is a separate mailbox
+  rather than an alias, R-018's 24-month sweep no longer covers what receives, and a
+  published retention figure with no mechanism behind it is exactly what the owner model
+  forbids — so the answer is asked for, not assumed (**OOM D-007**). The rest is D21:
+  contact drops from three tiers to two (the "Email us directly" label and its rules are
+  gone; the address is the invitation's last line), the footer loses its tagline *and*
+  address — *"…worth leaving behind."* had been on the page twice and is now only the
+  contact heading — the consent line moves from ~50px below the Send button to 10px by
+  grouping the two, and the hero art **centres in the whitespace** beside the text instead
+  of sitting against the container edge. That last one is a `left`/`right` **pair** with
+  `margin-inline: auto`; the old `right: -20px` override in the 1080px query had to go,
+  because overriding one offset alone silently re-pins the art. Measured at 1400px: 38px of
+  gap on each side of the art. `?v=3` in all three pages — `.contact-email-label`,
+  `.footer-tagline` and `.footer-email` were deleted, which is exactly the rename case
+  AQ-14 exists for.
 
 - **2026-07-30** — **Nine owner-directed site changes; D19 → R-021.** The structural one:
   **every section is now a full-viewport page** — `min-height: 100svh`, content centred
@@ -195,15 +228,4 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   that D-002, D-003, R-014, R-016, C8 and every de-duplication this week are instances of.
   Also completed `company` adoption ([company#1](https://github.com/Wrad-Labs/company/pull/1)),
   where the submodule had the same stale-`index.lock` failure as Optants — two of three repos.
-- **2026-07-30** — Compiled two newly-centralized owner-model rules into §4: **OOM D-005**
-  (every change lands through the gate, whoever authored it) and **OOM D-006** (never merge
-  on red or pending checks — here, with no CI, that means stating what was verified by hand).
-  Both were surfaced by running the adoption prompt against Optants, where they had been
-  locked into that repo's manual alone; they are cited here, never restated (D-002). Also
-  completed the cross-project adoption work: Optants' submodule pointer was frozen from
-  2026-07-16 behind a stale `index.lock` (fixed, [optants#85](https://github.com/Wrad-Labs/optants/pull/85)),
-  its duplicate `D-001` reduced to a pointer and an unindexed live runbook found by a D-003
-  orphan audit ([optants#87](https://github.com/Wrad-Labs/optants/pull/87)). Owner-model
-  repo now carries D-001–D-006, a README index, and `adoption.md` tracking cross-project
-  actions X-1–X-5.
 *(Older entries evicted by the cap — see `git log`.)*
