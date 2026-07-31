@@ -171,6 +171,53 @@ warm-neutral/terracotta direction is what ships today, and a further change is a
 Tier-2 proposal, not a decision violation. The **mark is no longer a draft**: D18 locked
 it on 2026-07-30, and there is no SVG sprite any more — see § Brand assets above.
 
+## Metadata surface (`index.html` `<head>`)
+
+Roughly a dozen lines that no reference doc described until now — which is how the
+retired tagline once survived in four of them after the visible copy changed. **When
+positioning copy changes, these change with it**; they are the same claim in machine-
+readable form, and a stale one contradicts the page.
+
+| Block | What it feeds | Notes |
+|---|---|---|
+| `<title>`, `<meta name="description">` | Search results | Must match the live headline and sub |
+| `<link rel="canonical">` | Duplicate resolution | Absolute `https://www.` — the `www` host is the canonical one |
+| `og:*` (`type`, `site_name`, `title`, `description`, `url`, `image`, `image:width/height`, `image:alt`) | Facebook, LinkedIn, Slack, iMessage | `og.png` is 1200×630; the explicit dimensions let a scraper reserve space before fetching |
+| `twitter:card`, `twitter:title/description/image` | X | `summary_large_image`, valid only because a real 1200×630 card exists (D18) |
+| JSON-LD `Organization` | Google knowledge panel | `name`, `url`, `logo` → `icon-512.png` (square, per schema.org), `email`, `description` |
+| `<link rel="apple-touch-icon">` | iOS home screen | 180×180 PNG; iOS ignores SVG favicons |
+| `<meta name="referrer">` | Outbound requests | `strict-origin-when-cross-origin` — Google Fonts and Formspree see the origin, not the path |
+| `<meta name="robots">` | Crawlers | Only on the other two pages: `index, follow` on `privacy.html`, `noindex` on `404.html`. `index.html` carries none, which *is* the default |
+
+**Two traps.** The JSON-LD `logo` wants a **square** image, so it points at
+`icon-512.png` and not at `mark.svg`, which is 512×939 (R-020). And **social platforms
+cache the share card against the URL** — replacing `og.png` does not update what they
+serve, which needs a manual re-scrape per platform (OB-10).
+
+## Accessibility affordances
+
+Beyond R-010's markup baseline, three things are easy to break by accident:
+
+- **Skip link.** First tab stop on every page, jumping to `#main`. Parked at
+  `left: -9999px` rather than `display: none` — **a hidden element cannot take focus**, so
+  a display-hidden skip link never returns. It moves with `left`, not `transform`, so it
+  is unaffected by `prefers-reduced-motion`.
+- **The Optants tile is one `<a>`** wrapping the whole card: one tab stop, one hit target.
+  Nesting a second interactive element inside it would break that (D19).
+- **`prefers-reduced-motion`** disables the scroll-reveal transition; the `.reveal`
+  default state is *visible*, so with JS off or motion reduced the content simply shows.
+
+## Layout stability
+
+**Measured CLS is 0.** There is no hero *image* — the hero art is an inline `<svg>` in
+`index.html`, so it costs no request and reserves its own space. All three `<img>`
+elements (`mark.svg`, `optants-logo.svg`, `logo-stacked.svg`) carry intrinsic
+`width`/`height`, so `width: auto` and `height`-based sizing resolve without reflow.
+
+The one remaining theoretical source is **font swap** — `&display=swap` on the Google
+Fonts request means a fallback paints first. That is the residue of AQ-9 (self-hosting),
+not something a `preload` of a non-existent image would fix.
+
 ## Page sections (in order)
 
 `#home` (hero: left-aligned copy + decorative SVG — the brand mark under a canopy,
