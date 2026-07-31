@@ -82,12 +82,18 @@ Last updated: **2026-07-31**
   truth about what a visitor receives.** Verify rendering against the live domain, not
   just locally.
 
-**In flight.** The seven-change contact/copy pass (D20/D21) is on
-`feat/contact-and-copy-pass` and **open for review as
-[#15](https://github.com/Wrad-Labs/website/pull/15)** — CSS bumped to `?v=3` in all three
-pages. Verified locally at 1400 / 960 / 375px with no console errors; **not yet verified
-live.** It carries one owner action that the merge does not complete: **OB-11**, the
-Formspree recipient.
+**In flight.** Nothing in the repo. The seven-change contact/copy pass (D20/D21) shipped
+2026-07-31 ([#15](https://github.com/Wrad-Labs/website/pull/15)) and is **verified live**:
+all three pages 200, each linking `style.css?v=3`, the versioned CSS serving
+`margin-inline` on the hero art and `.form-submit`, and none of the three deleted
+selectors surviving anywhere. `hello@` in every published slot, `support@` in **zero**
+live bytes, and — the D17 check that only the live domain can answer — **all four
+`mailto:` links render plain, with no `/cdn-cgi/` decoder**: the `<!--email_off-->`
+wrappers held through the address change.
+
+**But the release is not finished outside the repo.** Form mail still delivers wherever
+Formspree `mvzjloro` is pointed, which no commit here can change — **OB-11**, and the page
+and the form disagree until it is done.
 
 **Not here.** Accounting, company funding, corporate filings, and product
 development live in the private `company` repo (D8/R-012).
@@ -156,7 +162,9 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   because overriding one offset alone silently re-pins the art. Measured at 1400px: 38px of
   gap on each side of the art. `?v=3` in all three pages — `.contact-email-label`,
   `.footer-tagline` and `.footer-email` were deleted, which is exactly the rename case
-  AQ-14 exists for.
+  AQ-14 exists for. **Merged and verified live the same day** ([#15](https://github.com/Wrad-Labs/website/pull/15)),
+  including the check only the live domain can make: no `/cdn-cgi/` email decoder on
+  either page, so R-019 survived the address change.
 
 - **2026-07-30** — **Nine owner-directed site changes; D19 → R-021.** The structural one:
   **every section is now a full-viewport page** — `min-height: 100svh`, content centred
