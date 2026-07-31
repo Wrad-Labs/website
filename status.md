@@ -39,18 +39,19 @@ Last updated: **2026-07-31**
   markup, docs and metadata. `support@` appears in no tracked file except superseded
   decision entries. Honeypot and native-POST fallback unchanged; Formspree delivery
   **confirmed by the owner 2026-07-27**.
-- **Formspree still targets `support@`, deliberately — and that is not a mismatch.**
-  Owner-confirmed 2026-07-31: **`hello@` and `support@` are aliases into the same Google
-  Workspace mailbox**, so form mail already arrives where it is read, and the target
-  string is invisible to visitors. Left alone because Formspree's free plan caps the
-  account at **2 linked emails** (both used), and re-pointing would mean re-targeting the
-  form, deleting an address and verifying a new one to change nothing a visitor sees.
-  **The one way this breaks: if `support@` is ever retired as an alias, form delivery
-  stops silently** — re-point Formspree *first* (Workflow → Actions → Email → 3-dot →
-  Settings). Closed OB-11.
-- **One mailbox receives everything**, which is what R-018's 24-month sweep (OB-8) is
-  scoped to. Had they been separate mailboxes, the published retention figure would have
-  needed the sweep widened or the figure changed (D20).
+- **Formspree targets `hello@wradlabs.com` too**, as of 2026-07-31 — the owner re-pointed
+  it in the dashboard, so the page and the form now name the same address. The setting
+  lives at **Workflow → Actions → Email → 3-dot → Settings**, *not* Settings → Form
+  settings, which Formspree documents as the legacy path this account does not have; a new
+  target must first be a **verified Linked Email** under Account, and the free plan caps
+  that at **2**. Closed OB-11. **Repo-side changes cannot affect this** — the recipient is
+  dashboard config, so a `mailto:` edit here moves what the page *says* and nothing about
+  where mail *goes*.
+- **`hello@` and `support@` are aliases into one Google Workspace mailbox** (owner-confirmed
+  2026-07-31). That is why the re-point was cosmetic rather than a fix — mail was arriving
+  either way — and it is what R-018's 24-month sweep (OB-8) is scoped to. Had they been
+  separate mailboxes, the published retention figure would have needed the sweep widened or
+  the figure changed (D20).
 - **Ventures section.** The **Optants** tile is now a live **whole-card link** to
   **optants.com** (verified 200), labelled *Near launch*, carrying Optants' **own logo**
   copied from its repo — a second upstream brand, under the same derived-copy rule as the
@@ -101,10 +102,11 @@ live bytes, and — the D17 check that only the live domain can answer — **all
 `mailto:` links render plain, with no `/cdn-cgi/` decoder**: the `<!--email_off-->`
 wrappers held through the address change.
 
-**And it is finished outside the repo too.** OB-11 closed 2026-07-31 with no dashboard
-change needed: the two addresses are aliases into one mailbox, so form mail was never
-mis-delivered — see the Formspree note above for why the target is deliberately left on
-`support@`, and the one condition that would break it.
+**And it is finished outside the repo too.** OB-11 closed 2026-07-31: the two addresses
+are aliases into one mailbox, so form mail was never mis-delivered, and the owner then
+re-pointed Formspree at `hello@` as well, so the page and the form now agree. **The live
+form has not been submitted end-to-end since the re-point** — the next real inquiry is the
+test, unless someone sends a throwaway one first.
 
 **Not here.** Accounting, company funding, corporate filings, and product
 development live in the private `company` repo (D8/R-012).
@@ -162,8 +164,11 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   rather than an alias, R-018's 24-month sweep no longer covers what receives, and a
   published retention figure with no mechanism behind it is exactly what the owner model
   forbids — so the answer is asked for, not assumed (**OOM D-007**). **Answered and closed
-  2026-07-31: aliases into one mailbox**, so nothing was mis-delivered, the sweep scope
-  holds, and Formspree keeps its `support@` target on purpose. The rest is D21:
+  2026-07-31: aliases into one mailbox**, so nothing was mis-delivered and the sweep scope
+  holds; the owner re-pointed Formspree at `hello@` anyway, so both now agree. The
+  playbook needed correcting twice on the way — the recipient is under **Workflow**, not
+  Settings, and the address must be a verified Linked Email *first* — because it was
+  written from memory instead of from the vendor's docs. The rest is D21:
   contact drops from three tiers to two (the "Email us directly" label and its rules are
   gone; the address is the invitation's last line), the footer loses its tagline *and*
   address — *"…worth leaving behind."* had been on the page twice and is now only the
