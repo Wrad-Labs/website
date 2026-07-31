@@ -66,7 +66,8 @@ the same two decorative tokens (`--arch` / `--botanical`). The vessel, liquid an
 **mark's own five root tendrils** are lifted from `brand/mark.svg` by script, not
 redrawn (upstream **C11**). One behavioural change: the art is no longer bled off the
 right edge, because a half-cropped flask reads as a mistake where a half-cropped arch
-read as a crop.
+read as a crop. **Closes AQ-13** in the same PR: `tree-backdrop.png` (2 MB) was the old
+design's hero image, and replacing the hero is what made it certainly dead — deleted.
 
 Previously: the small-mark favicon set and the lockup share card shipped
 2026-07-30 ([#12](https://github.com/Wrad-Labs/website/pull/12)) and are **verified live**:
@@ -105,7 +106,6 @@ development live in the private `company` repo (D8/R-012).
 | AQ-9 | Self-host the fonts to drop the Google Fonts request (privacy + performance). Interacts with OB-1 and AQ-3. Carried from WORKPLAN P3. | 🟡 2 |
 | AQ-10 | Add `Disallow: /*.md$` to `robots.txt` so the tracked docs stop being *indexed*. They stay reachable — no build step, so D1 is untouched — but this is the only mitigation available for OB-5 and it costs nothing. | 🟢 1 |
 | AQ-11 | Add `privacy.html` to `sitemap.xml`. It carries a canonical URL and `index, follow` but is absent from the single-URL sitemap. | 🟢 1 |
-| AQ-13 | **`assets/images/tree-backdrop.png` (2 MB) is referenced by nothing** — no HTML, CSS or JS points at it; only `docs/ARCHITECTURE.md` mentions it. It belonged to the pre-2026-07-29 design. Confirm it is dead, then delete it. Surfaced while replacing the mark; deliberately left alone in that PR to keep the diff to one subject. | 🟢 1 |
 | AQ-12 | **Document the SEO/metadata surface in `docs/ARCHITECTURE.md`** — the JSON-LD `Organization` schema, Twitter/OG meta, and `apple-touch-icon` are 11 lines of `index.html` that no reference doc describes. Surfaced when the R-017 cap evicted the only session entry that recorded them. | 🟢 1 |
 
 Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see

@@ -5,7 +5,7 @@ to stay true against the source.** Companion to [`../CLAUDE.md`](../CLAUDE.md)
 (governance), [`INDEX.md`](INDEX.md) (the doc map), and
 [`../status.md`](../status.md) (current state + backlog).
 
-**Verified against source: 2026-07-29** — tokens, page sections, JS blocks, and the
+**Verified against source: 2026-07-30** — tokens, page sections, JS blocks, and the
 file tree were checked line-by-line against `style.css`, `index.html`, and
 `script.js` on this date. Re-verify and bump this line whenever you edit the doc;
 if it disagrees with the source, the doc is wrong.
@@ -60,7 +60,7 @@ website/
 
 ## Brand assets
 
-**Everything in `assets/images/` (except `tree-backdrop.png`) is a DERIVED COPY.** The
+**Everything in `assets/images/` is a DERIVED COPY.** The
 mark's source of truth is `brand/` in the private `company` repo, where the vector
 sources and the build script live (**D18 / R-020**). Never edit the artwork here: edit it
 there, re-run its build, re-copy. One asset per slot — the point of the set is that no
@@ -80,7 +80,6 @@ else uses the master itself. That is why the favicons and `mark.svg` below are n
 | `apple-touch-icon.png` | `<link rel="apple-touch-icon">` | Small mark, 180², opaque; iOS applies its own corner mask. |
 | `og.png` | `og:image`, `twitter:image` | 1200×630, which is why `twitter:card` is `summary_large_image`. Carries the **horizontal lockup** — mark plus "WRAD LABS" — above a terracotta rule. The wordmark is outlined, so the card needs no font. |
 | `icon-512.png` | JSON-LD `Organization.logo` | Small mark, square and opaque, which is what consumers of that field expect. |
-| `tree-backdrop.png` | *nothing* | 2 MB left over from the pre-2026-07-29 design. Referenced by no HTML, CSS or JS — pending deletion (AQ-13). |
 
 ## Design tokens
 
@@ -120,10 +119,10 @@ palette change means editing the `:root` block and nothing else.
 Every ink/accent pair above was measured against its background and passes WCAG AA
 for normal text. `--stone` is deliberately **not** an ink token for that reason.
 
-The palette and the brand mark remain an explicit **draft** (D11), not a locked
-rule — the current warm-neutral/terracotta direction is what ships today, and a
-further change is a normal Tier-2 proposal, not a decision violation. **No decision
-locks the logo**; the mark in the SVG sprite is a placeholder pending a new identity.
+The **palette** remains an explicit **draft** (D11), not a locked rule — the current
+warm-neutral/terracotta direction is what ships today, and a further change is a normal
+Tier-2 proposal, not a decision violation. The **mark is no longer a draft**: D18 locked
+it on 2026-07-30, and there is no SVG sprite any more — see § Brand assets above.
 
 ## Page sections (in order)
 
