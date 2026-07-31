@@ -63,6 +63,12 @@ Last updated: **2026-07-30**
 - **Third-party surface:** Cloudflare (edge/TLS), Google Fonts, Formspree, GitHub
   Pages/Fastly, Google Workspace (email, off-repo). All five are named in `privacy.html`
   as of 2026-07-30 — R-007 is met on the live site.
+- **CSS is cache-busted — `style.css?v=N`, and N must be bumped in all three pages when
+  selectors change.** The HTML is `max-age=600` but the CSS is `max-age=14400`, so a
+  returning visitor could otherwise hold new markup against four-hour-old styles, and any
+  release renaming a class rendered unstyled. Seen live 2026-07-30 (the new hero art
+  showed as a solid black shape). `script.js` is deliberately *not* versioned — under
+  R-008 a stale copy degrades rather than breaks.
 - **Cloudflare rewrites HTML at the edge.** Email Address Obfuscation was turning every
   `mailto:` into a JS-only decoder until 2026-07-30 (D17/R-019). Treat any zone-level
   Cloudflare feature as capable of changing what ships: **the repo is no longer the whole
@@ -103,7 +109,6 @@ development live in the private `company` repo (D8/R-012).
 | AQ-9 | Self-host the fonts to drop the Google Fonts request (privacy + performance). Interacts with OB-1 and AQ-3. Carried from WORKPLAN P3. | 🟡 2 |
 | AQ-10 | Add `Disallow: /*.md$` to `robots.txt` so the tracked docs stop being *indexed*. They stay reachable — no build step, so D1 is untouched — but this is the only mitigation available for OB-5 and it costs nothing. | 🟢 1 |
 | AQ-11 | Add `privacy.html` to `sitemap.xml`. It carries a canonical URL and `index, follow` but is absent from the single-URL sitemap. | 🟢 1 |
-| AQ-14 | **Cache-bust `style.css` so an HTML/CSS skew can't ship broken styling.** The HTML is `max-age=600`, the CSS `max-age=14400`, so for up to 4 hours a returning visitor holds new HTML with old CSS — and any deploy that renames a class renders it unstyled. Seen live on 2026-07-30: the new hero art showed solid black instead of muted. Fix is a version query on the three `<link rel="stylesheet">` tags (`style.css?v=2`), bumped whenever selectors change; a new URL makes the browser fetch fresh CSS immediately. Adopting it is a small convention change, hence 🟡. | 🟡 2 |
 | AQ-12 | **Document the SEO/metadata surface in `docs/ARCHITECTURE.md`** — the JSON-LD `Organization` schema, Twitter/OG meta, and `apple-touch-icon` are 11 lines of `index.html` that no reference doc describes. Surfaced when the R-017 cap evicted the only session entry that recorded them. | 🟢 1 |
 
 Tier key: 🟢 1 autonomous · 🟡 2 propose first · 🔴 3 human-only — see
@@ -141,7 +146,9 @@ record: `git log` is the record, and evicted entries are deleted, not archived.
   *"Building things worth leaving behind."*, and the footer's mark-plus-text pair is
   replaced by the single stacked lockup. The retired tagline was also in `<title>`, the
   meta description, OG/Twitter and the JSON-LD — all updated, since leaving them would have
-  contradicted the page.
+  contradicted the page. **AQ-14 shipped in the same release, deliberately:** cache-busting
+  the stylesheet only protects a deploy if the new HTML points at the new CSS URL, and this
+  was the largest class rename the site has had.
 
 - **2026-07-30** — **Replaced the placeholder mark with the real one (D18/R-020) — merged and live.** The
   owner signed off the flask-and-roots artwork; it was vectorised and built out in the
