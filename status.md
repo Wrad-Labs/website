@@ -83,8 +83,9 @@ Last updated: **2026-07-31**
   just locally.
 
 **In flight.** The seven-change contact/copy pass (D20/D21) is on
-`feat/contact-and-copy-pass`, **awaiting commit and PR** — CSS bumped to `?v=3` in all
-three pages. Verified locally at 1400 / 960 / 375px with no console errors; **not yet verified
+`feat/contact-and-copy-pass` and **open for review as
+[#15](https://github.com/Wrad-Labs/website/pull/15)** — CSS bumped to `?v=3` in all three
+pages. Verified locally at 1400 / 960 / 375px with no console errors; **not yet verified
 live.** It carries one owner action that the merge does not complete: **OB-11**, the
 Formspree recipient.
 
