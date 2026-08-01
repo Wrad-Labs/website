@@ -1,7 +1,7 @@
-/* ============ FONTS (self-hosted — D23 / R-023) ============
+/* ============ FONTS (self-hosted — W23 / WR-023) ============
    These files used to come from fonts.gstatic.com. They are served from this
    origin now, which removes Google as a processor from the request path — that
-   is why `privacy.html` no longer names Google Fonts (R-007), and why re-adding
+   is why `privacy.html` no longer names Google Fonts (WR-007), and why re-adding
    a `fonts.googleapis.com` link would silently reintroduce a processor the
    published policy does not disclose. Don't.
 
@@ -68,13 +68,13 @@
 }
 
 /* ============ TOKENS ============
-   Declared once, referenced everywhere (R-004 — never hardcode these values).
-   **CANOPY — the palette is LOCKED as of 2026-07-31 (D28, superseding D26).**
+   Declared once, referenced everywhere (WR-004 — never hardcode these values).
+   **CANOPY — the palette is LOCKED as of 2026-07-31 (W28, superseding W26).**
 
    WHY THIS ONE. Two constraints pull against each other. It must not read as
    Optants (warm off-white #FAFAF8, teal #115E59, same body typeface — the reason
    the two sites felt like one), and it must read as a studio that builds
-   commercial products in order to fund public good. D26's Cool Stone satisfied
+   commercial products in order to fund public good. W26's Cool Stone satisfied
    the first and failed the second: cool greys and an oxblood accent read austere
    and vinous, which is the opposite of generative.
 
@@ -115,7 +115,7 @@
   --on-accent: #FFFFFF;
 
   /* Status — form feedback only.
-     A GREEN ACCENT INVERTS D26'S PROBLEM. Under oxblood, --danger was the token
+     A GREEN ACCENT INVERTS W26'S PROBLEM. Under oxblood, --danger was the token
      that clashed and had to move to a vermillion. Here red sits 87° from the
      accent — the largest gap available — so --danger returns to a normal dark
      red. It is --success that now needs care: it must stay green while not
@@ -360,7 +360,7 @@ html { scroll-padding-top: var(--nav-h); }
 /* ============ LOGO MARK ============
    The mark is `assets/images/mark.svg`, referenced by <img> from every page —
    ONE file, cached across the site, so swapping it means replacing that file.
-   Its source of truth is the private company repo, `brand/` (D18); this copy is
+   Its source of truth is the private company repo, `brand/` (W18); this copy is
    derived and is never the place to edit the artwork.
 
    ALWAYS SIZE IT BY HEIGHT. The mark is taller than it is wide (512x939, aspect
@@ -436,7 +436,7 @@ html { scroll-padding-top: var(--nav-h); }
 .hero-art .vessel,
 .hero-art .roots { fill: var(--arch); }
 .hero-art .liquid { fill: var(--botanical); }
-/* The trunk is a FILLED tapered shape (D27); the branches stay strokes, thinning
+/* The trunk is a FILLED tapered shape (W27); the branches stay strokes, thinning
    as they go out.
 
    The widths are CLASSES, not `stroke-width` attributes in the markup. An SVG
@@ -607,7 +607,7 @@ html { scroll-padding-top: var(--nav-h); }
    Default state is VISIBLE. The hidden-then-reveal state applies only under
    `html.js`, set by an inline snippet in <head>. Without JS the class is never
    added, so every .reveal element renders normally instead of the page coming
-   up blank — R-008: the page must read and function with JavaScript disabled. */
+   up blank — WR-008: the page must read and function with JavaScript disabled. */
 .reveal { opacity: 1; transform: none; }
 .js .reveal {
   opacity: 0;
