@@ -1,14 +1,17 @@
 User-agent: *
 Allow: /
 
-# Every tracked file is served at the live domain (D2) — /CLAUDE.md, /status.md,
-# /decisions.md and the rest all return 200, and there is no build step to hide
-# them (D1). This stops crawlers fetching them. It does NOT make them private:
-# they stay reachable to anyone with the URL, which is OB-5's actual question.
-# A disallowed URL can still be listed by Google if something external links to
-# it — without content, since the file is never fetched. That is the ceiling here;
-# a .md file cannot carry a robots meta tag, and X-Robots-Tag needs headers we
-# do not control on Pages.
+# Every tracked file in this repo is served at the live domain (W2), and there is
+# no build step to hide one (W1). Since W29 the only Markdown left here is
+# CLAUDE.md, README.md and SECURITY.md — all three deliberately public. The
+# internal docs that used to sit beside them moved to the private company repo.
+# This line stays anyway: it costs nothing, it still covers the three stubs, and
+# the constraint it encodes has not changed.
+#
+# It suppresses *fetching*, not privacy. A disallowed URL can still be listed by
+# Google if something external links to it — without content, since the file is
+# never fetched. That is the ceiling here: a .md file cannot carry a robots meta
+# tag, and X-Robots-Tag needs response headers we do not control on Pages.
 #
 # `*` and `$` are the Google/Bing wildcard extensions, not original robots.txt
 # syntax. Crawlers that ignore them fall back to Allow: / and fetch as before.

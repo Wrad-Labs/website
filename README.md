@@ -12,25 +12,35 @@ Static corporate site for [www.wradlabs.com](https://www.wradlabs.com), hosted o
 website/
 ├── index.html              # Single-page site (hero, ventures, contact)
 ├── privacy.html            # Privacy policy
-├── 404.html · robots.txt · sitemap.xml
+├── 404.html · robots.txt · sitemap.xml · favicon.ico
 ├── CNAME                   # Custom domain for GitHub Pages (www.wradlabs.com)
 ├── .nojekyll               # Serve files as-is (skip Jekyll processing)
-├── docs/INDEX.md           # Doc map / memory-model entry point (start here)
 └── assets/
     ├── css/style.css       # All styles (design tokens at the top)
-    ├── js/script.js        # Nav, scroll reveal, hero canvas, contact form
-    └── images/             # Logo + tree backdrop
+    ├── js/script.js        # Nav, scroll reveal, contact form
+    ├── fonts/              # Self-hosted woff2 + SIL OFL licences
+    └── images/             # Brand assets (derived copies — see below)
 ```
 
-Working in this repo? Read [`docs/INDEX.md`](docs/INDEX.md) first — it maps every
-doc and explains the docs-as-memory model this project runs on.
+**No build step, no framework, no backend.** Hand-written HTML/CSS/vanilla JS. What is
+committed is what ships.
+
+## Working on this repo
+
+Read [`CLAUDE.md`](CLAUDE.md) first — it carries the non-negotiables and the change
+tiers. The full operating manual, decision log, compiled rules and current status live
+in the private `Wrad-Labs/company` repo under `website/`; this repo holds only what the
+site serves.
+
+Brand assets under `assets/images/` are **derived copies** of the corporate mark, whose
+source is `brand/` in that same private repo. Never edit the artwork here.
 
 ## Hosting
 
 - **GitHub Pages**, deploying from the `main` branch, root folder.
 - Custom domain `www.wradlabs.com` (see `CNAME`); apex `wradlabs.com` redirects to `www`.
-  DNS and registrar detail is deliberately not in tracked files (R-003) — it lives in
-  the untracked `OPERATIONS.local.md`.
+  DNS and registrar detail is deliberately not in tracked files — it lives in the
+  untracked `OPERATIONS.local.md`.
 - Pushing to `main` redeploys the site automatically (allow a minute or two).
 
 ## Local preview
@@ -50,3 +60,4 @@ python -m http.server 8000
   the privacy disclosure in `privacy.html`.
 - Email on `@wradlabs.com` runs on Google Workspace and is configured off-repo;
   nothing in this repository affects it.
+- Security issues: see [`SECURITY.md`](SECURITY.md).
