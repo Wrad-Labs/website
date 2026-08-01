@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Content-Security-Policy (D25/R-025). Must come BEFORE anything it governs — it applies
+<!-- Content-Security-Policy (W25/WR-025). Must come BEFORE anything it governs — it applies
      from the point the parser reaches it, so it sits above the preloads, the JSON-LD and
      the inline script.
 
@@ -25,7 +25,7 @@
      What a <meta> CSP cannot express: frame-ancestors, report-uri, sandbox. Clickjacking
      protection would need a real response header, which GitHub Pages does not let us set.
 
-     static.cloudflareinsights.com is Cloudflare's Web Analytics beacon (D24), injected at
+     static.cloudflareinsights.com is Cloudflare's Web Analytics beacon (W24), injected at
      the edge and in no commit. Without it here the CSP silently kills analytics. Its
      measurements POST to /cdn-cgi/rum, which is SAME-ORIGIN — verified by intercepting
      sendBeacon, not assumed — so connect-src needs no addition. Guessing would have
@@ -74,7 +74,7 @@
   "description": "Wrad Labs is an independent venture studio. We build commercial technology with the long-term goal of creating public good."
 }
 </script>
-<!-- Fonts are self-hosted (D23/R-023) — no fonts.googleapis.com, no preconnect,
+<!-- Fonts are self-hosted (W23/WR-023) — no fonts.googleapis.com, no preconnect,
      and no third-party request on page load. The @font-face blocks are at the top
      of style.css. Preload the two LATIN files only: they are what a reader of this
      page needs, and preloading them removes the round-trip that `display: swap`
@@ -88,18 +88,18 @@
      max-age=14400, so a returning visitor can hold NEW markup against 4-hour-old
      styles — and any release that renames a class then renders unstyled. Changing
      this query changes the URL, so the browser fetches the new CSS immediately.
-     BUMP IT WHENEVER SELECTORS CHANGE, in all three pages. (AQ-14) -->
+     BUMP IT WHENEVER SELECTORS CHANGE, in all three pages. (W-AQ-14) -->
 <link rel="stylesheet" href="assets/css/style.css?v=7">
 <!-- Marks JS as available so the scroll-reveal animation can hide elements before
      revealing them. Without JS this never runs, the .reveal defaults stay visible,
-     and the page reads normally (R-008). Runs in <head> to avoid a content flash. -->
+     and the page reads normally (WR-008). Runs in <head> to avoid a content flash. -->
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
 <!-- First tab stop on the page: lets a keyboard or screen-reader user jump the
      nav instead of tabbing through it on every page. Visually hidden until it
-     takes focus, then it appears over the nav (R-010). -->
+     takes focus, then it appears over the nav (WR-010). -->
 <a class="skip-link" href="#main">Skip to content</a>
 
 <!-- NAV -->
@@ -170,7 +170,8 @@
         <!-- The whole Optants tile is the link. One <a>, so there is a single tab
              stop and a single hit target; the arrow is the affordance and the
              hover/focus states are on the card itself. The logo is Optants' own,
-             copied from its repo — see docs/ARCHITECTURE.md § Brand assets. -->
+             copied from its repo — see company/website/docs/ARCHITECTURE.md
+             § Brand assets, in the private repo (W29). -->
         <a class="card card-link reveal" href="https://optants.com">
           <h3 class="card-brand">
             <img src="assets/images/optants-logo.svg" width="1054" height="248" alt="Optants">
@@ -203,8 +204,8 @@
 
            email_off: Cloudflare's Email Address Obfuscation rewrites mailto links at the
            edge into "[email protected]" behind a JS-only /cdn-cgi/ decoder. That breaks
-           R-008 (the page must read and function with JS off) and is not what the design
-           shows. See D17. -->
+           WR-008 (the page must read and function with JS off) and is not what the design
+           shows. See W17. -->
       <div class="contact-head reveal">
         <p class="eyebrow">Contact</p>
         <h2>Let's build something worth leaving behind.</h2>
