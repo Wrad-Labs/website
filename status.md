@@ -111,6 +111,18 @@ Last updated: **2026-07-31**
   `apple-touch-icon.png`, `og.png` (1200×630, so `twitter:card` is `summary_large_image`),
   and `icon-512.png` for the JSON-LD `logo`. The old 317 kB `logo.png` did all of those
   jobs at once and is deleted.
+- **All three pages carry an identical four-line icon block**, absolute-pathed, as of
+  2026-07-31 — and it now **declares `/favicon.ico` instead of leaving it to root
+  discovery**. It was always served and always current; it was simply in no `<link>`, so a
+  crawler reading the homepage's markup and a crawler fetching the bare root were looking
+  at the same file by coincidence rather than by statement. `index.html` had also been the
+  odd page out with relative `assets/…` hrefs and its `apple-touch-icon` stranded twelve
+  lines below the other icons; `404.html` declared no `apple-touch-icon` at all.
+- **Every icon this site serves is verified byte-identical to `brand/` upstream**
+  (2026-07-31, by hash): `favicon.svg`, `favicon-48.png`, `apple-touch-icon.png`,
+  `icon-512.png`, `og.png`, `mark.svg`, `logo-stacked.svg` and the root `favicon.ico` —
+  which was **also compared against the live domain** and matches. So a stale logo anywhere
+  is a *remote cache*, not a stale asset here. That distinction is OB-10.
 - **Two drawings of the mark, and the medium picks (upstream C11 / `R-003`).** Every
   **square raster icon** here is the **small mark** — the master's own vial filled solid
   with the tendrils clipped off, derived from the master rather than redrawn; `mark.svg` in the
@@ -235,7 +247,7 @@ development live in the private `company` repo (D8/R-012).
 | OB-5 | **Confirm tracked-file exposure is acceptable.** `CLAUDE.md`, `README.md`, `decisions.md` and `status.md` all return 200 at the live domain. **The available mitigation has now shipped** (AQ-10, 2026-07-31): `robots.txt` disallows `/*.md$`, so compliant crawlers stop fetching them. It does **not** make them private and never could — full suppression needs a Jekyll build, which D1 rules out, and a `.md` file can carry neither a robots meta tag nor an `X-Robots-Tag` on Pages. So this is now purely the owner's question: **accept that these files are reachable to anyone with the URL, or reopen D1/D2.** Nothing further an agent can do. Carried from WORKPLAN P0. | 🔴 3 |
 | OB-6 | **Content: replace aspirational copy with proof** as products, team, or case studies exist. Carried from WORKPLAN P4. | 🟡 2 |
 | OB-8 | **Annual inquiry sweep — delete contact-mailbox mail older than 24 months (R-018).** **One mailbox**, reached by both `hello@` and `support@` as aliases (owner-confirmed 2026-07-31), so the sweep scope is settled. First mandatory deletion due **2028-07** (form live since 2026-07-04); run it annually from 2027-07 so nothing ages past the published figure. Mailbox-side action only — no agent can do this. If the sweep lapses, `privacy.html` must change, not the practice. | 🔴 3 |
-| OB-10 | **Force the social platforms to re-scrape the share card.** **Now unblocked and worth doing** — `og.png` was re-cut to Canopy on 2026-07-31 (leaf-green rule, zero terracotta), so a re-scrape finally publishes the right card. Each platform caches the *old* image against the URL and will keep serving it — nothing in this repo can clear those caches, and they need a signed-in account. **LinkedIn:** open `https://www.linkedin.com/post-inspector/`, paste `https://www.wradlabs.com/`, click **Inspect** — it refetches on every run. **Facebook/Meta:** `https://developers.facebook.com/tools/debug/`, paste the URL, click **Scrape Again**. **X/Twitter:** no public validator remains; it refreshes on its own within about a week. **Verify:** each tool previews the card it now holds — you want the flask on off-white with a terracotta rule, not the old tree glyph. **Reverse:** nothing to undo; re-scraping only re-reads what the site already serves. | 🔴 3 |
+| OB-10 | **Refresh the logo Google is still showing.** **Rescoped 2026-07-31** — this was a LinkedIn/Facebook re-scrape playbook, and there are no accounts on either, so those caches are moot and the playbook is retired. The old mark survives in exactly two places, both Google's: the favicon beside search results, and Search Console's property branding. They are **separate caches with separate lifetimes and no purge endpoint** — nothing in this repo reaches them, and every asset this site serves is already Canopy and verified byte-identical to `brand/` (see **Now**). **Do, once:** Search Console → **URL Inspection** → paste `https://www.wradlabs.com/` → **Test live URL** → **Request Indexing**. Repeating it does not speed anything up. **Verify:** run a `site:wradlabs.com` search and look at the icon beside the result — you want the flask, not the old tree glyph. **Then wait:** days to a couple of weeks on Google's own re-crawl, and Search Console's branding may lag search itself. **Reverse:** nothing to undo — requesting indexing only asks Google to re-read what the site already serves. | 🔴 3 |
 
 ### Agent queue — ready to pick up
 
