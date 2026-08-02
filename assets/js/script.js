@@ -10,15 +10,25 @@ function updateNav() {
 updateNav();
 window.addEventListener('scroll', updateNav, { passive: true });
 
+function closeNav() {
+  navMobile.classList.remove('open');
+  navToggle.setAttribute('aria-expanded', 'false');
+}
+
 navToggle.addEventListener('click', () => {
   const open = navMobile.classList.toggle('open');
   navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
 });
 navMobile.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => {
-    navMobile.classList.remove('open');
-    navToggle.setAttribute('aria-expanded', 'false');
-  });
+  a.addEventListener('click', closeNav);
+});
+// Escape closes the open menu and puts focus back on the button that opened it.
+// Without the focus move, dismissing the menu leaves focus on a link that is now
+// display:none and the next Tab restarts from the top of the document.
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape' || !navMobile.classList.contains('open')) return;
+  closeNav();
+  navToggle.focus();
 });
 
 // ============ SCROLL REVEAL ============
@@ -32,6 +42,13 @@ const revealObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.15 });
 revealItems.forEach(el => revealObserver.observe(el));
+
+// The reveal is running — release the CSS rescue in style.css § SCROLL REVEAL,
+// which otherwise forces every .reveal element visible at 1.5s. This line belongs
+// HERE and not at the top of the file: it has to mean "the observer is wired",
+// not "this file started executing". Anything above that throws leaves the class
+// unset, and the page recovers on its own instead of staying blank.
+document.documentElement.classList.add('js-ready');
 
 // ============ CONTACT FORM (Formspree — static, no backend) ============
 // Progressive enhancement: with JS off, the form does a native POST to Formspree
