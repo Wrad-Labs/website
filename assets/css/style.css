@@ -625,8 +625,7 @@ html { scroll-padding-top: var(--nav-h); }
    viewport; that is fine and deliberate, because `min-height` lets it scroll rather
    than clip (WR-021). */
 .contact .container.narrow { max-width: 780px; }
-.contact-head { text-align: center; margin-bottom: 22px; }
-.contact-head .eyebrow { margin-bottom: 12px; }
+.contact-head { text-align: center; margin-bottom: 18px; }
 .contact-head h2 { margin-bottom: 14px; }
 /* `margin: 0 auto` is doing the centring, not `text-align` — the paragraph is capped
    at 620px by `.body-lg`, so without auto margins the centred TEXT would still sit in
@@ -647,9 +646,21 @@ html { scroll-padding-top: var(--nav-h); }
 /* Capped narrower than the container holding it — see the note above. Full-width
    inputs at 760 read as a page-wide form; 620 keeps it a compact block under a
    centred invitation, and gives the Name/Email row two ~300px columns. */
-.contact-form { display: flex; flex-direction: column; gap: 14px; max-width: 620px; margin-inline: auto; width: 100%; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.contact-form { display: flex; flex-direction: column; gap: 16px; max-width: 620px; margin-inline: auto; width: 100%; }
+/* TWO COLUMNS, and the reason is height, not fashion. Stacked, this form's three
+   fields ran 317px and the section needed 639px of viewport; beside each other they
+   run 275 and it needs 573. Name and Email stack on the left, Message takes the right
+   column and stretches to match them — so the message box gets TALLER (134 against
+   85) while the form gets shorter. */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-col { display: flex; flex-direction: column; gap: 12px; }
 .form-field { display: flex; flex-direction: column; gap: 8px; }
+/* The stretch. The grid row is as tall as the left column, the field fills it, and
+   `flex: 1` hands the leftover to the textarea. `min-height: 0` is required: a flex
+   item's default `min-height: auto` refuses to shrink below its `rows` attribute, so
+   without it a 3-row textarea would push the row taller instead of filling it. */
+.form-field-message { min-height: 0; }
+.form-field-message textarea { flex: 1; min-height: 0; }
 .form-field label { font-size: 0.85rem; color: var(--ink-muted); font-weight: 500; }
 .form-field input, .form-field textarea {
   background: var(--surface);
@@ -730,7 +741,12 @@ html { scroll-padding-top: var(--nav-h); }
   .nav-links { display: none; }
   .nav-toggle { display: flex; }
   .nav-mobile.open { display: flex; }
-  .form-row { grid-template-columns: 1fr; }
+  /* One column. The section is already taller than the viewport at this width and
+     scrolls, so the height the two-column layout bought is not needed — and two
+     ~150px columns would be. The message box goes back to its `rows` height, which
+     is what `min-height: 0` and `flex: 1` leave it at once nothing is stretching. */
+  .form-grid { grid-template-columns: 1fr; }
+  .form-field-message textarea { flex: none; }
   .hero-art { display: none; }
   /* The art is gone, so the column may widen — but NOT to the full container. At
      `none` the headline ran to a single 636px line above a 390px paragraph, which
@@ -753,7 +769,19 @@ html { scroll-padding-top: var(--nav-h); }
 /* A section can only centre what fits. Below roughly a landscape phone, let the
    sections size to their content instead of forcing a viewport height that the
    copy immediately overflows. */
-@media (max-height: 620px) {
+/* THE THRESHOLD TRACKS THE TALLEST SECTION, and that is #contact at 602px — its
+   content is 450 plus 80 of padding plus the 72 the nav takes. Above this, every
+   section lands as a full page; at or below it there is no viewport height left to
+   centre in, so they size to their content and the page simply scrolls. It was 620
+   while contact needed 673 and was being clipped, which is the wrong way round: the
+   escape was firing later than the failure it exists to prevent. **Re-measure this
+   number whenever the contact section's height changes** — it is the only section
+   whose height does not shrink with the viewport (the hero's art is height-clamped,
+   and ventures is short). **601 is 602 minus one** — deliberately, so the escape
+   takes over on exactly the heights the full-viewport rule cannot serve and there is
+   no gap between the two regimes. At 600 there was one: a 601px viewport kept
+   `min-height` and overflowed by a pixel. */
+@media (max-height: 601px) {
   /* `.hero` too, or the one section with its own min-height keeps forcing a
      viewport it cannot fill. Paddings are inherited from the base rules. */
   section, .hero { min-height: auto; }
