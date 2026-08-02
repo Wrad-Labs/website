@@ -214,15 +214,37 @@ a { color: inherit; text-decoration: none; }
    stays first as the fallback for browsers without the newer units. */
 section {
   position: relative;
-  min-height: 100vh;
-  min-height: 100svh;
-  padding: calc(var(--nav-h) + 32px) 0 48px;
+  /* THE NAV IS RESERVED ONCE, HERE, AND NOT AGAIN IN THE PADDING. Every section
+     below the first is reached by an anchor, and `scroll-padding-top` already parks
+     its top edge at `var(--nav-h)`. The old `padding: calc(var(--nav-h) + 32px)`
+     reserved the bar a SECOND time, and the two failures that produced are the ones
+     this page was reported for: a 100svh section landing at y=72 ends 72px below the
+     fold, so the bottom of every anchored section was cut off; and its content,
+     centred inside padding that assumed the nav was still overlapping, sat ~100px
+     lower than the space it was centred in. Subtracting the bar from the height
+     instead fixes both, and makes the section end exactly at the bottom of the
+     screen. */
+  min-height: calc(100vh - var(--nav-h));
+  min-height: calc(100svh - var(--nav-h));
+  padding: 32px 0 48px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
+/* The hero is the exception, and it is why the rule above is written as a
+   subtraction rather than just deleting the padding. It sits at the TOP of the
+   document, underneath the fixed nav rather than below it, and an anchor to `#home`
+   clamps at scrollY 0 and never gets the scroll-padding offset. So it takes the full
+   viewport and reserves the bar in its own padding — which is what puts the divider
+   beneath it exactly at the bottom of the screen instead of short of it. */
+.hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: calc(var(--nav-h) + 32px);
+}
 section + section { border-top: 1px solid var(--line); }
-/* Anchor jumps land below the nav rather than under it. */
+/* Anchor jumps land below the nav rather than under it. Paired with the height rule
+   above — change one and the other has to move. */
 html { scroll-padding-top: var(--nav-h); }
 
 /* ============ SKIP LINK ============
@@ -582,10 +604,34 @@ html { scroll-padding-top: var(--nav-h); }
 
 /* ============ CONTACT ============
    Three tiers with real space between them — intro, direct address, form —
-   instead of one undifferentiated stack. */
-.contact-head { margin-bottom: 32px; }
-.contact-head h2 { margin-bottom: 18px; }
-.contact-head .body-lg { margin: 0; }
+   instead of one undifferentiated stack.
+
+   CENTRED, AND IT HAS TO FIT ONE SCREEN. The section gets `100svh - --nav-h` less
+   64px of padding, which on a 717px-tall laptop is 565px of content. The old
+   left-aligned version measured 725 and overflowed by 185, which is why the form was
+   being cut off. The budget is met by four things together, none of which is
+   cosmetic: the Organization field is gone (−93 with its row gap), the message box
+   is 3 rows rather than 4 (−24), the form's row gap is 14 rather than 18, and the
+   head's internal margins are tightened. Add a field back and it will not fit.
+
+   THE HEAD IS WIDER THAN THE FORM ON PURPOSE, and it is the largest single saving
+   here. "Let's build something worth leaving behind." sets 706px on one line; in the
+   720px container it was inheriting, it wrapped to two and cost 43px — a third of
+   the overflow — for a heading that wants to be one line anyway. So the container
+   carries the head at 780 and the form is capped at 620 inside it. **780 is 706 plus
+   the container's own 64px of padding, plus 10 to spare** — 760 was tried first and
+   left the heading ten pixels short of fitting, which just wraps it again with no
+   warning. Below ~790px wide it wraps for real and the section grows past the
+   viewport; that is fine and deliberate, because `min-height` lets it scroll rather
+   than clip (WR-021). */
+.contact .container.narrow { max-width: 780px; }
+.contact-head { text-align: center; margin-bottom: 22px; }
+.contact-head .eyebrow { margin-bottom: 12px; }
+.contact-head h2 { margin-bottom: 14px; }
+/* `margin: 0 auto` is doing the centring, not `text-align` — the paragraph is capped
+   at 620px by `.body-lg`, so without auto margins the centred TEXT would still sit in
+   a left-aligned BOX once the container is wider than the cap. */
+.contact-head .body-lg { margin: 0 auto; max-width: 520px; }
 
 /* The address reads on from the invitation above it — same size as that copy, no
    label and no rules, just the next line. It used to be a bordered row with an
@@ -593,12 +639,15 @@ html { scroll-padding-top: var(--nav-h); }
    need. Matches `.body-lg` so the two paragraphs read as one thought. */
 .contact-email {
   font-size: 1.05rem;
-  margin: 10px 0 0;
+  margin: 8px 0 0;
 }
 .contact-email a { color: var(--accent); border-bottom: 1px solid transparent; transition: border-color .2s; }
 .contact-email a:hover { border-color: var(--accent); }
 
-.contact-form { display: flex; flex-direction: column; gap: 18px; }
+/* Capped narrower than the container holding it — see the note above. Full-width
+   inputs at 760 read as a page-wide form; 620 keeps it a compact block under a
+   centred invitation, and gives the Name/Email row two ~300px columns. */
+.contact-form { display: flex; flex-direction: column; gap: 14px; max-width: 620px; margin-inline: auto; width: 100%; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .form-field { display: flex; flex-direction: column; gap: 8px; }
 .form-field label { font-size: 0.85rem; color: var(--ink-muted); font-weight: 500; }
@@ -618,18 +667,27 @@ html { scroll-padding-top: var(--nav-h); }
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
-/* Button + consent as one group. The form's own 18px row gap plus the status
-   note's reserved line used to put ~50px between the button and the consent
-   line; grouping them makes that gap 10px and keeps the note out of the middle. */
-.form-submit { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
-.contact-form .btn { align-self: flex-start; }
+/* Button + consent as one group. The form's own row gap plus the status note's
+   reserved line used to put ~50px between the button and the consent line; grouping
+   them makes that gap 10px and keeps the note out of the middle.
+   CENTRED now, to match the head above it. The FIELDS stay left-aligned — a centred
+   label floating over a full-width input is harder to scan, and the label has to sit
+   at the edge its input starts at. */
+.form-submit { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.contact-form .btn { align-self: center; }
 .contact-form .btn:disabled { opacity: 0.6; cursor: default; }
-.form-note { font-size: 0.85rem; color: var(--ink-muted); min-height: 1em; }
+/* `margin: 0` because the note is the last thing in the form and its old 16px
+   bottom margin was pure overflow. `min-height` stays: the line is reserved so a
+   submit result does not shift the layout under the pointer. */
+.form-note { font-size: 0.85rem; color: var(--ink-muted); min-height: 1em; margin: 0; text-align: center; }
 .form-note.success { color: var(--success); }
 .form-note.error { color: var(--danger); }
 /* Honeypot spam trap — kept out of view and out of the tab order. */
 .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-.form-consent { font-size: 0.8rem; color: var(--ink-muted); margin: 0; }
+/* Centred to match the button above it. It matters on narrow screens, where this
+   line wraps: `.form-submit` centres the BOX, so without this the text inside it
+   would still set left-aligned and read as misplaced rather than deliberate. */
+.form-consent { font-size: 0.8rem; color: var(--ink-muted); margin: 0; text-align: center; }
 .form-consent a { color: var(--accent); text-decoration: underline; }
 
 /* ============ FOOTER ============
@@ -683,8 +741,10 @@ html { scroll-padding-top: var(--nav-h); }
   .hero-sub { max-width: none; }
 }
 @media (max-width: 560px) {
-  /* Still a full page, just with tighter gutters. */
-  section { padding: calc(var(--nav-h) + 24px) 0 48px; }
+  /* Still a full page, just with tighter gutters. Both halves of the height pair
+     step down together — see the note on `section`. */
+  section { padding: 24px 0 48px; }
+  .hero { padding-top: calc(var(--nav-h) + 24px); }
   .card-grid { grid-template-columns: 1fr; }
   .container, .hero-inner { padding: 0 20px; }
   .card { padding: 26px; }
@@ -694,7 +754,10 @@ html { scroll-padding-top: var(--nav-h); }
    sections size to their content instead of forcing a viewport height that the
    copy immediately overflows. */
 @media (max-height: 620px) {
-  section { min-height: auto; padding: calc(var(--nav-h) + 32px) 0 56px; }
+  /* `.hero` too, or the one section with its own min-height keeps forcing a
+     viewport it cannot fill. Paddings are inherited from the base rules. */
+  section, .hero { min-height: auto; }
+  section { padding-bottom: 56px; }
 }
 
 /* ============ REDUCED MOTION ============ */

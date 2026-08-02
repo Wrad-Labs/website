@@ -89,7 +89,7 @@
      styles — and any release that renames a class then renders unstyled. Changing
      this query changes the URL, so the browser fetches the new CSS immediately.
      BUMP IT WHENEVER SELECTORS CHANGE, in all three pages. (W-AQ-14) -->
-<link rel="stylesheet" href="assets/css/style.css?v=8">
+<link rel="stylesheet" href="assets/css/style.css?v=9">
 <!-- Marks JS as available so the scroll-reveal animation can hide elements before
      revealing them. Without JS this never runs, the .reveal defaults stay visible,
      and the page reads normally (WR-008). Runs in <head> to avoid a content flash. -->
@@ -225,13 +225,13 @@
             <input type="email" id="email" name="email" required>
           </div>
         </div>
-        <div class="form-field">
-          <label for="organization">Organization</label>
-          <input type="text" id="organization" name="organization">
-        </div>
+        <!-- Organization was removed 2026-08-02 (W32): it was the only optional field,
+             it fed nothing, and it cost a whole row on a form that has to fit one
+             screen. `privacy.html`'s "What we collect" list is the paired edit —
+             WR-007 requires it to name every field this form actually collects. -->
         <div class="form-field">
           <label for="message">Message</label>
-          <textarea id="message" name="message" rows="4" required></textarea>
+          <textarea id="message" name="message" rows="3" required></textarea>
         </div>
         <!-- Honeypot: hidden from humans; bots that fill it are silently dropped by Formspree. -->
         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp-field">
