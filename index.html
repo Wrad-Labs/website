@@ -206,8 +206,10 @@
            edge into "[email protected]" behind a JS-only /cdn-cgi/ decoder. That breaks
            WR-008 (the page must read and function with JS off) and is not what the design
            shows. See W17. -->
+      <!-- No "CONTACT" eyebrow here, unlike #ventures. The nav link, the heading and
+           the form all say what this section is; the eyebrow was labelling a page that
+           announces itself, and it cost 31px on a section that has to fit one screen. -->
       <div class="contact-head reveal">
-        <p class="eyebrow">Contact</p>
         <h2>Let's build something worth leaving behind.</h2>
         <p class="body-lg">Whether you're interested in collaboration, partnerships, or learning more about Wrad Labs, we'd love to hear from you.</p>
         <p class="contact-email"><!--email_off--><a href="mailto:hello@wradlabs.com">hello@wradlabs.com</a><!--/email_off--></p>
@@ -215,23 +217,31 @@
 
       <!-- Submits to Formspree (endpoint mvzjloro → the hello@ mailbox). -->
       <form class="contact-form reveal" id="contactForm" action="https://formspree.io/f/mvzjloro" method="POST">
-        <div class="form-row">
-          <div class="form-field">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required>
+        <!-- Two columns: Name and Email stack on the left, Message fills the right at
+             the full height of that stack. This is a layout change only — the DOM order
+             is still name → email → message, so the tab order and the order a screen
+             reader announces them are unchanged. -->
+        <div class="form-grid">
+          <div class="form-col">
+            <div class="form-field">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required>
+            </div>
           </div>
-          <div class="form-field">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
+          <!-- Organization was removed 2026-08-02 (W32): it was the only optional field,
+               it fed nothing, and it cost a whole row on a form that has to fit one
+               screen. `privacy.html`'s "What we collect" list is the paired edit —
+               WR-007 requires it to name every field this form actually collects. -->
+          <div class="form-field form-field-message">
+            <label for="message">Message</label>
+            <!-- `rows` is the no-CSS fallback; the stylesheet stretches this to the
+                 height of the Name/Email stack beside it. -->
+            <textarea id="message" name="message" rows="3" required></textarea>
           </div>
-        </div>
-        <!-- Organization was removed 2026-08-02 (W32): it was the only optional field,
-             it fed nothing, and it cost a whole row on a form that has to fit one
-             screen. `privacy.html`'s "What we collect" list is the paired edit —
-             WR-007 requires it to name every field this form actually collects. -->
-        <div class="form-field">
-          <label for="message">Message</label>
-          <textarea id="message" name="message" rows="3" required></textarea>
         </div>
         <!-- Honeypot: hidden from humans; bots that fill it are silently dropped by Formspree. -->
         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp-field">
