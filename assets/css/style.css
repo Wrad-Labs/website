@@ -146,16 +146,25 @@
   --nav-h: 72px;
 
   --container: 1160px;
-  /* Width of the hero's text column. Declared here because two rules depend on
-     the SAME number: `.hero-content` is capped by it, and `.hero-art` starts at
-     it in order to centre itself in the whitespace beside the text.
 
-     NARROWED 560 → 520 to rebalance the homepage. This token does double duty:
-     it takes 40px off the text column AND hands those 40px to the whitespace the
-     art centres in, so the art can grow without colliding with the copy. Raising
-     the art's height alone would not have worked — width follows height from the
-     viewBox, and the art would have eaten into the text column. */
-  --hero-col: 520px;
+  /* The hero's own container, DELIBERATELY NARROWER than --container. The rest of
+     the page wants the full 1160; the hero is a single composition of two objects,
+     and at 1160 it spread far enough that the headline and the art read as two
+     things parked at opposite edges rather than one group. Everything the hero
+     shows now sits inside this width, centred together. */
+  --hero-max: 980px;
+  /* Width of the hero's text column — and the first of three numbers that have to
+     add up. `--hero-col + --hero-gap + the art's width` must fit inside --hero-max
+     less its 64px of padding. The art's width appears nowhere: it follows from its
+     height and the 460×600 viewBox, so changing `.hero-art`'s height spends this
+     budget too.
+
+     520 → 440 came with the container. The headline is capped so that
+     "ventures with purpose." fits this width on one line — that pairing is what
+     holds the headline to two lines instead of three, and narrowing either one
+     alone breaks it. */
+  --hero-col: 440px;
+  --hero-gap: 48px;
   --radius: 6px;
   --radius-lg: 14px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -379,22 +388,58 @@ html { scroll-padding-top: var(--nav-h); }
    the space below the nav does that job now, so the gap it left at the top of the
    page is gone. */
 .hero { overflow: hidden; }
+/* ONE CENTRED ROW. The text column and the art are flex siblings now — previously
+   the art was absolutely positioned, pinned between `left: var(--hero-col)` and
+   `right: 0` and centred in the whitespace that left over. That worked, but it tied
+   the composition's width to the page container's: the two halves could only ever
+   sit at the far edges of 1160px. As a row they are one object that a single
+   max-width can hold, and the left/right pair whose two halves had to move together
+   is gone with it.
+   Consequence worth knowing: the art no longer overflows this box vertically, so
+   `.hero-inner` is now as tall as the art and the section grows to fit it. */
 .hero-inner {
   width: 100%;               /* see the note on .container */
-  max-width: var(--container);
+  max-width: var(--hero-max);
   margin: 0 auto;
   padding: 0 32px;
-  position: relative;
+  display: flex;
+  align-items: center;
+  /* Centres the PAIR inside the container, which is not the same as centring the
+     container. `.hero-content` is capped by --hero-col and the art is `flex: none`,
+     so between 900 and 1080px — where the art steps down but the container has not
+     — the row is ~110px narrower than the box holding it. Without this the group
+     sits left-flush and the whole thing looks off-centre at exactly the widths a
+     laptop uses. */
+  justify-content: center;
+  gap: var(--hero-gap);
 }
-.hero-content { position: relative; z-index: 1; max-width: var(--hero-col); }
+/* `order` because the <svg> comes first in the markup and renders second. That was
+   already true under the absolute positioning, so this preserves the status quo
+   rather than introducing a mismatch — and the art is `aria-hidden`, so no reading
+   order changes for anyone. Moving 15kB of path data to avoid one declaration would
+   produce a diff nobody can review. */
+.hero-content { order: 1; flex: 1 1 var(--hero-col); max-width: var(--hero-col); }
 .hero-headline {
-  font-size: clamp(2.3rem, 5.2vw, 3.6rem);
+  /* Capped at 2.8rem so "ventures with purpose." fits --hero-col on one line and the
+     headline sets in TWO lines, not three. The cap and the column are a pair — see
+     the note on --hero-col. The 2rem floor does the same job at the other end and is
+     just as measured: at a 375px phone the column is 335px and "ventures with
+     purpose." sets 359px at the old 2.3rem, 336 at 2.15 and 313 at 2. Two of those
+     three are a third line. */
+  font-size: clamp(2rem, 5.2vw, 2.8rem);
   margin-bottom: 22px;
   letter-spacing: -0.025em;
+  /* Belt-and-braces. The greedy break already lands after "technology" at this
+     width; `balance` keeps it there when the column is squeezed between
+     breakpoints, and browsers without it wrap greedily to the same two lines. */
+  text-wrap: balance;
 }
 .hero-sub {
   font-size: 1.05rem;
-  max-width: 460px;
+  /* Held inside the headline's column rather than filling it, so the paragraph
+     reads as the shorter line under the larger one. Ratio kept from the old
+     460-in-520. */
+  max-width: 390px;
   margin: 0 0 34px;
 }
 .hero-actions { display: flex; gap: 26px; align-items: center; flex-wrap: wrap; }
@@ -408,26 +453,21 @@ html { scroll-padding-top: var(--nav-h); }
    viewport tall, and `min()` keeps the art inside the space left over after the
    nav and the section padding. Width follows from the viewBox.
 
-   CENTRED IN THE WHITESPACE, not pinned to the right edge. `left: var(--hero-col)`
-   starts the box where the text column ends, `right: 0` ends it at the container
-   edge, and `margin-inline: auto` centres the art between them — for an absolutely
-   positioned replaced element the width resolves from the aspect ratio first, then
-   the two auto margins split what is left. Both offsets must move together: pinning
-   one and leaving the other is what put the art against the edge before. */
+   It is a FLEX ITEM now, sitting beside the text rather than floating over the
+   whitespace — see the note on `.hero-inner`. `flex: 0 0 auto` because the height
+   is the size that was chosen; letting flex shrink it would silently letterbox the
+   drawing inside a box the wrong shape.
+
+   700 → 520 with the narrower container. This is the third number in the budget
+   described on --hero-col: at 520 tall the art is 399 wide, which leaves the 440px
+   text column and the 48px gap 29px of slack inside --hero-max. Raise the height
+   and the text column is what gives way — and the headline goes back to three
+   lines. */
 .hero-art {
-  position: absolute;
-  left: var(--hero-col);
-  right: 0;
-  margin-inline: auto;
-  top: 50%;
-  transform: translateY(-50%);
-  /* Raised 600 → 700 and the reserved padding cut 140 → 110, so the art claims
-     more of the page. Paired with the narrowed --hero-col: growing this alone
-     would push the art into the text column, because width follows height. */
-  height: min(700px, calc(100vh - var(--nav-h) - 110px));
+  order: 2;
+  flex: 0 0 auto;
+  height: min(520px, calc(100vh - var(--nav-h) - 190px));
   width: auto;
-  max-width: 48%;
-  z-index: 0;
   pointer-events: none;
 }
 /* Two tones only, same pair the arch used: the mass in --arch, the details that
@@ -619,10 +659,12 @@ html { scroll-padding-top: var(--nav-h); }
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1080px) {
   /* Smaller, but still whole — the shape is an object now, not a backdrop.
-     Height-driven, to stay consistent with the base rule. `right` is left alone:
-     overriding one of the two offsets would break the centring above. */
+     Height-driven, to stay consistent with the base rule. It has to step down
+     before the container does: between here and the 900px breakpoint the row is
+     narrower than --hero-max, and the art is what has to give back the width, or
+     the text column is squeezed and the headline wraps to three lines. */
   .hero-art {
-    height: min(460px, calc(100vh - var(--nav-h) - 160px));
+    height: min(440px, calc(100vh - var(--nav-h) - 200px));
     opacity: 0.9;
   }
 }
@@ -632,7 +674,13 @@ html { scroll-padding-top: var(--nav-h); }
   .nav-mobile.open { display: flex; }
   .form-row { grid-template-columns: 1fr; }
   .hero-art { display: none; }
-  .hero-content { max-width: none; }
+  /* The art is gone, so the column may widen — but NOT to the full container. At
+     `none` the headline ran to a single 636px line above a 390px paragraph, which
+     read as two unrelated blocks. 560 keeps it at two lines all the way down to a
+     375px phone, and the sub then fills the column instead of being inset inside
+     it. Still centred, by the rule on `.hero-inner`. */
+  .hero-content { max-width: 560px; }
+  .hero-sub { max-width: none; }
 }
 @media (max-width: 560px) {
   /* Still a full page, just with tighter gutters. */
