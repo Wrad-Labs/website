@@ -89,7 +89,7 @@
      styles — and any release that renames a class then renders unstyled. Changing
      this query changes the URL, so the browser fetches the new CSS immediately.
      BUMP IT WHENEVER SELECTORS CHANGE, in all three pages. (W-AQ-14) -->
-<link rel="stylesheet" href="assets/css/style.css?v=8">
+<link rel="stylesheet" href="assets/css/style.css?v=9">
 <!-- Marks JS as available so the scroll-reveal animation can hide elements before
      revealing them. Without JS this never runs, the .reveal defaults stay visible,
      and the page reads normally (WR-008). Runs in <head> to avoid a content flash. -->
@@ -198,26 +198,22 @@
   <!-- SECTION 3: CONTACT -->
   <section id="contact" class="contact">
     <div class="container narrow">
-      <!-- Two tiers: the intro, with the address reading straight on from it, then
-           the form. The address is deliberately NOT a labelled row set off by rules —
-           it is the last line of the invitation, not a second channel announced.
-
-           email_off: Cloudflare's Email Address Obfuscation rewrites mailto links at the
-           edge into "[email protected]" behind a JS-only /cdn-cgi/ decoder. That breaks
-           WR-008 (the page must read and function with JS off) and is not what the design
-           shows. See W17. -->
+      <!-- No "CONTACT" eyebrow here, unlike #ventures. The nav link, the heading and
+           the form all say what this section is; the eyebrow was labelling a page that
+           announces itself, and it cost 31px on a section that has to fit one screen.
+           The address is not here either — it moved beside the Send button, where it
+           reads as the alternative to the form rather than a second channel announced
+           above it. -->
       <div class="contact-head reveal">
-        <p class="eyebrow">Contact</p>
         <h2>Let's build something worth leaving behind.</h2>
         <p class="body-lg">Whether you're interested in collaboration, partnerships, or learning more about Wrad Labs, we'd love to hear from you.</p>
-        <p class="contact-email"><!--email_off--><a href="mailto:hello@wradlabs.com">hello@wradlabs.com</a><!--/email_off--></p>
       </div>
 
       <!-- Submits to Formspree (endpoint mvzjloro → the hello@ mailbox). -->
       <form class="contact-form reveal" id="contactForm" action="https://formspree.io/f/mvzjloro" method="POST">
         <div class="form-row">
           <div class="form-field">
-            <label for="name">Name</label>
+            <label for="name">Full name</label>
             <input type="text" id="name" name="name" required>
           </div>
           <div class="form-field">
@@ -225,24 +221,32 @@
             <input type="email" id="email" name="email" required>
           </div>
         </div>
-        <div class="form-field">
-          <label for="organization">Organization</label>
-          <input type="text" id="organization" name="organization">
-        </div>
+        <!-- Organization was removed 2026-08-02 (W32): it was the only optional field,
+             it fed nothing, and it cost a whole row on a form that has to fit one
+             screen. `privacy.html`'s "What we collect" list is the paired edit —
+             WR-007 requires it to name every field this form actually collects. -->
         <div class="form-field">
           <label for="message">Message</label>
-          <textarea id="message" name="message" rows="4" required></textarea>
+          <textarea id="message" name="message" rows="3" required></textarea>
         </div>
         <!-- Honeypot: hidden from humans; bots that fill it are silently dropped by Formspree. -->
         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp-field">
         <!-- Subject line of the notification email Formspree sends you. -->
         <input type="hidden" name="_subject" value="New contact from wradlabs.com">
-        <!-- Button and consent are one group so the consent line sits directly under
-             the button, inside the form's 18px row gap rather than a row below it.
-             The status note stays after them — it is feedback, not part of the CTA. -->
+        <!-- Button and address on ONE row: the address is the alternative to the form,
+             so it reads best beside the thing it is an alternative to. It is also the
+             only place the address appears on this page now.
+
+             email_off: Cloudflare's Email Address Obfuscation rewrites mailto links at
+             the edge into "[email protected]" behind a JS-only /cdn-cgi/ decoder. That
+             breaks WR-008 (the page must read and function with JS off) and is not what
+             the design shows. See W17 / WR-019.
+
+             The consent line that used to sit under the button is gone — the Privacy
+             Policy is linked in the footer, on every page, which is where it belongs. -->
         <div class="form-submit">
           <button type="submit" class="btn btn-primary" id="contactSubmit">Send</button>
-          <p class="form-consent">By sending this message you agree to our <a href="privacy.html">Privacy Policy</a>.</p>
+          <p class="form-alt">You can also email us at <!--email_off--><a href="mailto:hello@wradlabs.com">hello@wradlabs.com</a><!--/email_off--></p>
         </div>
         <p class="form-note" id="formNote" role="status"></p>
       </form>
