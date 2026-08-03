@@ -716,6 +716,30 @@ html { scroll-padding-top: var(--nav-h); }
 }
 .js .reveal.in-view { opacity: 1; transform: translateY(0); }
 
+/* THE RESCUE. WR-008 covers JS *off*; this covers JS *half-on*, which is the
+   worse case. The inline <head> snippet adds `js` and hides every .reveal
+   element — on index.html that is the headline, the sub, both cards, the
+   contact head and the form, i.e. all of the copy. They are revealed only when
+   assets/js/script.js runs at the end of <body>. If that one request fails —
+   flaky network, a blocking extension, a bad deploy — the class is set, nothing
+   ever un-sets it, and the visitor reads an empty page.
+
+   So the hidden state is conditional on a SECOND class that only script.js can
+   set, and it is set where the observer is wired rather than at the top of the
+   file — `js-ready` means "the reveal is running", not "this file started".
+   Until it appears, the animation below fires at 1.5s and lands every element on
+   its final values, so a stalled script degrades to "the content is here without
+   the entrance effect."
+
+   1.5s is chosen to sit past a slow-but-working script and well inside the time
+   a reader would call the page broken. When script.js does run, `js-ready`
+   lands in milliseconds, this selector stops matching, and the animation is
+   removed long before its delay elapses — it costs a working page nothing. */
+@keyframes reveal-rescue { to { opacity: 1; transform: none; } }
+.js:not(.js-ready) .reveal {
+  animation: reveal-rescue 0.4s var(--ease) 1.5s forwards;
+}
+
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1080px) {
   /* Smaller, but still whole — the shape is an object now, not a backdrop.
@@ -791,4 +815,8 @@ html { scroll-padding-top: var(--nav-h); }
   }
   .card-link:hover { transform: none; }
   .js .reveal { opacity: 1; transform: none; }
+  /* Nothing is hidden here, so there is nothing to rescue — and a 0.4s fade
+     for a reader who asked for no motion is exactly what this block exists to
+     prevent. */
+  .js:not(.js-ready) .reveal { animation: none; }
 }
