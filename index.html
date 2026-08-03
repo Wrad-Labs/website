@@ -88,7 +88,11 @@
      max-age=14400, so a returning visitor can hold NEW markup against 4-hour-old
      styles — and any release that renames a class then renders unstyled. Changing
      this query changes the URL, so the browser fetches the new CSS immediately.
-     BUMP IT WHENEVER SELECTORS CHANGE, in all three pages. -->
+     BUMP IT WHENEVER SELECTORS CHANGE, in all three pages. (WT-6)
+
+     WT-6 is a compiled trigger, not a backlog row. This comment used to cite one,
+     and the row it named had never existed — backlog rows are deleted the day they
+     close, so a served file must not point at one. -->
 <link rel="stylesheet" href="/assets/css/style.css?v=10">
 <!-- Marks JS as available so the scroll-reveal animation can hide elements before
      revealing them. Without JS this never runs, the .reveal defaults stay visible,
