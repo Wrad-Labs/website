@@ -1,0 +1,12 @@
+# Wrad Labs Inc. — https://www.wradlabs.com
+# Vulnerability disclosure for this site. The full policy, including scope
+# and what is explicitly out of scope, is at https://www.wradlabs.com/SECURITY.md
+#
+# Expires is not decoration: RFC 9116 makes this file INVALID once it passes,
+# not merely stale. Renewing it is a dated backlog row (W-OB-20), not a habit.
+
+Contact: mailto:hello@wradlabs.com
+Expires: 2027-08-01T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://www.wradlabs.com/.well-known/security.txt
+Policy: https://www.wradlabs.com/SECURITY.md
