@@ -1,7 +1,7 @@
-/* ============ FONTS (self-hosted — W23 / WR-023) ============
+/* ============ FONTS (self-hosted — WS-D23 / WS-R023) ============
    These files used to come from fonts.gstatic.com. They are served from this
    origin now, which removes Google as a processor from the request path — that
-   is why `privacy.html` no longer names Google Fonts (WR-007), and why re-adding
+   is why `privacy.html` no longer names Google Fonts (WS-R007), and why re-adding
    a `fonts.googleapis.com` link would silently reintroduce a processor the
    published policy does not disclose. Don't.
 
@@ -68,13 +68,13 @@
 }
 
 /* ============ TOKENS ============
-   Declared once, referenced everywhere (WR-004 — never hardcode these values).
-   **CANOPY — the palette is LOCKED as of 2026-07-31 (W28, superseding W26).**
+   Declared once, referenced everywhere (WS-R004 — never hardcode these values).
+   **CANOPY — the palette is LOCKED as of 2026-07-31 (WS-D28, superseding WS-D26).**
 
    WHY THIS ONE. Two constraints pull against each other. It must not read as
    Optants (warm off-white #FAFAF8, teal #115E59, same body typeface — the reason
    the two sites felt like one), and it must read as a studio that builds
-   commercial products in order to fund public good. W26's Cool Stone satisfied
+   commercial products in order to fund public good. WS-D26's Cool Stone satisfied
    the first and failed the second: cool greys and an oxblood accent read austere
    and vinous, which is the opposite of generative.
 
@@ -115,7 +115,7 @@
   --on-accent: #FFFFFF;
 
   /* Status — form feedback only.
-     A GREEN ACCENT INVERTS W26'S PROBLEM. Under oxblood, --danger was the token
+     A GREEN ACCENT INVERTS WS-D26'S PROBLEM. Under oxblood, --danger was the token
      that clashed and had to move to a vermillion. Here red sits 87° from the
      accent — the largest gap available — so --danger returns to a normal dark
      red. It is --success that now needs care: it must stay green while not
@@ -394,7 +394,7 @@ html { scroll-padding-top: var(--nav-h); }
 /* ============ LOGO MARK ============
    The mark is `assets/images/mark.svg`, referenced by <img> from every page —
    ONE file, cached across the site, so swapping it means replacing that file.
-   Its source of truth is the private company repo, `brand/` (W18); this copy is
+   Its source of truth is the private company repo, `brand/` (WS-D18); this copy is
    derived and is never the place to edit the artwork.
 
    ALWAYS SIZE IT BY HEIGHT. The mark is taller than it is wide (512x939, aspect
@@ -501,7 +501,7 @@ html { scroll-padding-top: var(--nav-h); }
 .hero-art .vessel,
 .hero-art .roots { fill: var(--arch); }
 .hero-art .liquid { fill: var(--botanical); }
-/* The trunk is a FILLED tapered shape (W27); the branches stay strokes, thinning
+/* The trunk is a FILLED tapered shape (WS-D27); the branches stay strokes, thinning
    as they go out.
 
    The widths are CLASSES, not `stroke-width` attributes in the markup. An SVG
@@ -625,7 +625,7 @@ html { scroll-padding-top: var(--nav-h); }
    padding, plus 10 to spare** — 760 was tried first and left the heading ten pixels
    short of fitting, which just wraps it again with no warning. Below ~790px wide it
    wraps for real and the section grows past the viewport; that is fine and
-   deliberate, because `min-height` lets it scroll rather than clip (WR-021). */
+   deliberate, because `min-height` lets it scroll rather than clip (WS-R021). */
 .contact .container.narrow { max-width: 780px; }
 .contact-head { text-align: center; margin-bottom: 12px; }
 .contact-head h2 { margin-bottom: 10px; }
@@ -684,7 +684,7 @@ html { scroll-padding-top: var(--nav-h); }
 /* Honeypot spam trap — kept out of view and out of the tab order. */
 .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 /* "You can also email us at hello@…", sitting beside the Send button. This is the
-   ONLY place the address appears on this page now (WR-019 still applies: plain
+   ONLY place the address appears on this page now (WS-R019 still applies: plain
    readable text in both link text and href, wrapped in `<!--email_off-->`).
    Deliberately quieter than the button — it is the alternative, not the call to
    action — but the address itself takes the accent so it reads as a link. */
@@ -707,7 +707,7 @@ html { scroll-padding-top: var(--nav-h); }
    Default state is VISIBLE. The hidden-then-reveal state applies only under
    `html.js`, set by an inline snippet in <head>. Without JS the class is never
    added, so every .reveal element renders normally instead of the page coming
-   up blank — WR-008: the page must read and function with JavaScript disabled. */
+   up blank — WS-R008: the page must read and function with JavaScript disabled. */
 .reveal { opacity: 1; transform: none; }
 .js .reveal {
   opacity: 0;
@@ -716,7 +716,7 @@ html { scroll-padding-top: var(--nav-h); }
 }
 .js .reveal.in-view { opacity: 1; transform: translateY(0); }
 
-/* THE RESCUE. WR-008 covers JS *off*; this covers JS *half-on*, which is the
+/* THE RESCUE. WS-R008 covers JS *off*; this covers JS *half-on*, which is the
    worse case. The inline <head> snippet adds `js` and hides every .reveal
    element — on index.html that is the headline, the sub, both cards, the
    contact head and the form, i.e. all of the copy. They are revealed only when

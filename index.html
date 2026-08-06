@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Content-Security-Policy (W25/WR-025). Must come BEFORE anything it governs — it applies
+<!-- Content-Security-Policy (WS-D25/WS-R025). Must come BEFORE anything it governs — it applies
      from the point the parser reaches it, so it sits above the preloads, the JSON-LD and
      the inline script.
 
@@ -25,7 +25,7 @@
      What a <meta> CSP cannot express: frame-ancestors, report-uri, sandbox. Clickjacking
      protection would need a real response header, which GitHub Pages does not let us set.
 
-     static.cloudflareinsights.com is Cloudflare's Web Analytics beacon (W24), injected at
+     static.cloudflareinsights.com is Cloudflare's Web Analytics beacon (WS-D24), injected at
      the edge and in no commit. Without it here the CSP silently kills analytics. Its
      measurements POST to /cdn-cgi/rum, which is SAME-ORIGIN — verified by intercepting
      sendBeacon, not assumed — so connect-src needs no addition. Guessing would have
@@ -40,10 +40,10 @@
      browser and an explicit floor costs nothing. -->
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <!-- Tints the mobile browser toolbar to this page's own ground. THE ONE PLACE A
-     COLOUR IS HARDCODED ON THIS SITE (W36) — WR-004 forbids it everywhere else,
+     COLOUR IS HARDCODED ON THIS SITE (WS-D36) — WS-R004 forbids it everywhere else,
      and a meta tag cannot reference a custom property, so this is the value of
      --bg copied by hand. CHANGE --bg AND CHANGE THIS, in all three pages, in the
-     same commit. The palette has already lived in four places once (W28). -->
+     same commit. The palette has already lived in four places once (WS-D28). -->
 <meta name="theme-color" content="#F6F3EA">
 <title>Wrad Labs Inc. — Building technology ventures with purpose</title>
 <meta name="description" content="Wrad Labs is an independent venture studio. We build commercial technology with the long-term goal of creating public good.">
@@ -80,7 +80,7 @@
   "description": "Wrad Labs is an independent venture studio. We build commercial technology with the long-term goal of creating public good."
 }
 </script>
-<!-- Fonts are self-hosted (W23/WR-023) — no fonts.googleapis.com, no preconnect,
+<!-- Fonts are self-hosted (WS-D23/WS-R023) — no fonts.googleapis.com, no preconnect,
      and no third-party request on page load. The @font-face blocks are at the top
      of style.css. Preload the two LATIN files only: they are what a reader of this
      page needs, and preloading them removes the round-trip that `display: swap`
@@ -94,22 +94,22 @@
      max-age=14400, so a returning visitor can hold NEW markup against 4-hour-old
      styles — and any release that renames a class then renders unstyled. Changing
      this query changes the URL, so the browser fetches the new CSS immediately.
-     BUMP IT WHENEVER SELECTORS CHANGE, in all three pages. (WT-6)
+     BUMP IT WHENEVER SELECTORS CHANGE, in all three pages. (WS-T6)
 
-     WT-6 is a compiled trigger, not a backlog row. This comment used to cite one,
+     WS-T6 is a compiled trigger, not a backlog row. This comment used to cite one,
      and the row it named had never existed — backlog rows are deleted the day they
      close, so a served file must not point at one. -->
 <link rel="stylesheet" href="/assets/css/style.css?v=10">
 <!-- Marks JS as available so the scroll-reveal animation can hide elements before
      revealing them. Without JS this never runs, the .reveal defaults stay visible,
-     and the page reads normally (WR-008). Runs in <head> to avoid a content flash. -->
+     and the page reads normally (WS-R008). Runs in <head> to avoid a content flash. -->
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
 <!-- First tab stop on the page: lets a keyboard or screen-reader user jump the
      nav instead of tabbing through it on every page. Visually hidden until it
-     takes focus, then it appears over the nav (WR-010). -->
+     takes focus, then it appears over the nav (WS-R010). -->
 <a class="skip-link" href="#main">Skip to content</a>
 
 <!-- NAV -->
@@ -181,7 +181,7 @@
              stop and a single hit target; the arrow is the affordance and the
              hover/focus states are on the card itself. The logo is Optants' own,
              copied from its repo — see company/website/docs/ARCHITECTURE.md
-             § Brand assets, in the private repo (W29). -->
+             § Brand assets, in the private repo (WS-D29). -->
         <a class="card card-link reveal" href="https://optants.com">
           <h3 class="card-brand">
             <img src="assets/images/optants-logo.svg" width="1054" height="248" alt="Optants">
@@ -231,10 +231,10 @@
             <input type="email" id="email" name="email" autocomplete="email" required>
           </div>
         </div>
-        <!-- Organization was removed 2026-08-02 (W32): it was the only optional field,
+        <!-- Organization was removed 2026-08-02 (WS-D32): it was the only optional field,
              it fed nothing, and it cost a whole row on a form that has to fit one
              screen. `privacy.html`'s "What we collect" list is the paired edit —
-             WR-007 requires it to name every field this form actually collects. -->
+             WS-R007 requires it to name every field this form actually collects. -->
         <div class="form-field">
           <label for="message">Message</label>
           <textarea id="message" name="message" rows="3" required></textarea>
@@ -249,8 +249,8 @@
 
              email_off: Cloudflare's Email Address Obfuscation rewrites mailto links at
              the edge into "[email protected]" behind a JS-only /cdn-cgi/ decoder. That
-             breaks WR-008 (the page must read and function with JS off) and is not what
-             the design shows. See W17 / WR-019.
+             breaks WS-R008 (the page must read and function with JS off) and is not what
+             the design shows. See WS-D17 / WS-R019.
 
              The consent line that used to sit under the button is gone — the Privacy
              Policy is linked in the footer, on every page, which is where it belongs. -->

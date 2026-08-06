@@ -49,7 +49,7 @@ rules you must not break, and the current state of the site:
 Wrad-Labs/company → website/CLAUDE.md
                     website/docs/INDEX.md     ← the doc map, start here
                     website/status.md         ← where the site is right now
-                    website/rules/active.md   ← the constraints
+                    website/rules.md          ← the constraints
 ```
 
 The two repos are cloned side by side, so from here that is `../company/website/`. If it
@@ -63,7 +63,7 @@ gh api repos/Wrad-Labs/company/contents/website/docs/INDEX.md --jq '.content' | 
 markup here, the memory there, cross-linked in both bodies. An undocumented change didn't
 happen.
 
-Also read **Rootstock** — the operating framework, `owner.md` included — before any
+Also read **Rootstock** — the operating framework, one file (`README.md`) — before any
 collaboration-style call. It is the private **`Wrad-Labs/rootstock`**, a **sibling clone
 read at HEAD, never pinned**:
 
@@ -72,7 +72,7 @@ git -C ../rootstock pull
 ```
 
 It is deliberately **not** a submodule of this repo and is never cloned into it: every
-tracked file here is served, so that would publish it (`WR-015`). If the clone is not on
+tracked file here is served, so that would publish it (`WS-R015`). If the clone is not on
 disk, fetch by URL from this working copy.
 
 ## Local preview
