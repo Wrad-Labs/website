@@ -3,7 +3,8 @@
 # and what is explicitly out of scope, is at https://www.wradlabs.com/SECURITY.md
 #
 # Expires is not decoration: RFC 9116 makes this file INVALID once it passes,
-# not merely stale. Renewing it is a dated backlog row (W-OB-20), not a habit.
+# not merely stale. Renewal is a dated obligation, tracked privately, not a habit —
+# and if it ever lapses, delete this file rather than serve an invalid one.
 
 Contact: mailto:hello@wradlabs.com
 Expires: 2027-08-01T00:00:00.000Z
