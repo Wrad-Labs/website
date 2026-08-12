@@ -83,3 +83,9 @@ python -m http.server 8000
 
 Or start it from the tracked `.claude/launch.json`. Check the affected sections at mobile
 and desktop widths and confirm the console is clean before opening a PR.
+
+That is the **local** half. Verifying the **live** site after it deploys is a separate step
+and a separate rule (`WS-R025`): the repo does not contain everything a visitor receives,
+because the edge injects. If your environment cannot reach `www.wradlabs.com` — a cloud
+container's proxy blocks it — say so in the PR rather than letting the local pass stand in
+for it.
