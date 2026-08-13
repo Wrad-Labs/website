@@ -46,8 +46,7 @@ Read the real manual. It is not optional — it carries the locked decisions, th
 rules you must not break, and the current state of the site:
 
 ```
-Wrad-Labs/company → website/CLAUDE.md
-                    website/docs/INDEX.md     ← the doc map, start here
+Wrad-Labs/company → website/CLAUDE.md         ← the manual and the doc map, start here
                     website/status.md         ← where the site is right now
                     website/rules.md          ← the constraints
 ```
@@ -56,7 +55,7 @@ The two repos are cloned side by side, so from here that is `../company/website/
 is not on disk:
 
 ```bash
-gh api repos/Wrad-Labs/company/contents/website/docs/INDEX.md --jq '.content' | tr -d '\n' | base64 -d
+gh api repos/Wrad-Labs/company/contents/website/CLAUDE.md --jq '.content' | tr -d '\n' | base64 -d
 ```
 
 **A site change and its documentation land as paired PRs in the same session** — the
