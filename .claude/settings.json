@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"$(git -C \"$CLAUDE_PROJECT_DIR\" rev-parse --path-format=absolute --git-common-dir)/../../rootstock/tools/readout-hook.mjs\"; [ ! -f \"$f\" ] || node \"$f\""
+          }
+        ]
+      }
+    ]
+  }
+}
