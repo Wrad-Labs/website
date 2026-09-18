@@ -72,8 +72,26 @@ git -C ../rootstock pull
 ```
 
 It is deliberately **not** a submodule of this repo and is never cloned into it: every
-tracked file here is served, so that would publish it (`WS-R015`). If the clone is not on
-disk, fetch by URL from this working copy.
+tracked file here is served, so that would publish it (`WS-R015`).
+
+**Bootstrap (rootstock §3 owns the rule and the rationale; this clause is commands
+only).** A local session pulls as above; a worktree cwd derives the path instead of
+assuming `..`:
+
+```
+ROOTSTOCK="$(dirname "$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")")/rootstock"
+```
+
+A cloud session starts with only this repo and rootstock is private: attach it as a
+second repo at session start (the **+** beside the repo pill), or run
+`add_repo(owner: "Wrad-Labs", repo: "rootstock")` then a shallow clone outside this
+working copy (`WS-R015`). Mechanics measured in an optants cloud container 2026-08-08
+([optants#138](https://github.com/Wrad-Labs/optants/pull/138)); the derivation above
+verified in this clone and a worktree of it 2026-09-17, the cloud half carried from that
+measurement and **not** re-measured here. A session that finds either changed fixes this
+clause in the same change (rootstock §3). The SessionStart hook in
+[`.claude/settings.json`](.claude/settings.json) fires this clause: clone absent, it points
+here; clone present, it runs rootstock's `tools/session-start-hook.mjs`.
 
 ## Local preview
 

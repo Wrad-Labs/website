@@ -1,5 +1,16 @@
 {
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 30,
+            "command": "r=\"$(git -C \"$CLAUDE_PROJECT_DIR\" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)\" || exit 0; r=\"$r/../../rootstock\"; if [ -f \"$r/tools/session-start-hook.mjs\" ]; then node \"$r/tools/session-start-hook.mjs\"; elif [ ! -d \"$r/.git\" ]; then printf '%s\\n' '{\"hookSpecificOutput\":{\"hookEventName\":\"SessionStart\",\"additionalContext\":\"BOOTSTRAP NOT DONE: the rootstock clone is absent, so the framework this project builds to has not been read. Do it before any other work: CLAUDE.md § Bootstrap has the commands (rootstock README §3). Until then the readout Stop hook is inert.\"}}'; fi"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
