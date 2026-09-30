@@ -1,4 +1,9 @@
 {
+  "attribution": {
+    "commit": "Co-Authored-By: Coding-Agent <admin@wradlabs.com>",
+    "pr": "",
+    "sessionUrl": false
+  },
   "hooks": {
     "SessionStart": [
       {
